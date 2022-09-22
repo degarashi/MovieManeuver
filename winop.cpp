@@ -4,14 +4,6 @@
 #include <QThread>
 #include <QDebug>
 
-/*
-int MI_H(const int x) {
-	return x * 65535 / (::GetSystemMetrics(SM_CXSCREEN) - 1);
-}
-int MI_V(const int y) {
-	return y * 65535 / (::GetSystemMetrics(SM_CYSCREEN) - 1);
-}
-*/
 namespace {
 	struct FindChildParam {
 		std::wstring    target;
