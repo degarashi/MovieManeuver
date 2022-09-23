@@ -86,21 +86,12 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 
 			{PS::E_Button::DPadLeft, &dg::Manip::backward_5sec},
 			{PS::E_Button::DPadRight, &dg::Manip::forward_5sec},
-			{PS::E_Button::LeftThumbNX, &dg::Manip::backward_5sec},
-			{PS::E_Button::LeftThumbPX, &dg::Manip::forward_5sec},
-
-			{PS::E_Button::RightThumbNX, &dg::Manip::backward_10sec},
-			{PS::E_Button::RightThumbPX, &dg::Manip::forward_10sec},
 
 			{PS::E_Button::LeftShoulder, &dg::Manip::speedDown},
 			{PS::E_Button::RightShoulder, &dg::Manip::speedUp},
-			{PS::E_Button::RightThumbNY, &dg::Manip::speedDown},
-			{PS::E_Button::RightThumbPY, &dg::Manip::speedUp},
 
 			{PS::E_Button::DPadDown, &dg::Manip::volumeDown},
 			{PS::E_Button::DPadUp, &dg::Manip::volumeUp},
-			{PS::E_Button::LeftThumbNY, &dg::Manip::volumeDown},
-			{PS::E_Button::LeftThumbPY, &dg::Manip::volumeUp},
 
 			{PS::E_Button::X, &dg::Manip::volumeMute},
 			{PS::E_Button::Y, &dg::Manip::fullScreen},
@@ -118,6 +109,41 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 		if(state.getTrigger(PS::E_Trigger::TriggerRight).buttonState().pressed()) {
 			_manip->forward_10sec(_hwTarget);
 		}
+
+		// TODO: 後でリファクタリング
+		if(state.axis(PS::E_Thumb::ThumbLeft)
+			.axis(dg::AxisState2D::Horizontal)
+			.trigger(dg::AxisState::Negative).buttonState().pressed())
+			_manip->backward_5sec(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbLeft)
+			.axis(dg::AxisState2D::Horizontal)
+			.trigger(dg::AxisState::Positive).buttonState().pressed())
+			_manip->forward_5sec(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbRight)
+			.axis(dg::AxisState2D::Horizontal)
+			.trigger(dg::AxisState::Negative).buttonState().pressed())
+			_manip->backward_10sec(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbRight)
+			.axis(dg::AxisState2D::Horizontal)
+			.trigger(dg::AxisState::Positive).buttonState().pressed())
+			_manip->forward_10sec(_hwTarget);
+
+		if(state.axis(PS::E_Thumb::ThumbLeft)
+			.axis(dg::AxisState2D::Vertical)
+			.trigger(dg::AxisState::Negative).buttonState().pressed())
+			_manip->volumeDown(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbLeft)
+			.axis(dg::AxisState2D::Vertical)
+			.trigger(dg::AxisState::Positive).buttonState().pressed())
+			_manip->volumeUp(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbRight)
+			.axis(dg::AxisState2D::Vertical)
+			.trigger(dg::AxisState::Negative).buttonState().pressed())
+			_manip->speedDown(_hwTarget);
+		if(state.axis(PS::E_Thumb::ThumbRight)
+			.axis(dg::AxisState2D::Vertical)
+			.trigger(dg::AxisState::Positive).buttonState().pressed())
+			_manip->speedUp(_hwTarget);
 	}
 }
 void MainWindow::onPadUpdate(const dg::XI_PadState& state) {

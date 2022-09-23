@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <xinput.h>
 #include "vector.hpp"
-#include "triggerstate.hpp"
+#include "axisstate2d.hpp"
 
 namespace dg {
 	// XInput用のPadState
@@ -16,17 +16,7 @@ namespace dg {
 				RightThumb, RightShoulder,
 				DPadLeft, DPadUp, DPadRight, DPadDown,
 
-				NumButtons,
-				LeftThumbPX = NumButtons,
-				LeftThumbNX,
-				LeftThumbPY,
-				LeftThumbNY,
-				RightThumbPX,
-				RightThumbNX,
-				RightThumbPY,
-				RightThumbNY,
-
-				NumButtonsAll
+				NumButtons
 			};
 			enum E_Thumb {
 				ThumbLeft,
@@ -44,17 +34,9 @@ namespace dg {
 							  DEFAULT_DZ_THUMB;
 
 		private:
-			ButtonState _button[E_Button::NumButtonsAll];
+			ButtonState _button[E_Button::NumButtons];
 			TriggerState _trigger[E_Trigger::NumTrigger];
-			// -1.0 -> 1.0
-			Vec2    _thumb[E_Thumb::NumThumb];
-
-			struct DeadZone {
-				int thumb[E_Thumb::NumThumb] = {
-					DEFAULT_DZ_THUMB,
-					DEFAULT_DZ_THUMB,
-				};
-			} _deadzone;
+			AxisState2D _axis[E_Thumb::NumThumb];
 
 			void _updateButton(int idx, bool prev, bool cur);
 
@@ -80,5 +62,8 @@ namespace dg {
 			void setThumbDeadZone(E_Thumb id, int dz);
 			[[nodiscard]] int getTriggerDeadZone(E_Trigger id) const;
 			void setTriggerDeadZone(E_Trigger id, int dz);
+
+			[[nodiscard]] const AxisState2D& axis(E_Thumb id) const;
+			[[nodiscard]] AxisState2D& refAxis(E_Thumb id);
 	};
 }

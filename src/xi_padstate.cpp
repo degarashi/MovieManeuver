@@ -1,5 +1,4 @@
 ﻿#include "xi_padstate.hpp"
-#include "aux_func.hpp"
 #include <algorithm>
 #include <cmath>
 #include <QtGlobal>
@@ -14,6 +13,10 @@ namespace dg {
 		_trigger {
 			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER),
 			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER)
+		},
+		_axis {
+			AxisState2D(THUMB_RANGE, DEFAULT_DZ_THUMB),
+			AxisState2D(THUMB_RANGE, DEFAULT_DZ_THUMB)
 		}
 	{
 		setNeutral(true);
@@ -27,8 +30,8 @@ namespace dg {
 			btn.init();
 		for(auto& t: _trigger)
 			t.init();
-		for(auto& t: _thumb)
-			t = Vec2{};
+		for(auto& a: _axis)
+			a.init();
 	}
 	void XI_PadState::updateState() {
 		// ボタンやAxisの値は変化させない
@@ -37,6 +40,8 @@ namespace dg {
 			btn.update();
 		for(auto& tri : _trigger)
 			tri.update();
+		for(auto& a : _axis)
+			a.update();
 	}
 	void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
 		// ---- ボタンカウンタの更新 ----
@@ -52,20 +57,6 @@ namespace dg {
 			_button[i].update(cur);
 		}
 
-		const auto realValue = [](
-			const int rawValue,
-			const int deadzone,
-			const int maxRange,
-			float& processedValueDst
-		) {
-			Q_ASSERT(deadzone <= maxRange);
-			Q_ASSERT(std::abs(rawValue) <= maxRange);
-
-			const int pv_i= std::max<int>(0, std::abs(rawValue) - deadzone);
-			const float pv = pv_i / static_cast<float>(maxRange - deadzone);
-			processedValueDst = (rawValue < 0) ? -pv: pv;
-			return pv > 0;
-		};
 		// LeftTrigger
 		{
 			const bool positive = _trigger[E_Trigger::TriggerLeft].update(pad.bLeftTrigger);
@@ -77,34 +68,18 @@ namespace dg {
 			Q_ASSERT(positive);
 		}
 
-		const auto procAxis = [this, &realValue](
-			const int indexPositive, const int indexNegative,
-			float& processedValueDst,
-			const int rawValue, const int deadzone, const int max_range)
-		{
-			const bool bval = realValue(rawValue, deadzone, max_range, processedValueDst);
-			bool pos = false,
-				 neg = false;
-			if(rawValue > 0) {
-				pos = bval;
-			} else if(rawValue < 0) {
-				neg = bval;
-			}
-			_button[indexPositive].update(pos);
-			_button[indexNegative].update(neg);
-		};
-		procAxis(E_Button::LeftThumbPX, E_Button::LeftThumbNX, _thumb[E_Thumb::ThumbLeft].x,
-					pad.sThumbLX, getThumbDeadZone(E_Thumb::ThumbLeft), THUMB_RANGE);
-		procAxis(E_Button::LeftThumbPY, E_Button::LeftThumbNY, _thumb[E_Thumb::ThumbLeft].y,
-					pad.sThumbLY, getThumbDeadZone(E_Thumb::ThumbLeft), THUMB_RANGE);
-		procAxis(E_Button::RightThumbPX, E_Button::RightThumbNX, _thumb[E_Thumb::ThumbRight].x,
-					pad.sThumbRX, getThumbDeadZone(E_Thumb::ThumbRight), THUMB_RANGE);
-		procAxis(E_Button::RightThumbPY, E_Button::RightThumbNY, _thumb[E_Thumb::ThumbRight].y,
-					pad.sThumbRY, getThumbDeadZone(E_Thumb::ThumbRight), THUMB_RANGE);
+		_axis[AxisState2D::Horizontal].update(pad.sThumbLX, pad.sThumbLY);
+		_axis[AxisState2D::Vertical].update(pad.sThumbRX, pad.sThumbRY);
 	}
 	bool XI_PadState::check() const {
 		for(const auto& btn : _button)
 			if(!btn.check())
+				return false;
+		for(const auto& tri : _trigger)
+			if(!tri.check())
+				return false;
+		for(const auto& a : _axis)
+			if(!a.check())
 				return false;
 
 		// いずれか片方が0でないとおかしい
@@ -113,16 +88,6 @@ namespace dg {
 		};
 		if(!axisCheck(E_Button::DPadLeft, E_Button::DPadRight)) return false;
 		if(!axisCheck(E_Button::DPadUp, E_Button::DPadDown)) return false;
-		if(!axisCheck(E_Button::LeftThumbPX, E_Button::LeftThumbNX)) return false;
-		if(!axisCheck(E_Button::LeftThumbPY, E_Button::LeftThumbNY)) return false;
-		if(!axisCheck(E_Button::RightThumbPY, E_Button::RightThumbNY)) return false;
-		if(!axisCheck(E_Button::RightThumbPY, E_Button::RightThumbNY)) return false;
-
-		// 0以上MAX値以下
-		if(!IsInRange(getThumbDeadZone(E_Thumb::ThumbLeft), 0, THUMB_RANGE)) return false;
-		if(!IsInRange(getTriggerDeadZone(E_Trigger::TriggerLeft), 0, TRIGGER_RANGE)) return false;
-		if(!IsInRange(getThumbDeadZone(E_Thumb::ThumbRight), 0, THUMB_RANGE)) return false;
-		if(!IsInRange(getTriggerDeadZone(E_Trigger::TriggerRight), 0, TRIGGER_RANGE)) return false;
 
 		return true;
 	}
@@ -139,7 +104,7 @@ namespace dg {
 		return _trigger[t];
 	}
 	Vec2 XI_PadState::getThumb(const E_Thumb t) const {
-		return _thumb[t];
+		return _axis[t].dir();
 	}
 	IVec2 XI_PadState::getDPadVec() const {
 		return {
@@ -149,17 +114,16 @@ namespace dg {
 				- static_cast<int>(_button[E_Button::DPadDown].pressing() > 0),
 		};
 	}
-	int XI_PadState::getThumbDeadZone(const E_Thumb id) const {
-		return _deadzone.thumb[id];
-	}
-	void XI_PadState::setThumbDeadZone(const E_Thumb id, const int dz) {
-		_deadzone.thumb[id] = dz;
-		Q_ASSERT(IsInRange(dz, 0, THUMB_RANGE));
-	}
 	int XI_PadState::getTriggerDeadZone(const E_Trigger id) const {
 		return _trigger[id].deadZone();
 	}
 	void XI_PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
 		_trigger[id].setDeadZone(dz);
+	}
+	const AxisState2D& XI_PadState::axis(const E_Thumb id) const {
+		return _axis[id];
+	}
+	AxisState2D& XI_PadState::refAxis(const E_Thumb id) {
+		return _axis[id];
 	}
 }
