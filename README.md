@@ -1,7 +1,7 @@
 # Movie Maneuver
 
 ## 概要
-![ScreenShot Image](./screen_shot.png)
+![ScreenShot Image](./doc/screen_shot.png)
 
 XInput対応のゲームパッドからブラウザ(現状はChromeのみ)上で再生中の動画を操作できます。
 
