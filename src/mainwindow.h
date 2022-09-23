@@ -21,8 +21,6 @@ class MainWindow : public QMainWindow {
 		const dg::Manip*				_manip;
 		HWND							_hwTarget;
 
-		// ---- for Debug UI ----
-		void _updateDebugView(const dg::XI_PadState& state);
 		void _manipulate(const dg::XI_PadState& state);
 
 	private slots:
