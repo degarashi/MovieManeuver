@@ -3,6 +3,7 @@
 #include <xinput.h>
 #include "vector.hpp"
 #include "axisstate2d.hpp"
+#include "aux_enums.hpp"
 
 namespace dg {
 	// XInput用のPadState
@@ -65,5 +66,7 @@ namespace dg {
 
 			[[nodiscard]] const AxisState2D& thumb(E_Thumb id) const;
 			[[nodiscard]] AxisState2D& refThumb(E_Thumb id);
+
+			[[nodiscard]] bool thumbTilted(E_Thumb id, Direction4 dir) const;
 	};
 }

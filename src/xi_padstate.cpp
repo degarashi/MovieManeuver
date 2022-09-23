@@ -126,4 +126,11 @@ namespace dg {
 	AxisState2D& XI_PadState::refThumb(const E_Thumb id) {
 		return _thumb[id];
 	}
+	bool XI_PadState::thumbTilted(const E_Thumb id, const Direction4 dir) const {
+		const int positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
+								 AxisState::Positive : AxisState::Negative;
+		const int vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?
+								 AxisState2D::Horizontal : AxisState2D::Vertical;
+		return thumb(id).axis(vertical).trigger(positive).buttonState().pressed();
+	}
 }
