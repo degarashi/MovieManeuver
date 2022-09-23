@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <cmath>
 #include <QtGlobal>
-#include <QDebug>
 
 namespace {
 	template <class T>
