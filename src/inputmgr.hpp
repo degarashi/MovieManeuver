@@ -9,9 +9,7 @@ namespace dg {
 		Q_OBJECT
 		public:
 			InputMgr();
-			~InputMgr() override;
 		private:
-			QThread*	_th;
 			QTimer*		_timer;
 			DWORD		_pktNum;
 			XI_PadState	_state;
