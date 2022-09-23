@@ -30,6 +30,7 @@ set(PROJECT_SOURCES
     src/aux_func.hpp
     src/triggerstate.hpp
     src/axisstate.hpp
+    src/axisstate2d.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
