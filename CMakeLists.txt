@@ -32,6 +32,7 @@ set(PROJECT_SOURCES
     src/axisstate.hpp
     src/axisstate2d.hpp
     src/aux_enums.hpp
+    src/mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
