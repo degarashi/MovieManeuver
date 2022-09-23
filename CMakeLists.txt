@@ -14,25 +14,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+set(SRC_DIR src)
+aux_source_directory(src SOURCE)
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        inputmgr.hpp
-        inputmgr.cpp
-        padstate.hpp
-        padstate.cpp
-        vector.hpp
-        winop.hpp
-        winop.cpp
-        manip.hpp
-        manip.cpp
-        manip_udemy.hpp
-        manip_udemy.cpp
-        manip_youtube.hpp
-        manip_youtube.cpp
-        buttonstate.cpp
+    ${SOURCE}
+    src/winop.hpp
+    src/padstate.hpp
+    src/vector.hpp
+    src/manip.hpp
+    src/manip_udemy.hpp
+    src/manip_youtube.hpp
+    src/mainwindow.h
+    src/inputmgr.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
