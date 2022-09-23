@@ -26,6 +26,7 @@ set(PROJECT_SOURCES
     src/manip_youtube.hpp
     src/mainwindow.h
     src/inputmgr.hpp
+    src/buttonstate.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
