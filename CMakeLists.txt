@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
     src/buttonstate.hpp
     src/aux_func.hpp
     src/triggerstate.hpp
+    src/axisstate.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
