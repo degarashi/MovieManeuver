@@ -31,6 +31,7 @@ set(PROJECT_SOURCES
     src/triggerstate.hpp
     src/axisstate.hpp
     src/axisstate2d.hpp
+    src/aux_enums.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
