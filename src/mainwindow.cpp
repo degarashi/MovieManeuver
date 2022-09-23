@@ -110,40 +110,23 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 			_manip->forward_10sec(_hwTarget);
 		}
 
-		// TODO: 後でリファクタリング
-		if(state.thumb(PS::E_Thumb::ThumbLeft)
-			.axis(dg::AxisState2D::Horizontal)
-			.trigger(dg::AxisState::Negative).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Left))
 			_manip->backward_5sec(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbLeft)
-			.axis(dg::AxisState2D::Horizontal)
-			.trigger(dg::AxisState::Positive).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Right))
 			_manip->forward_5sec(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbRight)
-			.axis(dg::AxisState2D::Horizontal)
-			.trigger(dg::AxisState::Negative).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Left))
 			_manip->backward_10sec(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbRight)
-			.axis(dg::AxisState2D::Horizontal)
-			.trigger(dg::AxisState::Positive).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Right))
 			_manip->forward_10sec(_hwTarget);
 
-		if(state.thumb(PS::E_Thumb::ThumbLeft)
-			.axis(dg::AxisState2D::Vertical)
-			.trigger(dg::AxisState::Negative).buttonState().pressed())
-			_manip->volumeDown(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbLeft)
-			.axis(dg::AxisState2D::Vertical)
-			.trigger(dg::AxisState::Positive).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Top))
 			_manip->volumeUp(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbRight)
-			.axis(dg::AxisState2D::Vertical)
-			.trigger(dg::AxisState::Negative).buttonState().pressed())
-			_manip->speedDown(_hwTarget);
-		if(state.thumb(PS::E_Thumb::ThumbRight)
-			.axis(dg::AxisState2D::Vertical)
-			.trigger(dg::AxisState::Positive).buttonState().pressed())
+		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Bottom))
+			_manip->volumeDown(_hwTarget);
+		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Top))
 			_manip->speedUp(_hwTarget);
+		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Bottom))
+			_manip->speedDown(_hwTarget);
 	}
 }
 void MainWindow::onPadUpdate(const dg::XI_PadState& state) {
