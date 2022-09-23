@@ -14,9 +14,10 @@ namespace dg {
 		connect(_timer, &QTimer::timeout, this, &InputMgr::onTimer);
 		_th->start();
 
-		// とりあえずの暫定措置
-		_state.refThumb(XI_PadState::E_Thumb::ThumbLeft).setDeadZone(32768-1024);
-		_state.refThumb(XI_PadState::E_Thumb::ThumbRight).setDeadZone(32768-1024);
+		const int Range = XI_PadState::THUMB_RANGE;
+		const int DZ = Range - (Range >> 5);
+		_state.refThumb(XI_PadState::E_Thumb::ThumbLeft).setDeadZone(DZ);
+		_state.refThumb(XI_PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
 	}
 	InputMgr::~InputMgr() {
 		_th->exit();
