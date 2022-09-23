@@ -19,7 +19,7 @@ aux_source_directory(src SOURCE)
 set(PROJECT_SOURCES
     ${SOURCE}
     src/winop.hpp
-    src/padstate.hpp
+    src/xi_padstate.hpp
     src/vector.hpp
     src/manip.hpp
     src/manip_udemy.hpp

@@ -5,7 +5,8 @@
 #include "buttonstate.hpp"
 
 namespace dg {
-	class PadState {
+	// XInput用のPadState
+	class XI_PadState {
 		public:
 			enum E_Button {
 				Start,
@@ -65,7 +66,7 @@ namespace dg {
 			void _updateButton(int idx, bool prev, bool cur);
 
         public:
-            PadState();
+			XI_PadState();
             [[nodiscard]] bool check() const;
             // init: true=counterもリセット
             void setNeutral(bool init);

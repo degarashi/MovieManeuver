@@ -1,4 +1,4 @@
-﻿#include "padstate.hpp"
+﻿#include "xi_padstate.hpp"
 #include <algorithm>
 #include <cmath>
 #include <QtGlobal>
@@ -11,15 +11,15 @@ namespace {
 	}
 }
 namespace dg {
-	const int PadState::TRIGGER_RANGE = 255;
-	const int PadState::THUMB_RANGE = 32768;
-	const int PadState::DEFAULT_DZ_THUMB = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-	const int PadState::DEFAULT_DZ_TRIGGER = XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+	const int XI_PadState::TRIGGER_RANGE = 255;
+	const int XI_PadState::THUMB_RANGE = 32768;
+	const int XI_PadState::DEFAULT_DZ_THUMB = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+	const int XI_PadState::DEFAULT_DZ_TRIGGER = XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
 
-	PadState::PadState() {
+	XI_PadState::XI_PadState() {
 		setNeutral(true);
 	}
-	void PadState::setNeutral(const bool init) {
+	void XI_PadState::setNeutral(const bool init) {
 		if(!init) {
 			updateState(XINPUT_GAMEPAD{});
 			return;
@@ -31,13 +31,13 @@ namespace dg {
 		for(auto& t: _thumb)
 			t = Vec2{};
 	}
-    void PadState::updateState() {
+    void XI_PadState::updateState() {
 		// ボタンやAxisの値は変化させない
 		// カウント値だけ更新
 		for(auto& btn : _button)
 			btn.update();
 	}
-    void PadState::updateState(const XINPUT_GAMEPAD& pad) {
+    void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
 		// ---- ボタンカウンタの更新 ----
 		const int XInput_Flag[] = {
 			XINPUT_GAMEPAD_START, XINPUT_GAMEPAD_BACK,
@@ -113,7 +113,7 @@ namespace dg {
 		procAxis(E_Button::RightThumbPY, E_Button::RightThumbNY, _thumb[E_Thumb::ThumbRight].y,
 					pad.sThumbRY, getThumbDeadZone(E_Thumb::ThumbRight), THUMB_RANGE);
 	}
-	bool PadState::check() const {
+	bool XI_PadState::check() const {
 		for(const auto& btn : _button)
 			if(!btn.check())
 				return false;
@@ -137,22 +137,22 @@ namespace dg {
 
 		return true;
 	}
-	bool PadState::pressed(const E_Button id) const {
+	bool XI_PadState::pressed(const E_Button id) const {
 		return _button[id].pressed();
 	}
-	bool PadState::released(const E_Button id) const {
+	bool XI_PadState::released(const E_Button id) const {
 		return _button[id].released();
 	}
-	ButtonState::Frames PadState::pressing(const E_Button id) const {
+	ButtonState::Frames XI_PadState::pressing(const E_Button id) const {
 		return _button[id].pressing();
 	}
-	float PadState::getTrigger(const E_Trigger t) const {
+	float XI_PadState::getTrigger(const E_Trigger t) const {
 		return _trigger[t];
 	}
-	Vec2 PadState::getThumb(const E_Thumb t) const {
+	Vec2 XI_PadState::getThumb(const E_Thumb t) const {
 		return _thumb[t];
 	}
-	IVec2 PadState::getDPadVec() const {
+	IVec2 XI_PadState::getDPadVec() const {
 		return {
 			static_cast<int>(_button[E_Button::DPadRight].pressing() > 0)
 				- static_cast<int>(_button[E_Button::DPadLeft].pressing() > 0),
@@ -160,17 +160,17 @@ namespace dg {
 				- static_cast<int>(_button[E_Button::DPadDown].pressing() > 0),
 		};
 	}
-	int PadState::getThumbDeadZone(const E_Thumb id) const {
+	int XI_PadState::getThumbDeadZone(const E_Thumb id) const {
 		return _deadzone.thumb[id];
 	}
-	void PadState::setThumbDeadZone(const E_Thumb id, const int dz) {
+	void XI_PadState::setThumbDeadZone(const E_Thumb id, const int dz) {
 		_deadzone.thumb[id] = dz;
 		Q_ASSERT(IsInRange(dz, 0, THUMB_RANGE));
 	}
-	int PadState::getTriggerDeadZone(const E_Trigger id) const {
+	int XI_PadState::getTriggerDeadZone(const E_Trigger id) const {
 		return _deadzone.trigger[id];
 	}
-	void PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
+	void XI_PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
 		_deadzone.trigger[id] = dz;
 		Q_ASSERT(IsInRange(dz, 0, TRIGGER_RANGE));
 	}

@@ -2,7 +2,7 @@
 #include <QMainWindow>
 
 namespace dg {
-	struct PadState;
+	struct XI_PadState;
 	struct Manip;
 }
 QT_BEGIN_NAMESPACE
@@ -15,17 +15,17 @@ class MainWindow : public QMainWindow {
 		MainWindow(QWidget* parent=nullptr);
 
 	private:
-		using PS = dg::PadState;
+		using PS = dg::XI_PadState;
 		std::shared_ptr<Ui::MainWindow> _ui;
 		QTimer*							_timer;
 		const dg::Manip*				_manip;
 		HWND							_hwTarget;
 
 		// ---- for Debug UI ----
-		void _updateDebugView(const dg::PadState& state);
-		void _manipulate(const dg::PadState& state);
+		void _updateDebugView(const dg::XI_PadState& state);
+		void _manipulate(const dg::XI_PadState& state);
 
 	private slots:
-		void onPadUpdate(const dg::PadState& state);
+		void onPadUpdate(const dg::XI_PadState& state);
 		void checkTargetWindow();
 };

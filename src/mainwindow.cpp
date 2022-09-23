@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 	_timer->start(CHECKTARGET_INTERVAL);
 	connect(_timer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
 }
-void MainWindow::_updateDebugView(const dg::PadState& state) {
+void MainWindow::_updateDebugView(const dg::XI_PadState& state) {
 	QCheckBox* ar[] = {
 		_ui->cbStart, _ui->cbBack,
 		_ui->cbA, _ui->cbB, _ui->cbX, _ui->cbY,
@@ -69,7 +69,7 @@ void MainWindow::_updateDebugView(const dg::PadState& state) {
 	}
 
 	for(int i=0 ; i<std::size(ar) ; i++) {
-		ar[i]->setChecked(state.pressing(static_cast<dg::PadState::E_Button>(i)) > 0);
+		ar[i]->setChecked(state.pressing(static_cast<dg::XI_PadState::E_Button>(i)) > 0);
 	}
 	for(int i=0 ; i<std::size(arT) ; i++) {
 		auto& ent = arT[i];
@@ -78,7 +78,7 @@ void MainWindow::_updateDebugView(const dg::PadState& state) {
 	}
 }
 
-void MainWindow::_manipulate(const dg::PadState& state) {
+void MainWindow::_manipulate(const dg::XI_PadState& state) {
 	if(_hwTarget) {
 		struct ManipulateEnt {
 			PS::E_Button	buttonId;
@@ -118,7 +118,7 @@ void MainWindow::_manipulate(const dg::PadState& state) {
 		}
 	}
 }
-void MainWindow::onPadUpdate(const dg::PadState& state) {
+void MainWindow::onPadUpdate(const dg::XI_PadState& state) {
 	_updateDebugView(state);
 	_manipulate(state);
 }

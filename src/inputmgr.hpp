@@ -1,7 +1,7 @@
 #pragma once
 #include <QObject>
 #include <windows.h>
-#include "padstate.hpp"
+#include "xi_padstate.hpp"
 
 class QTimer;
 namespace dg {
@@ -14,12 +14,12 @@ namespace dg {
 			QThread*	_th;
 			QTimer*		_timer;
 			DWORD		_pktNum;
-			PadState	_state;
+			XI_PadState	_state;
 
 		private slots:
 			void onTimer();
 
 		signals:
-			void onInput(const dg::PadState& state);
+			void onInput(const dg::XI_PadState& state);
 	};
 }
