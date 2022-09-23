@@ -10,7 +10,12 @@ namespace dg {
 	const int XI_PadState::DEFAULT_DZ_THUMB = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 	const int XI_PadState::DEFAULT_DZ_TRIGGER = XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
 
-	XI_PadState::XI_PadState() {
+	XI_PadState::XI_PadState():
+		_trigger {
+			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER),
+			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER)
+		}
+	{
 		setNeutral(true);
 	}
 	void XI_PadState::setNeutral(const bool init) {
@@ -21,7 +26,7 @@ namespace dg {
 		for(auto& btn: _button)
 			btn.init();
 		for(auto& t: _trigger)
-			t = 0;
+			t.init();
 		for(auto& t: _thumb)
 			t = Vec2{};
 	}
@@ -30,6 +35,8 @@ namespace dg {
 		// カウント値だけ更新
 		for(auto& btn : _button)
 			btn.update();
+		for(auto& tri : _trigger)
+			tri.update();
 	}
     void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
 		// ---- ボタンカウンタの更新 ----
@@ -61,25 +68,13 @@ namespace dg {
 		};
 		// LeftTrigger
 		{
-			const bool positive = realValue(
-				pad.bLeftTrigger,
-				getTriggerDeadZone(E_Trigger::TriggerLeft),
-				TRIGGER_RANGE,
-				_trigger[E_Trigger::TriggerLeft]
-			);
-			Q_ASSERT(_trigger[E_Trigger::TriggerLeft] >= 0);
-			_button[E_Button::LeftTrigger].update(positive);
+			const bool positive = _trigger[E_Trigger::TriggerLeft].update(pad.bLeftTrigger);
+			Q_ASSERT(positive);
 		}
 		// RightTrigger
 		{
-			const bool positive = realValue(
-				pad.bRightTrigger,
-				getTriggerDeadZone(E_Trigger::TriggerRight),
-				TRIGGER_RANGE,
-				_trigger[E_Trigger::TriggerRight]
-			);
-			Q_ASSERT(_trigger[E_Trigger::TriggerRight] >= 0);
-			_button[E_Button::RightTrigger].update(positive);
+			const bool positive = _trigger[E_Trigger::TriggerRight].update(pad.bRightTrigger);
+			Q_ASSERT(positive);
 		}
 
 		const auto procAxis = [this, &realValue](
@@ -140,7 +135,7 @@ namespace dg {
 	ButtonState::Frames XI_PadState::pressing(const E_Button id) const {
 		return _button[id].pressing();
 	}
-	float XI_PadState::getTrigger(const E_Trigger t) const {
+	const TriggerState& XI_PadState::getTrigger(const E_Trigger t) const {
 		return _trigger[t];
 	}
 	Vec2 XI_PadState::getThumb(const E_Thumb t) const {
@@ -162,10 +157,9 @@ namespace dg {
 		Q_ASSERT(IsInRange(dz, 0, THUMB_RANGE));
 	}
 	int XI_PadState::getTriggerDeadZone(const E_Trigger id) const {
-		return _deadzone.trigger[id];
+		return _trigger[id].deadZone();
 	}
 	void XI_PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
-		_deadzone.trigger[id] = dz;
-		Q_ASSERT(IsInRange(dz, 0, TRIGGER_RANGE));
+		_trigger[id].setDeadZone(dz);
 	}
 }

@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <xinput.h>
 #include "vector.hpp"
-#include "buttonstate.hpp"
+#include "triggerstate.hpp"
 
 namespace dg {
 	// XInput用のPadState
@@ -26,8 +26,6 @@ namespace dg {
 				RightThumbPY,
 				RightThumbNY,
 
-				LeftTrigger,
-				RightTrigger,
 				NumButtonsAll
 			};
 			enum E_Thumb {
@@ -47,8 +45,7 @@ namespace dg {
 
 		private:
 			ButtonState _button[E_Button::NumButtonsAll];
-			// 0.0 -> 1.0
-			float _trigger[E_Trigger::NumTrigger];
+			TriggerState _trigger[E_Trigger::NumTrigger];
 			// -1.0 -> 1.0
 			Vec2    _thumb[E_Thumb::NumThumb];
 
@@ -56,10 +53,6 @@ namespace dg {
 				int thumb[E_Thumb::NumThumb] = {
 					DEFAULT_DZ_THUMB,
 					DEFAULT_DZ_THUMB,
-				};
-				int trigger[E_Trigger::NumTrigger] = {
-					DEFAULT_DZ_TRIGGER,
-					DEFAULT_DZ_TRIGGER,
 				};
 			} _deadzone;
 
@@ -78,7 +71,7 @@ namespace dg {
             [[nodiscard]] bool released(E_Button id) const;
 			[[nodiscard]] ButtonState::Frames pressing(E_Button id) const;
 
-            [[nodiscard]] float getTrigger(E_Trigger t) const;
+			[[nodiscard]] const TriggerState& getTrigger(E_Trigger t) const;
             [[nodiscard]] Vec2 getThumb(E_Thumb t) const;
 
             [[nodiscard]] IVec2 getDPadVec() const;

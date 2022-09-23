@@ -40,19 +40,7 @@ void MainWindow::_updateDebugView(const dg::XI_PadState& state) {
 		_ui->cbRThumb, _ui->cbRShoulder,
 		_ui->cbDPad_Left, _ui->cbDPad_Up, _ui->cbDPad_Right, _ui->cbDPad_Down,
 	};
-	struct Trig {
-		PS::E_Button	sourceCB;
-		PS::E_Trigger	sourcePB;
-		QCheckBox		*cb;
-		QProgressBar	*pb;
-	};
 
-	Trig arT[] = {
-		{PS::E_Button::LeftTrigger, PS::E_Trigger::TriggerLeft,
-			_ui->cbLTrigger, _ui->pbLTrigger},
-		{PS::E_Button::RightTrigger, PS::E_Trigger::TriggerRight,
-			_ui->cbRTrigger, _ui->pbRTrigger},
-	};
 	struct Thumb {
 		PS::E_Thumb		sourceId;
 		QProgressBar	*pbX, *pbY;
@@ -67,14 +55,23 @@ void MainWindow::_updateDebugView(const dg::XI_PadState& state) {
 		ent.pbX->setValue(val.x * 50);
 		ent.pbY->setValue(val.y * 50);
 	}
-
 	for(int i=0 ; i<std::size(ar) ; i++) {
 		ar[i]->setChecked(state.pressing(static_cast<dg::XI_PadState::E_Button>(i)) > 0);
 	}
-	for(int i=0 ; i<std::size(arT) ; i++) {
-		auto& ent = arT[i];
-		ent.cb->setChecked(state.pressing(ent.sourceCB));
-		ent.pb->setValue(state.getTrigger(ent.sourcePB) * 100);
+
+	struct Trig {
+		PS::E_Trigger	sourceId;
+		QCheckBox		*cb;
+		QProgressBar	*pb;
+	};
+	const Trig arT[] = {
+		{PS::E_Trigger::TriggerLeft, _ui->cbLTrigger, _ui->pbLTrigger},
+		{PS::E_Trigger::TriggerRight, _ui->cbRTrigger, _ui->pbRTrigger},
+	};
+	for(auto& ent : arT) {
+		auto& t = state.getTrigger(ent.sourceId);
+		ent.cb->setChecked(t.buttonState().pressing());
+		ent.pb->setValue(t.trigger() * 100);
 	}
 }
 
@@ -92,8 +89,6 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 			{PS::E_Button::LeftThumbNX, &dg::Manip::backward_5sec},
 			{PS::E_Button::LeftThumbPX, &dg::Manip::forward_5sec},
 
-			{PS::E_Button::LeftTrigger, &dg::Manip::backward_10sec},
-			{PS::E_Button::RightTrigger, &dg::Manip::forward_10sec},
 			{PS::E_Button::RightThumbNX, &dg::Manip::backward_10sec},
 			{PS::E_Button::RightThumbPX, &dg::Manip::forward_10sec},
 
@@ -115,6 +110,13 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 				(_manip->*e.mproc)(_hwTarget);
 				break;
 			}
+		}
+
+		if(state.getTrigger(PS::E_Trigger::TriggerLeft).buttonState().pressed()) {
+			_manip->backward_10sec(_hwTarget);
+		}
+		if(state.getTrigger(PS::E_Trigger::TriggerRight).buttonState().pressed()) {
+			_manip->forward_10sec(_hwTarget);
 		}
 	}
 }
