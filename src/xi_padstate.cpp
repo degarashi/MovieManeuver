@@ -14,7 +14,7 @@ namespace dg {
 			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER),
 			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER)
 		},
-		_axis {
+		_thumb {
 			AxisState2D(THUMB_RANGE, DEFAULT_DZ_THUMB),
 			AxisState2D(THUMB_RANGE, DEFAULT_DZ_THUMB)
 		}
@@ -30,8 +30,8 @@ namespace dg {
 			btn.init();
 		for(auto& t: _trigger)
 			t.init();
-		for(auto& a: _axis)
-			a.init();
+		for(auto& t: _thumb)
+			t.init();
 	}
 	void XI_PadState::updateState() {
 		// ボタンやAxisの値は変化させない
@@ -40,8 +40,8 @@ namespace dg {
 			btn.update();
 		for(auto& tri : _trigger)
 			tri.update();
-		for(auto& a : _axis)
-			a.update();
+		for(auto& t : _thumb)
+			t.update();
 	}
 	void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
 		// ---- ボタンカウンタの更新 ----
@@ -68,8 +68,8 @@ namespace dg {
 			Q_ASSERT(positive);
 		}
 
-		_axis[AxisState2D::Horizontal].update(pad.sThumbLX, pad.sThumbLY);
-		_axis[AxisState2D::Vertical].update(pad.sThumbRX, pad.sThumbRY);
+		_thumb[AxisState2D::Horizontal].update(pad.sThumbLX, pad.sThumbLY);
+		_thumb[AxisState2D::Vertical].update(pad.sThumbRX, pad.sThumbRY);
 	}
 	bool XI_PadState::check() const {
 		for(const auto& btn : _button)
@@ -78,7 +78,7 @@ namespace dg {
 		for(const auto& tri : _trigger)
 			if(!tri.check())
 				return false;
-		for(const auto& a : _axis)
+		for(const auto& a : _thumb)
 			if(!a.check())
 				return false;
 
@@ -104,7 +104,7 @@ namespace dg {
 		return _trigger[t];
 	}
 	Vec2 XI_PadState::getThumb(const E_Thumb t) const {
-		return _axis[t].dir();
+		return _thumb[t].dir();
 	}
 	IVec2 XI_PadState::getDPadVec() const {
 		return {
@@ -120,10 +120,10 @@ namespace dg {
 	void XI_PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
 		_trigger[id].setDeadZone(dz);
 	}
-	const AxisState2D& XI_PadState::axis(const E_Thumb id) const {
-		return _axis[id];
+	const AxisState2D& XI_PadState::thumb(const E_Thumb id) const {
+		return _thumb[id];
 	}
-	AxisState2D& XI_PadState::refAxis(const E_Thumb id) {
-		return _axis[id];
+	AxisState2D& XI_PadState::refThumb(const E_Thumb id) {
+		return _thumb[id];
 	}
 }

@@ -15,8 +15,8 @@ namespace dg {
 		_th->start();
 
 		// とりあえずの暫定措置
-		_state.refAxis(XI_PadState::E_Thumb::ThumbLeft).setDeadZone(32768-1024);
-		_state.refAxis(XI_PadState::E_Thumb::ThumbRight).setDeadZone(32768-1024);
+		_state.refThumb(XI_PadState::E_Thumb::ThumbLeft).setDeadZone(32768-1024);
+		_state.refThumb(XI_PadState::E_Thumb::ThumbRight).setDeadZone(32768-1024);
 	}
 	InputMgr::~InputMgr() {
 		_th->exit();

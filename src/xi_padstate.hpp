@@ -36,7 +36,7 @@ namespace dg {
 		private:
 			ButtonState _button[E_Button::NumButtons];
 			TriggerState _trigger[E_Trigger::NumTrigger];
-			AxisState2D _axis[E_Thumb::NumThumb];
+			AxisState2D _thumb[E_Thumb::NumThumb];
 
 			void _updateButton(int idx, bool prev, bool cur);
 
@@ -63,7 +63,7 @@ namespace dg {
 			[[nodiscard]] int getTriggerDeadZone(E_Trigger id) const;
 			void setTriggerDeadZone(E_Trigger id, int dz);
 
-			[[nodiscard]] const AxisState2D& axis(E_Thumb id) const;
-			[[nodiscard]] AxisState2D& refAxis(E_Thumb id);
+			[[nodiscard]] const AxisState2D& thumb(E_Thumb id) const;
+			[[nodiscard]] AxisState2D& refThumb(E_Thumb id);
 	};
 }

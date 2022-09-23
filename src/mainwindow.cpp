@@ -111,36 +111,36 @@ void MainWindow::_manipulate(const dg::XI_PadState& state) {
 		}
 
 		// TODO: 後でリファクタリング
-		if(state.axis(PS::E_Thumb::ThumbLeft)
+		if(state.thumb(PS::E_Thumb::ThumbLeft)
 			.axis(dg::AxisState2D::Horizontal)
 			.trigger(dg::AxisState::Negative).buttonState().pressed())
 			_manip->backward_5sec(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbLeft)
+		if(state.thumb(PS::E_Thumb::ThumbLeft)
 			.axis(dg::AxisState2D::Horizontal)
 			.trigger(dg::AxisState::Positive).buttonState().pressed())
 			_manip->forward_5sec(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbRight)
+		if(state.thumb(PS::E_Thumb::ThumbRight)
 			.axis(dg::AxisState2D::Horizontal)
 			.trigger(dg::AxisState::Negative).buttonState().pressed())
 			_manip->backward_10sec(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbRight)
+		if(state.thumb(PS::E_Thumb::ThumbRight)
 			.axis(dg::AxisState2D::Horizontal)
 			.trigger(dg::AxisState::Positive).buttonState().pressed())
 			_manip->forward_10sec(_hwTarget);
 
-		if(state.axis(PS::E_Thumb::ThumbLeft)
+		if(state.thumb(PS::E_Thumb::ThumbLeft)
 			.axis(dg::AxisState2D::Vertical)
 			.trigger(dg::AxisState::Negative).buttonState().pressed())
 			_manip->volumeDown(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbLeft)
+		if(state.thumb(PS::E_Thumb::ThumbLeft)
 			.axis(dg::AxisState2D::Vertical)
 			.trigger(dg::AxisState::Positive).buttonState().pressed())
 			_manip->volumeUp(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbRight)
+		if(state.thumb(PS::E_Thumb::ThumbRight)
 			.axis(dg::AxisState2D::Vertical)
 			.trigger(dg::AxisState::Negative).buttonState().pressed())
 			_manip->speedDown(_hwTarget);
-		if(state.axis(PS::E_Thumb::ThumbRight)
+		if(state.thumb(PS::E_Thumb::ThumbRight)
 			.axis(dg::AxisState2D::Vertical)
 			.trigger(dg::AxisState::Positive).buttonState().pressed())
 			_manip->speedUp(_hwTarget);
