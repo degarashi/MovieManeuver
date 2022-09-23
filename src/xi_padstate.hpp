@@ -39,9 +39,9 @@ namespace dg {
 				NumTrigger
 			};
 			const static int TRIGGER_RANGE,
-								THUMB_RANGE;
+							  THUMB_RANGE;
 			const static int DEFAULT_DZ_TRIGGER,
-								DEFAULT_DZ_THUMB;
+							  DEFAULT_DZ_THUMB;
 
 		private:
 			ButtonState _button[E_Button::NumButtonsAll];
@@ -58,23 +58,23 @@ namespace dg {
 
 			void _updateButton(int idx, bool prev, bool cur);
 
-        public:
+		public:
 			XI_PadState();
-            [[nodiscard]] bool check() const;
-            // init: true=counterもリセット
-            void setNeutral(bool init);
-            // 前回と入力の変化が無いときに呼ぶ
-            void updateState();
-            void updateState(const XINPUT_GAMEPAD& pad);
+			[[nodiscard]] bool check() const;
+			// init: true=counterもリセット
+			void setNeutral(bool init);
+			// 前回と入力の変化が無いときに呼ぶ
+			void updateState();
+			void updateState(const XINPUT_GAMEPAD& pad);
 
-            [[nodiscard]] bool pressed(E_Button id) const;
-            [[nodiscard]] bool released(E_Button id) const;
+			[[nodiscard]] bool pressed(E_Button id) const;
+			[[nodiscard]] bool released(E_Button id) const;
 			[[nodiscard]] ButtonState::Frames pressing(E_Button id) const;
 
 			[[nodiscard]] const TriggerState& getTrigger(E_Trigger t) const;
-            [[nodiscard]] Vec2 getThumb(E_Thumb t) const;
+			[[nodiscard]] Vec2 getThumb(E_Thumb t) const;
 
-            [[nodiscard]] IVec2 getDPadVec() const;
+			[[nodiscard]] IVec2 getDPadVec() const;
 
 			[[nodiscard]] int getThumbDeadZone(E_Thumb id) const;
 			void setThumbDeadZone(E_Thumb id, int dz);

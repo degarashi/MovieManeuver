@@ -30,7 +30,7 @@ namespace dg {
 		for(auto& t: _thumb)
 			t = Vec2{};
 	}
-    void XI_PadState::updateState() {
+	void XI_PadState::updateState() {
 		// ボタンやAxisの値は変化させない
 		// カウント値だけ更新
 		for(auto& btn : _button)
@@ -38,7 +38,7 @@ namespace dg {
 		for(auto& tri : _trigger)
 			tri.update();
 	}
-    void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
+	void XI_PadState::updateState(const XINPUT_GAMEPAD& pad) {
 		// ---- ボタンカウンタの更新 ----
 		const int XInput_Flag[] = {
 			XINPUT_GAMEPAD_START, XINPUT_GAMEPAD_BACK,
@@ -84,7 +84,7 @@ namespace dg {
 		{
 			const bool bval = realValue(rawValue, deadzone, max_range, processedValueDst);
 			bool pos = false,
-				neg = false;
+				 neg = false;
 			if(rawValue > 0) {
 				pos = bval;
 			} else if(rawValue < 0) {
