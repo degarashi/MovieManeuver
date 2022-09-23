@@ -1,14 +1,9 @@
 ﻿#include "xi_padstate.hpp"
+#include "aux_func.hpp"
 #include <algorithm>
 #include <cmath>
 #include <QtGlobal>
 
-namespace {
-	template <class T>
-	bool IsInRange(const T& val, const T& min, const T& max) {
-		return (val >= min) && (val <= max);
-	}
-}
 namespace dg {
 	const int XI_PadState::TRIGGER_RANGE = 255;
 	const int XI_PadState::THUMB_RANGE = 32768;
