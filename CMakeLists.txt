@@ -40,6 +40,9 @@ set(PROJECT_SOURCES
     src/inputmgr_xinput.hpp
 )
 
+set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${WIIREMOTE_INCLUDE_DIR})
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MovieManeuver
         MANUAL_FINALIZATION
@@ -63,10 +66,12 @@ else()
     endif()
 endif()
 
+set(WIIREMOTE_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/libwiiremote.lib)
 target_link_libraries(
     MovieManeuver
     PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
+    ${WIIREMOTE_LIB}
     xinput
 )
 
