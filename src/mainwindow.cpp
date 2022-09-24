@@ -18,6 +18,40 @@ namespace {
 	};
 	constexpr int CHECKTARGET_INTERVAL = 1000;
 }
+
+namespace {
+	// とりあえずのキーマップ
+	dg::VKMapping MakeKeyMap() {
+		using dg::VKMapping;
+		using dg::VirtualKey;
+		using dg::Manip;
+
+		VKMapping map;
+		map.emplace(VirtualKey::DLeft, &Manip::backward_5sec);
+		map.emplace(VirtualKey::DRight, &Manip::forward_5sec);
+		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
+		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
+
+		map.emplace(VirtualKey::B, &Manip::startPause);
+		map.emplace(VirtualKey::Y, &Manip::volumeMute);
+
+		map.emplace(VirtualKey::L1, &Manip::speedDown);
+		map.emplace(VirtualKey::R1, &Manip::speedUp);
+		map.emplace(VirtualKey::L2, &Manip::backward_10sec);
+		map.emplace(VirtualKey::R2, &Manip::forward_10sec);
+
+		map.emplace(VirtualKey::TL_Left, &Manip::backward_5sec);
+		map.emplace(VirtualKey::TL_Right, &Manip::forward_5sec);
+		map.emplace(VirtualKey::TL_Up, &Manip::volumeUp);
+		map.emplace(VirtualKey::TL_Down, &Manip::volumeDown);
+
+		map.emplace(VirtualKey::TR_Left, &Manip::backward_10sec);
+		map.emplace(VirtualKey::TR_Right, &Manip::forward_10sec);
+		map.emplace(VirtualKey::TR_Up, &Manip::speedUp);
+		map.emplace(VirtualKey::TR_Down, &Manip::speedDown);
+		return map;
+	}
+}
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
 	  _ui(new Ui::MainWindow),
@@ -25,71 +59,30 @@ MainWindow::MainWindow(QWidget *parent)
 	  _hwTarget(nullptr)
 {
 	_ui->setupUi(this);
-	auto* t = new dg::InputMgr();
-	connect(t, &dg::InputMgr::onInput, this, &MainWindow::onPadUpdate);
 
+	{
+		_imgr.reset(new dg::XInputMgr());
+		connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
+		_ui->verticalLayout->addWidget(_imgr->makeDialog(), 1);
+	}
+	_keyMap = MakeKeyMap();
+
+	// ウィンドウ検索のインターバルタイマー初期化
 	_timer = new QTimer(this);
 	_timer->start(CHECKTARGET_INTERVAL);
 	connect(_timer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
 }
-
-void MainWindow::_manipulate(const dg::XI_PadState& state) {
+void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 	if(_hwTarget) {
-		struct ManipulateEnt {
-			PS::E_Button	buttonId;
-			void (dg::Manip::*mproc)(HWND) const;
-		};
-		const ManipulateEnt manipEnt[] = {
-			{PS::E_Button::A, &dg::Manip::startPause},
-
-			{PS::E_Button::DPadLeft, &dg::Manip::backward_5sec},
-			{PS::E_Button::DPadRight, &dg::Manip::forward_5sec},
-
-			{PS::E_Button::LeftShoulder, &dg::Manip::speedDown},
-			{PS::E_Button::RightShoulder, &dg::Manip::speedUp},
-
-			{PS::E_Button::DPadDown, &dg::Manip::volumeDown},
-			{PS::E_Button::DPadUp, &dg::Manip::volumeUp},
-
-			{PS::E_Button::X, &dg::Manip::volumeMute},
-			{PS::E_Button::Y, &dg::Manip::fullScreen},
-		};
-		for(auto& e: manipEnt) {
-			if(state.pressed(e.buttonId)) {
-				(_manip->*e.mproc)(_hwTarget);
-				break;
+		const auto m = MakeKeyMap();
+		for(auto& inp : inputs) {
+			const auto itr = m.find(inp);
+			if(itr != m.end()) {
+				auto ptr = itr->second;
+				(_manip->*ptr)(_hwTarget);
 			}
 		}
-
-		if(state.getTrigger(PS::E_Trigger::TriggerLeft).buttonState().pressed()) {
-			_manip->backward_10sec(_hwTarget);
-		}
-		if(state.getTrigger(PS::E_Trigger::TriggerRight).buttonState().pressed()) {
-			_manip->forward_10sec(_hwTarget);
-		}
-
-		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Left))
-			_manip->backward_5sec(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Right))
-			_manip->forward_5sec(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Left))
-			_manip->backward_10sec(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Right))
-			_manip->forward_10sec(_hwTarget);
-
-		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Top))
-			_manip->volumeUp(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbLeft, dg::Direction4::Bottom))
-			_manip->volumeDown(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Top))
-			_manip->speedUp(_hwTarget);
-		if(state.thumbTilted(PS::E_Thumb::ThumbRight, dg::Direction4::Bottom))
-			_manip->speedDown(_hwTarget);
 	}
-}
-void MainWindow::onPadUpdate(const dg::XI_PadState& state) {
-	_ui->diag_xinput->updateDebugView(state);
-	_manipulate(state);
 }
 void MainWindow::checkTargetWindow() {
 	_hwTarget = nullptr;

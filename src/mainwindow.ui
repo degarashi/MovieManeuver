@@ -20,10 +20,7 @@
    <string>Movie Maneuver</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
-    <item>
-     <widget class="dg::Diag_XInput" name="diag_xinput" native="true"/>
-    </item>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
     <item>
      <widget class="QLabel" name="lbWindowName">
       <property name="text">
@@ -44,14 +41,6 @@
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>dg::Diag_XInput</class>
-   <extends>QWidget</extends>
-   <header>src/dg_diag_xinput.hpp</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

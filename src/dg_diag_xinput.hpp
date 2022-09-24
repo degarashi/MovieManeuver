@@ -14,6 +14,8 @@ namespace dg {
 
 		public:
 			explicit Diag_XInput(QWidget *parent = nullptr);
+
+		public slots:
 			void updateDebugView(const dg::XI_PadState& state);
 	};
 }

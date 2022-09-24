@@ -1,9 +1,10 @@
 #pragma once
 #include <QMainWindow>
+#include "virtual_key_def.hpp"
 
 namespace dg {
-	struct XI_PadState;
 	struct Manip;
+	class InputMgrBase;
 }
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,15 +16,21 @@ class MainWindow : public QMainWindow {
 		MainWindow(QWidget* parent=nullptr);
 
 	private:
-		using PS = dg::XI_PadState;
-		std::shared_ptr<Ui::MainWindow> _ui;
+		template <class T>
+		using SP = std::shared_ptr<T>;
+
+		SP<Ui::MainWindow>		_ui;
+		SP<dg::InputMgrBase>	_imgr;
+		// ウィンドウ検索のインターバルタイマー
 		QTimer*							_timer;
+		// 対象(Youtube/Udemy)の検索や操作方法を定義
 		const dg::Manip*				_manip;
+		// 操作対象(ブラウザ)のウィンドウハンドル
 		HWND							_hwTarget;
 
-		void _manipulate(const dg::XI_PadState& state);
+		dg::VKMapping			_keyMap;
 
 	private slots:
-		void onPadUpdate(const dg::XI_PadState& state);
+		void onPadUpdate(const dg::VKInputs& inputs);
 		void checkTargetWindow();
 };
