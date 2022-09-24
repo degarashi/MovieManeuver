@@ -63,7 +63,12 @@ else()
     endif()
 endif()
 
-target_link_libraries(MovieManeuver PRIVATE Qt${QT_VERSION_MAJOR}::Widgets xinput)
+target_link_libraries(
+    MovieManeuver
+    PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    xinput
+)
 
 set_target_properties(MovieManeuver PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
