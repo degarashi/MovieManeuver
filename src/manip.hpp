@@ -5,6 +5,7 @@
 
 class QString;
 namespace dg {
+	// ブラウザを操作するためのキーストロークやマウス操作を定義
 	struct Manip {
 		using Proc_t = std::function<void ()>;
 		HWND findTarget() const;
@@ -21,6 +22,7 @@ namespace dg {
 		virtual void volumeMute(HWND hw) const = 0;
 		virtual void fullScreen(HWND hw) const {}
 
+		// 操作対象ウィンドウを検索する際の名前を取得
 		virtual const std::wstring& getWindowTopName() const = 0;
 		virtual const std::wstring& getWindowChildName() const = 0;
 
