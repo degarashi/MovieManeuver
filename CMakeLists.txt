@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
     src/diag_xinput.ui
     src/virtual_key.hpp
     src/virtual_key_def.hpp
+    src/inputmgr_xinput.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

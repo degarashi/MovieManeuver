@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "inputmgr.hpp"
+#include "inputmgr_xinput.hpp"
 #include "manip_udemy.hpp"
 #include "manip_youtube.hpp"
 

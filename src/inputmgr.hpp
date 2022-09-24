@@ -1,7 +1,6 @@
 #pragma once
 #include <QObject>
 #include <windows.h>
-#include "xi_padstate.hpp"
 #include "virtual_key_def.hpp"
 
 class QTimer;
@@ -18,22 +17,5 @@ namespace dg {
 		public:
 			InputMgrBase();
 			virtual QWidget* makeDialog() = 0;
-	};
-	class XInputMgr : public InputMgrBase {
-		Q_OBJECT
-		private:
-			DWORD		_pktNum = 0;
-			XI_PadState	_state;
-			using PS = XI_PadState;
-
-			VKInputs _composeInputs() const;
-
-		private slots:
-			void onTimer() override;
-		signals:
-			void onInputXI(const dg::XI_PadState& state);
-		public:
-			XInputMgr();
-			QWidget* makeDialog() override;
 	};
 }
