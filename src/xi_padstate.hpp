@@ -39,8 +39,6 @@ namespace dg {
 			TriggerState _trigger[E_Trigger::NumTrigger];
 			AxisState2D _thumb[E_Thumb::NumThumb];
 
-			void _updateButton(int idx, bool prev, bool cur);
-
 		public:
 			XI_PadState();
 			[[nodiscard]] bool check() const;
