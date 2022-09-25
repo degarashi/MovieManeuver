@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
     src/virtual_key.hpp
     src/virtual_key_def.hpp
     src/inputmgr_xinput.hpp
+    src/wii_padstate.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
