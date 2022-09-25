@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 	if(_hwTarget) {
-		const auto m = MakeKeyMap();
+		const auto& m = _keyMap;
 		for(auto& inp : inputs) {
 			const auto itr = m.find(inp);
 			if(itr != m.end()) {
