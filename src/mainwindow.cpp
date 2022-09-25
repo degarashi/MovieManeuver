@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "inputmgr_xinput.hpp"
+#include "inputmgr_wii.hpp"
 #include "manip_udemy.hpp"
 #include "manip_youtube.hpp"
 
@@ -51,6 +51,27 @@ namespace {
 		map.emplace(VirtualKey::TR_Down, &Manip::speedDown);
 		return map;
 	}
+	dg::VKMapping MakeKeyMap_Wii() {
+		using dg::VKMapping;
+		using dg::VirtualKey;
+		using dg::Manip;
+
+		VKMapping map;
+		map.emplace(VirtualKey::DLeft, &Manip::backward_5sec);
+		map.emplace(VirtualKey::DRight, &Manip::forward_5sec);
+		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
+		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
+
+		map.emplace(VirtualKey::A, &Manip::startPause);
+		map.emplace(VirtualKey::B, &Manip::volumeMute);
+		map.emplace(VirtualKey::L1, &Manip::volumeMute);
+
+		map.emplace(VirtualKey::Select, &Manip::speedDown);
+		map.emplace(VirtualKey::Start, &Manip::speedUp);
+		map.emplace(VirtualKey::X, &Manip::backward_10sec);
+		map.emplace(VirtualKey::Y, &Manip::forward_10sec);
+		return map;
+	}
 }
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent),
@@ -61,11 +82,11 @@ MainWindow::MainWindow(QWidget *parent)
 	_ui->setupUi(this);
 
 	{
-		_imgr.reset(new dg::XInputMgr());
+		_imgr.reset(new dg::wii::Manager());
 		connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
 		_ui->verticalLayout->addWidget(_imgr->makeDialog(), 1);
 	}
-	_keyMap = MakeKeyMap();
+	_keyMap = MakeKeyMap_Wii();
 
 	// ウィンドウ検索のインターバルタイマー初期化
 	_timer = new QTimer(this);
