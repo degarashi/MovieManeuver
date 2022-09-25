@@ -41,6 +41,7 @@ set(PROJECT_SOURCES
     src/diag_wiimote.h
     src/diag_wiimote.ui
     src/wii_padstate.hpp
+    src/inputmgr_wii.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
