@@ -38,6 +38,8 @@ set(PROJECT_SOURCES
     src/virtual_key.hpp
     src/virtual_key_def.hpp
     src/inputmgr_xinput.hpp
+    src/diag_wiimote.h
+    src/diag_wiimote.ui
     src/wii_padstate.hpp
 )
 
