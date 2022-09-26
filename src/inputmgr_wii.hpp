@@ -13,6 +13,7 @@ namespace dg::wii {
 			Manager();
 			~Manager();
 			QWidget* makeDialog() override;
+			int numRemote() const;
 		private slots:
 			void onTimer() override;
 		signals:

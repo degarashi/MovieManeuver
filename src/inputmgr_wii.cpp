@@ -41,4 +41,7 @@ namespace dg::wii {
 		connect(this, &Manager::onInputWii, diag, &Diag_Wiimote::updateDebugView);
 		return diag;
 	}
+	int Manager::numRemote() const {
+		return WRMT_GetNumWiiRemote();
+	}
 }
