@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "inputmgr_wii.hpp"
+#include "inputmgr_xinput.hpp"
 #include "manip_udemy.hpp"
 #include "manip_youtube.hpp"
 
@@ -81,12 +82,21 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	_ui->setupUi(this);
 
+	// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
 	{
-		_imgr.reset(new dg::wii::Manager());
+		auto* wiiMgr = new dg::wii::Manager();
+		if(wiiMgr->numRemote() == 0) {
+			auto* xiMgr = new dg::XInputMgr();
+			_imgr.reset(xiMgr);
+			_keyMap = MakeKeyMap();
+		} else {
+			_imgr.reset(wiiMgr);
+			_keyMap = MakeKeyMap_Wii();
+		}
+
 		connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
 		_ui->verticalLayout->addWidget(_imgr->makeDialog(), 1);
 	}
-	_keyMap = MakeKeyMap_Wii();
 
 	// ウィンドウ検索のインターバルタイマー初期化
 	_timer = new QTimer(this);
