@@ -5,9 +5,9 @@
 #include "axisstate2d.hpp"
 #include "aux_enums.hpp"
 
-namespace dg {
+namespace dg::xinput {
 	// XInput用のPadState
-	class XI_PadState {
+	class PadState {
 		public:
 			enum E_Button {
 				Start,
@@ -40,7 +40,7 @@ namespace dg {
 			AxisState2D _thumb[E_Thumb::NumThumb];
 
 		public:
-			XI_PadState();
+			PadState();
 			[[nodiscard]] bool check() const;
 			// init: true=counterもリセット
 			void setNeutral(bool init);

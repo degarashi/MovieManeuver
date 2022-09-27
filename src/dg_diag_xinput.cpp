@@ -2,9 +2,9 @@
 #include "ui_diag_xinput.h"
 #include "xi_padstate.hpp"
 
-namespace dg {
+namespace dg::xinput {
 	namespace {
-		using PS = dg::XI_PadState;
+		using PS = dg::xinput::PadState;
 	}
 
 	Diag_XInput::Diag_XInput(QWidget *parent) :
@@ -13,7 +13,7 @@ namespace dg {
 	{
 		_ui->setupUi(this);
 	}
-	void Diag_XInput::updateDebugView(const dg::XI_PadState& state) {
+	void Diag_XInput::updateDebugView(const dg::xinput::PadState& state) {
 		QCheckBox* ar[] = {
 			_ui->cbStart, _ui->cbBack,
 			_ui->cbA, _ui->cbB, _ui->cbX, _ui->cbY,
@@ -37,7 +37,7 @@ namespace dg {
 			ent.pbY->setValue(val.y * 50);
 		}
 		for(int i=0 ; i<std::size(ar) ; i++) {
-			ar[i]->setChecked(state.pressing(static_cast<dg::XI_PadState::E_Button>(i)) > 0);
+			ar[i]->setChecked(state.pressing(static_cast<dg::xinput::PadState::E_Button>(i)) > 0);
 		}
 
 		struct Trig {

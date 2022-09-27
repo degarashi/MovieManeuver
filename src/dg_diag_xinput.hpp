@@ -4,8 +4,8 @@
 namespace Ui {
 	class Diag_XInput;
 }
-namespace dg {
-	struct XI_PadState;
+namespace dg::xinput {
+	struct PadState;
 
 	class Diag_XInput : public QWidget {
 		Q_OBJECT
@@ -16,6 +16,6 @@ namespace dg {
 			explicit Diag_XInput(QWidget *parent = nullptr);
 
 		public slots:
-			void updateDebugView(const dg::XI_PadState& state);
+			void updateDebugView(const dg::xinput::PadState& state);
 	};
 }

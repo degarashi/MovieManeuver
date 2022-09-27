@@ -1,12 +1,12 @@
 #include "inputmgr_xinput.hpp"
 #include "dg_diag_xinput.hpp"
 
-namespace dg {
+namespace dg::xinput {
 	XInputMgr::XInputMgr() {
-		const int Range = XI_PadState::THUMB_RANGE;
+		const int Range = PadState::THUMB_RANGE;
 		const int DZ = Range - (Range >> 5);
-		_state.refThumb(XI_PadState::E_Thumb::ThumbLeft).setDeadZone(DZ);
-		_state.refThumb(XI_PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
+		_state.refThumb(PadState::E_Thumb::ThumbLeft).setDeadZone(DZ);
+		_state.refThumb(PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
 	}
 	QWidget* XInputMgr::makeDialog() {
 		auto* diag = new Diag_XInput();

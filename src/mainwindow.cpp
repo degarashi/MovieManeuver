@@ -86,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
 	{
 		auto* wiiMgr = new dg::wii::Manager();
 		if(wiiMgr->numRemote() == 0) {
-			auto* xiMgr = new dg::XInputMgr();
+			auto* xiMgr = new dg::xinput::XInputMgr();
 			_imgr.reset(xiMgr);
 			_keyMap = MakeKeyMap();
 		} else {
