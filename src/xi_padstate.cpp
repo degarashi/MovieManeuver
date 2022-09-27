@@ -59,12 +59,12 @@ namespace dg::xinput {
 
 		// LeftTrigger
 		{
-			const bool positive = _trigger[E_Trigger::TriggerLeft].update(pad.bLeftTrigger);
+			const bool positive = _trigger[TriggerId(Trigger::TriggerLeft)].update(pad.bLeftTrigger);
 			Q_ASSERT(positive);
 		}
 		// RightTrigger
 		{
-			const bool positive = _trigger[E_Trigger::TriggerRight].update(pad.bRightTrigger);
+			const bool positive = _trigger[TriggerId(Trigger::TriggerRight)].update(pad.bRightTrigger);
 			Q_ASSERT(positive);
 		}
 
@@ -100,8 +100,8 @@ namespace dg::xinput {
 	ButtonState::Frames PadState::pressing(const Button id) const {
 		return _button[BtnId(id)].pressing();
 	}
-	const TriggerState& PadState::getTrigger(const E_Trigger t) const {
-		return _trigger[t];
+	const TriggerState& PadState::getTrigger(const Trigger t) const {
+		return _trigger[TriggerId(t)];
 	}
 	Vec2 PadState::getThumb(const Thumb t) const {
 		return _thumb[ThumbId(t)].dir();
@@ -114,11 +114,11 @@ namespace dg::xinput {
 				- static_cast<int>(_button[BtnId(Button::DPadDown)].pressing() > 0),
 		};
 	}
-	int PadState::getTriggerDeadZone(const E_Trigger id) const {
-		return _trigger[id].deadZone();
+	int PadState::getTriggerDeadZone(const Trigger id) const {
+		return _trigger[TriggerId(id)].deadZone();
 	}
-	void PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
-		_trigger[id].setDeadZone(dz);
+	void PadState::setTriggerDeadZone(const Trigger id, const int dz) {
+		_trigger[TriggerId(id)].setDeadZone(dz);
 	}
 	const AxisState2D& PadState::thumb(const Thumb id) const {
 		return _thumb[ThumbId(id)];

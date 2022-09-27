@@ -24,7 +24,7 @@ namespace dg::xinput {
 				ThumbRight,
 				NumThumb
 			};
-			enum E_Trigger {
+			enum class Trigger {
 				TriggerLeft,
 				TriggerRight,
 				NumTrigger
@@ -36,11 +36,12 @@ namespace dg::xinput {
 
 		private:
 			ButtonState _button[static_cast<int>(Button::NumButtons)];
-			TriggerState _trigger[E_Trigger::NumTrigger];
+			TriggerState _trigger[static_cast<int>(Trigger::NumTrigger)];
 			AxisState2D _thumb[static_cast<int>(Thumb::NumThumb)];
 
 			static auto BtnId(const Button id) { return static_cast<int>(id); }
 			static auto ThumbId(const Thumb id) { return static_cast<int>(id); }
+			static auto TriggerId(const Trigger id) { return static_cast<int>(id); }
 
 		public:
 			PadState();
@@ -55,15 +56,15 @@ namespace dg::xinput {
 			[[nodiscard]] bool released(Button id) const;
 			[[nodiscard]] ButtonState::Frames pressing(Button id) const;
 
-			[[nodiscard]] const TriggerState& getTrigger(E_Trigger t) const;
+			[[nodiscard]] const TriggerState& getTrigger(Trigger t) const;
 			[[nodiscard]] Vec2 getThumb(Thumb t) const;
 
 			[[nodiscard]] IVec2 getDPadVec() const;
 
 			[[nodiscard]] int getThumbDeadZone(Thumb id) const;
 			void setThumbDeadZone(Thumb id, int dz);
-			[[nodiscard]] int getTriggerDeadZone(E_Trigger id) const;
-			void setTriggerDeadZone(E_Trigger id, int dz);
+			[[nodiscard]] int getTriggerDeadZone(Trigger id) const;
+			void setTriggerDeadZone(Trigger id, int dz);
 
 			[[nodiscard]] const AxisState2D& thumb(Thumb id) const;
 			[[nodiscard]] AxisState2D& refThumb(Thumb id);

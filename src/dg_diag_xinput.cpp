@@ -41,13 +41,13 @@ namespace dg::xinput {
 		}
 
 		struct Trig {
-			PS::E_Trigger	sourceId;
+			PS::Trigger	sourceId;
 			QCheckBox		*cb;
 			QProgressBar	*pb;
 		};
 		const Trig arT[] = {
-			{PS::E_Trigger::TriggerLeft, _ui->cbLTrigger, _ui->pbLTrigger},
-			{PS::E_Trigger::TriggerRight, _ui->cbRTrigger, _ui->pbRTrigger},
+			{PS::Trigger::TriggerLeft, _ui->cbLTrigger, _ui->pbLTrigger},
+			{PS::Trigger::TriggerRight, _ui->cbRTrigger, _ui->pbRTrigger},
 		};
 		for(auto& ent : arT) {
 			auto& t = state.getTrigger(ent.sourceId);

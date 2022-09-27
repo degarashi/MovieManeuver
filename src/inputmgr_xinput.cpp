@@ -66,9 +66,9 @@ namespace dg::xinput {
 					ret.emplace_back(t.vk);
 			}
 		}
-		if(_state.getTrigger(PS::E_Trigger::TriggerLeft).buttonState().pressed())
+		if(_state.getTrigger(PS::Trigger::TriggerLeft).buttonState().pressed())
 			ret.emplace_back(VirtualKey::L2);
-		if(_state.getTrigger(PS::E_Trigger::TriggerRight).buttonState().pressed())
+		if(_state.getTrigger(PS::Trigger::TriggerRight).buttonState().pressed())
 			ret.emplace_back(VirtualKey::R2);
 
 		return ret;
