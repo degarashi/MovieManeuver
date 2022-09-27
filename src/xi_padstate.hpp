@@ -6,29 +6,29 @@
 #include "aux_enums.hpp"
 
 namespace dg::xinput {
+	enum class Button {
+		Start,
+		Back,
+		A,B,X,Y,
+		LeftThumb, LeftShoulder,
+		RightThumb, RightShoulder,
+		DPadLeft, DPadUp, DPadRight, DPadDown,
+
+		NumButtons
+	};
+	enum class Thumb {
+		ThumbLeft,
+		ThumbRight,
+		NumThumb
+	};
+	enum class Trigger {
+		TriggerLeft,
+		TriggerRight,
+		NumTrigger
+	};
 	// XInput用のPadState
 	class PadState {
 		public:
-			enum class Button {
-				Start,
-				Back,
-				A,B,X,Y,
-				LeftThumb, LeftShoulder,
-				RightThumb, RightShoulder,
-				DPadLeft, DPadUp, DPadRight, DPadDown,
-
-				NumButtons
-			};
-			enum class Thumb {
-				ThumbLeft,
-				ThumbRight,
-				NumThumb
-			};
-			enum class Trigger {
-				TriggerLeft,
-				TriggerRight,
-				NumTrigger
-			};
 			const static int TRIGGER_RANGE,
 							  THUMB_RANGE;
 			const static int DEFAULT_DZ_TRIGGER,

@@ -5,8 +5,8 @@ namespace dg::xinput {
 	Manager::Manager() {
 		const int Range = PadState::THUMB_RANGE;
 		const int DZ = Range - (Range >> 5);
-		_state.refThumb(PadState::Thumb::ThumbLeft).setDeadZone(DZ);
-		_state.refThumb(PadState::Thumb::ThumbRight).setDeadZone(DZ);
+		_state.refThumb(Thumb::ThumbLeft).setDeadZone(DZ);
+		_state.refThumb(Thumb::ThumbRight).setDeadZone(DZ);
 	}
 	QWidget* Manager::makeDialog() {
 		auto* diag = new DebugViewWidget();
@@ -17,27 +17,27 @@ namespace dg::xinput {
 		VKInputs ret;
 		{
 			struct BtnPair {
-				PS::Button 	id;
+				Button 	id;
 				VirtualKey		vk;
 			};
 			const BtnPair Btn[] = {
-				{PS::Button::A, VirtualKey::B},
-				{PS::Button::B, VirtualKey::A},
-				{PS::Button::X, VirtualKey::Y},
-				{PS::Button::Y, VirtualKey::X},
+				{Button::A, VirtualKey::B},
+				{Button::B, VirtualKey::A},
+				{Button::X, VirtualKey::Y},
+				{Button::Y, VirtualKey::X},
 
-				{PS::Button::DPadLeft, VirtualKey::DLeft},
-				{PS::Button::DPadUp, VirtualKey::DUp},
-				{PS::Button::DPadRight, VirtualKey::DRight},
-				{PS::Button::DPadDown, VirtualKey::DDown},
+				{Button::DPadLeft, VirtualKey::DLeft},
+				{Button::DPadUp, VirtualKey::DUp},
+				{Button::DPadRight, VirtualKey::DRight},
+				{Button::DPadDown, VirtualKey::DDown},
 
-				{PS::Button::LeftShoulder, VirtualKey::L1},
-				{PS::Button::LeftThumb, VirtualKey::L3},
-				{PS::Button::RightShoulder, VirtualKey::R1},
-				{PS::Button::RightThumb, VirtualKey::R3},
+				{Button::LeftShoulder, VirtualKey::L1},
+				{Button::LeftThumb, VirtualKey::L3},
+				{Button::RightShoulder, VirtualKey::R1},
+				{Button::RightThumb, VirtualKey::R3},
 
-				{PS::Button::Start, VirtualKey::Start},
-				{PS::Button::Back, VirtualKey::Select},
+				{Button::Start, VirtualKey::Start},
+				{Button::Back, VirtualKey::Select},
 			};
 			for(auto& b : Btn) {
 				if(_state.pressed(b.id))
@@ -46,29 +46,29 @@ namespace dg::xinput {
 		}
 		{
 			struct TiltPair {
-				PS::Thumb thumb;
+				Thumb thumb;
 				Direction4	dir;
 				VirtualKey	vk;
 			};
 			const TiltPair TP[] = {
-				{PS::Thumb::ThumbLeft, Direction4::Left, VirtualKey::TL_Left},
-				{PS::Thumb::ThumbLeft, Direction4::Top, VirtualKey::TL_Up},
-				{PS::Thumb::ThumbLeft, Direction4::Right, VirtualKey::TL_Right},
-				{PS::Thumb::ThumbLeft, Direction4::Bottom, VirtualKey::TL_Down},
+				{Thumb::ThumbLeft, Direction4::Left, VirtualKey::TL_Left},
+				{Thumb::ThumbLeft, Direction4::Top, VirtualKey::TL_Up},
+				{Thumb::ThumbLeft, Direction4::Right, VirtualKey::TL_Right},
+				{Thumb::ThumbLeft, Direction4::Bottom, VirtualKey::TL_Down},
 
-				{PS::Thumb::ThumbRight, Direction4::Left, VirtualKey::TR_Left},
-				{PS::Thumb::ThumbRight, Direction4::Top, VirtualKey::TR_Up},
-				{PS::Thumb::ThumbRight, Direction4::Right, VirtualKey::TR_Right},
-				{PS::Thumb::ThumbRight, Direction4::Bottom, VirtualKey::TR_Down},
+				{Thumb::ThumbRight, Direction4::Left, VirtualKey::TR_Left},
+				{Thumb::ThumbRight, Direction4::Top, VirtualKey::TR_Up},
+				{Thumb::ThumbRight, Direction4::Right, VirtualKey::TR_Right},
+				{Thumb::ThumbRight, Direction4::Bottom, VirtualKey::TR_Down},
 			};
 			for(auto& t : TP) {
 				if(_state.thumbTilted(t.thumb, t.dir))
 					ret.emplace_back(t.vk);
 			}
 		}
-		if(_state.getTrigger(PS::Trigger::TriggerLeft).buttonState().pressed())
+		if(_state.getTrigger(Trigger::TriggerLeft).buttonState().pressed())
 			ret.emplace_back(VirtualKey::L2);
-		if(_state.getTrigger(PS::Trigger::TriggerRight).buttonState().pressed())
+		if(_state.getTrigger(Trigger::TriggerRight).buttonState().pressed())
 			ret.emplace_back(VirtualKey::R2);
 
 		return ret;

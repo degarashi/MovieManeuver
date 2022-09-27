@@ -3,10 +3,6 @@
 #include "xi_padstate.hpp"
 
 namespace dg::xinput {
-	namespace {
-		using PS = dg::xinput::PadState;
-	}
-
 	DebugViewWidget::DebugViewWidget(QWidget *parent) :
 		QWidget(parent),
 		_ui(new Ui::Diag_XInput)
@@ -22,13 +18,13 @@ namespace dg::xinput {
 			_ui->cbDPad_Left, _ui->cbDPad_Up, _ui->cbDPad_Right, _ui->cbDPad_Down,
 		};
 
-		struct Thumb {
-			PS::Thumb		sourceId;
+		struct ThumbP {
+			Thumb		sourceId;
 			QProgressBar	*pbX, *pbY;
 		};
-		Thumb arB[] = {
-			{PS::Thumb::ThumbLeft, _ui->pbLThumbX, _ui->pbLThumbY},
-			{PS::Thumb::ThumbRight, _ui->pbRThumbX, _ui->pbRThumbY},
+		ThumbP arB[] = {
+			{Thumb::ThumbLeft, _ui->pbLThumbX, _ui->pbLThumbY},
+			{Thumb::ThumbRight, _ui->pbRThumbX, _ui->pbRThumbY},
 		};
 		for(int i=0 ; i<std::size(arB) ; i++) {
 			auto& ent = arB[i];
@@ -37,17 +33,17 @@ namespace dg::xinput {
 			ent.pbY->setValue(val.y * 50);
 		}
 		for(int i=0 ; i<std::size(ar) ; i++) {
-			ar[i]->setChecked(state.pressing(static_cast<dg::xinput::PadState::Button>(i)) > 0);
+			ar[i]->setChecked(state.pressing(static_cast<dg::xinput::Button>(i)) > 0);
 		}
 
 		struct Trig {
-			PS::Trigger	sourceId;
+			Trigger	sourceId;
 			QCheckBox		*cb;
 			QProgressBar	*pb;
 		};
 		const Trig arT[] = {
-			{PS::Trigger::TriggerLeft, _ui->cbLTrigger, _ui->pbLTrigger},
-			{PS::Trigger::TriggerRight, _ui->cbRTrigger, _ui->pbRTrigger},
+			{Trigger::TriggerLeft, _ui->cbLTrigger, _ui->pbLTrigger},
+			{Trigger::TriggerRight, _ui->cbRTrigger, _ui->pbRTrigger},
 		};
 		for(auto& ent : arT) {
 			auto& t = state.getTrigger(ent.sourceId);
