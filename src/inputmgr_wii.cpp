@@ -37,8 +37,8 @@ namespace dg::wii {
 		}
 	}
 	QWidget* Manager::makeDialog() {
-		auto* diag = new Diag_Wiimote();
-		connect(this, &Manager::onInputWii, diag, &Diag_Wiimote::updateDebugView);
+		auto* diag = new DebugViewWidget();
+		connect(this, &Manager::onInputWii, diag, &DebugViewWidget::updateDebugView);
 		return diag;
 	}
 	int Manager::numRemote() const {

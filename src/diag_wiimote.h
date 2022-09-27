@@ -1,20 +1,18 @@
 #pragma once
 #include <QWidget>
 
-namespace dg {
-	namespace wii {
-		class Remote;
-	}
+namespace dg::wii {
+	class Remote;
 	namespace Ui {
-		class Diag_Wiimote;
+		class DebugViewWidget;
 	}
-	class Diag_Wiimote : public QWidget {
+	class DebugViewWidget : public QWidget {
 		Q_OBJECT
 		private:
-			std::shared_ptr<Ui::Diag_Wiimote> _ui;
+			std::shared_ptr<Ui::DebugViewWidget> _ui;
 
 		public:
-			explicit Diag_Wiimote(QWidget *parent = nullptr);
+			explicit DebugViewWidget(QWidget *parent = nullptr);
 		public slots:
 			void updateDebugView(const dg::wii::Remote& remote);
 	};
