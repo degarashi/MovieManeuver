@@ -3,7 +3,7 @@
 #include "xi_padstate.hpp"
 
 namespace dg::xinput {
-	class XInputMgr : public InputMgrBase {
+	class Manager : public InputMgrBase {
 		Q_OBJECT
 		private:
 			DWORD		_pktNum = 0;
@@ -17,7 +17,7 @@ namespace dg::xinput {
 		signals:
 			void onInputXI(const dg::xinput::PadState& state);
 		public:
-			XInputMgr();
+			Manager();
 			QWidget* makeDialog() override;
 	};
 }

@@ -2,18 +2,18 @@
 #include "dg_diag_xinput.hpp"
 
 namespace dg::xinput {
-	XInputMgr::XInputMgr() {
+	Manager::Manager() {
 		const int Range = PadState::THUMB_RANGE;
 		const int DZ = Range - (Range >> 5);
 		_state.refThumb(PadState::E_Thumb::ThumbLeft).setDeadZone(DZ);
 		_state.refThumb(PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
 	}
-	QWidget* XInputMgr::makeDialog() {
+	QWidget* Manager::makeDialog() {
 		auto* diag = new Diag_XInput();
-		connect(this, &XInputMgr::onInputXI, diag, &Diag_XInput::updateDebugView);
+		connect(this, &Manager::onInputXI, diag, &Diag_XInput::updateDebugView);
 		return diag;
 	}
-	VKInputs XInputMgr::_composeInputs() const {
+	VKInputs Manager::_composeInputs() const {
 		VKInputs ret;
 		{
 			struct BtnPair {
@@ -73,7 +73,7 @@ namespace dg::xinput {
 
 		return ret;
 	}
-	void XInputMgr::onTimer() {
+	void Manager::onTimer() {
 		XINPUT_STATE xstate{};
 		if(XInputGetState(0, &xstate) == ERROR_SUCCESS) {
 			if(_pktNum == xstate.dwPacketNumber) {
