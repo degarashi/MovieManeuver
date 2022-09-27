@@ -7,13 +7,13 @@ namespace Ui {
 namespace dg::xinput {
 	struct PadState;
 
-	class Diag_XInput : public QWidget {
+	class DebugViewWidget : public QWidget {
 		Q_OBJECT
 		private:
 			std::shared_ptr<Ui::Diag_XInput>	_ui;
 
 		public:
-			explicit Diag_XInput(QWidget *parent = nullptr);
+			explicit DebugViewWidget(QWidget *parent = nullptr);
 
 		public slots:
 			void updateDebugView(const dg::xinput::PadState& state);

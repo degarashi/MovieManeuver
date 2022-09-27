@@ -7,13 +7,13 @@ namespace dg::xinput {
 		using PS = dg::xinput::PadState;
 	}
 
-	Diag_XInput::Diag_XInput(QWidget *parent) :
+	DebugViewWidget::DebugViewWidget(QWidget *parent) :
 		QWidget(parent),
 		_ui(new Ui::Diag_XInput)
 	{
 		_ui->setupUi(this);
 	}
-	void Diag_XInput::updateDebugView(const dg::xinput::PadState& state) {
+	void DebugViewWidget::updateDebugView(const dg::xinput::PadState& state) {
 		QCheckBox* ar[] = {
 			_ui->cbStart, _ui->cbBack,
 			_ui->cbA, _ui->cbB, _ui->cbX, _ui->cbY,

@@ -9,8 +9,8 @@ namespace dg::xinput {
 		_state.refThumb(PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
 	}
 	QWidget* Manager::makeDialog() {
-		auto* diag = new Diag_XInput();
-		connect(this, &Manager::onInputXI, diag, &Diag_XInput::updateDebugView);
+		auto* diag = new DebugViewWidget();
+		connect(this, &Manager::onInputXI, diag, &DebugViewWidget::updateDebugView);
 		return diag;
 	}
 	VKInputs Manager::_composeInputs() const {
