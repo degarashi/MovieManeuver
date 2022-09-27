@@ -25,7 +25,7 @@ set(PROJECT_SOURCES
     src/manip_udemy.hpp
     src/manip_youtube.hpp
     src/mainwindow.h
-    src/inputmgr.hpp
+    src/inputmgr_base.hpp
     src/buttonstate.hpp
     src/aux_func.hpp
     src/triggerstate.hpp

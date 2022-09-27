@@ -1,5 +1,5 @@
 #pragma once
-#include "inputmgr.hpp"
+#include "inputmgr_base.hpp"
 #include "wii_padstate.hpp"
 
 namespace dg::wii {

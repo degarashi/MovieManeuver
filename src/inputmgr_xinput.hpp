@@ -1,5 +1,5 @@
 #pragma once
-#include "inputmgr.hpp"
+#include "inputmgr_base.hpp"
 #include "xi_padstate.hpp"
 
 namespace dg {

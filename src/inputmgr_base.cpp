@@ -1,4 +1,4 @@
-#include "inputmgr.hpp"
+#include "inputmgr_base.hpp"
 #include <QTimer>
 
 namespace dg {
