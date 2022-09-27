@@ -103,8 +103,8 @@ namespace dg::xinput {
 	const TriggerState& PadState::getTrigger(const E_Trigger t) const {
 		return _trigger[t];
 	}
-	Vec2 PadState::getThumb(const E_Thumb t) const {
-		return _thumb[t].dir();
+	Vec2 PadState::getThumb(const Thumb t) const {
+		return _thumb[ThumbId(t)].dir();
 	}
 	IVec2 PadState::getDPadVec() const {
 		return {
@@ -120,13 +120,13 @@ namespace dg::xinput {
 	void PadState::setTriggerDeadZone(const E_Trigger id, const int dz) {
 		_trigger[id].setDeadZone(dz);
 	}
-	const AxisState2D& PadState::thumb(const E_Thumb id) const {
-		return _thumb[id];
+	const AxisState2D& PadState::thumb(const Thumb id) const {
+		return _thumb[ThumbId(id)];
 	}
-	AxisState2D& PadState::refThumb(const E_Thumb id) {
-		return _thumb[id];
+	AxisState2D& PadState::refThumb(const Thumb id) {
+		return _thumb[ThumbId(id)];
 	}
-	bool PadState::thumbTilted(const E_Thumb id, const Direction4 dir) const {
+	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
 		const int positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
 								 AxisState::Positive : AxisState::Negative;
 		const int vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?

@@ -23,12 +23,12 @@ namespace dg::xinput {
 		};
 
 		struct Thumb {
-			PS::E_Thumb		sourceId;
+			PS::Thumb		sourceId;
 			QProgressBar	*pbX, *pbY;
 		};
 		Thumb arB[] = {
-			{PS::E_Thumb::ThumbLeft, _ui->pbLThumbX, _ui->pbLThumbY},
-			{PS::E_Thumb::ThumbRight, _ui->pbRThumbX, _ui->pbRThumbY},
+			{PS::Thumb::ThumbLeft, _ui->pbLThumbX, _ui->pbLThumbY},
+			{PS::Thumb::ThumbRight, _ui->pbRThumbX, _ui->pbRThumbY},
 		};
 		for(int i=0 ; i<std::size(arB) ; i++) {
 			auto& ent = arB[i];

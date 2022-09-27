@@ -5,8 +5,8 @@ namespace dg::xinput {
 	Manager::Manager() {
 		const int Range = PadState::THUMB_RANGE;
 		const int DZ = Range - (Range >> 5);
-		_state.refThumb(PadState::E_Thumb::ThumbLeft).setDeadZone(DZ);
-		_state.refThumb(PadState::E_Thumb::ThumbRight).setDeadZone(DZ);
+		_state.refThumb(PadState::Thumb::ThumbLeft).setDeadZone(DZ);
+		_state.refThumb(PadState::Thumb::ThumbRight).setDeadZone(DZ);
 	}
 	QWidget* Manager::makeDialog() {
 		auto* diag = new DebugViewWidget();
@@ -46,20 +46,20 @@ namespace dg::xinput {
 		}
 		{
 			struct TiltPair {
-				PS::E_Thumb thumb;
+				PS::Thumb thumb;
 				Direction4	dir;
 				VirtualKey	vk;
 			};
 			const TiltPair TP[] = {
-				{PS::E_Thumb::ThumbLeft, Direction4::Left, VirtualKey::TL_Left},
-				{PS::E_Thumb::ThumbLeft, Direction4::Top, VirtualKey::TL_Up},
-				{PS::E_Thumb::ThumbLeft, Direction4::Right, VirtualKey::TL_Right},
-				{PS::E_Thumb::ThumbLeft, Direction4::Bottom, VirtualKey::TL_Down},
+				{PS::Thumb::ThumbLeft, Direction4::Left, VirtualKey::TL_Left},
+				{PS::Thumb::ThumbLeft, Direction4::Top, VirtualKey::TL_Up},
+				{PS::Thumb::ThumbLeft, Direction4::Right, VirtualKey::TL_Right},
+				{PS::Thumb::ThumbLeft, Direction4::Bottom, VirtualKey::TL_Down},
 
-				{PS::E_Thumb::ThumbRight, Direction4::Left, VirtualKey::TR_Left},
-				{PS::E_Thumb::ThumbRight, Direction4::Top, VirtualKey::TR_Up},
-				{PS::E_Thumb::ThumbRight, Direction4::Right, VirtualKey::TR_Right},
-				{PS::E_Thumb::ThumbRight, Direction4::Bottom, VirtualKey::TR_Down},
+				{PS::Thumb::ThumbRight, Direction4::Left, VirtualKey::TR_Left},
+				{PS::Thumb::ThumbRight, Direction4::Top, VirtualKey::TR_Up},
+				{PS::Thumb::ThumbRight, Direction4::Right, VirtualKey::TR_Right},
+				{PS::Thumb::ThumbRight, Direction4::Bottom, VirtualKey::TR_Down},
 			};
 			for(auto& t : TP) {
 				if(_state.thumbTilted(t.thumb, t.dir))
