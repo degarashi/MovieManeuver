@@ -1,14 +1,17 @@
 #include "manip_youtube.hpp"
 #include "winop.hpp"
 #include <QThread>
+#include <QDateTime>
 
 namespace dg {
 	namespace {
 		constexpr unsigned long WAIT = 25;
 	}
-	void Manip_YouTube::YProc(HWND hw, const Proc_t& p) {
+	void Manip_YouTube::_focus(HWND hw, const Proc_t& p) const {
 		TempSwitch(hw, [hw, &p](){
-			ClickLeftTop(hw);
+			ClickLeftTop(hw, true);
+			QThread::msleep(WAIT);
+			TapKey(VK_ESCAPE);
 			QThread::msleep(WAIT);
 			TapKey(VK_HOME);
 			p();
@@ -23,42 +26,42 @@ namespace dg {
 		return ret;
 	}
 	void Manip_YouTube::startPause(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(u8'K');
 		});
 	}
 	void Manip_YouTube::forward_5sec(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(VK_RIGHT);
 		});
 	}
 	void Manip_YouTube::backward_5sec(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(VK_LEFT);
 		});
 	}
 	void Manip_YouTube::forward_10sec(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(u8'L');
 		});
 	}
 	void Manip_YouTube::backward_10sec(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(u8'J');
 		});
 	}
 	void Manip_YouTube::speedDown(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(0xBC, VK_SHIFT);
 		});
 	}
 	void Manip_YouTube::speedUp(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(0xBE, VK_SHIFT);
 		});
 	}
 	void Manip_YouTube::volumeDown(const HWND hw) const {
-		YProc(hw, [hw](){
+		_focus(hw, [hw](){
 			QThread::msleep(WAIT);
 			ClickLeftTop(hw, true, 160);
 			TapKey(VK_DOWN);
@@ -67,7 +70,7 @@ namespace dg {
 		});
 	}
 	void Manip_YouTube::volumeUp(const HWND hw) const {
-		YProc(hw, [hw](){
+		_focus(hw, [hw](){
 			QThread::msleep(WAIT);
 			ClickLeftTop(hw, true, 160);
 			TapKey(VK_UP);
@@ -76,7 +79,7 @@ namespace dg {
 		});
 	}
 	void Manip_YouTube::volumeMute(const HWND hw) const {
-		YProc(hw, [](){
+		_focus(hw, [](){
 			TapKey(u8'M');
 		});
 	}
