@@ -9,7 +9,7 @@ namespace dg::xinput {
 	// XInput用のPadState
 	class PadState {
 		public:
-			enum E_Button {
+			enum class Button {
 				Start,
 				Back,
 				A,B,X,Y,
@@ -35,9 +35,11 @@ namespace dg::xinput {
 							  DEFAULT_DZ_THUMB;
 
 		private:
-			ButtonState _button[E_Button::NumButtons];
+			ButtonState _button[static_cast<int>(Button::NumButtons)];
 			TriggerState _trigger[E_Trigger::NumTrigger];
 			AxisState2D _thumb[E_Thumb::NumThumb];
+
+			static auto BtnId(const Button id) { return static_cast<int>(id); }
 
 		public:
 			PadState();
@@ -48,9 +50,9 @@ namespace dg::xinput {
 			void updateState();
 			void updateState(const XINPUT_GAMEPAD& pad);
 
-			[[nodiscard]] bool pressed(E_Button id) const;
-			[[nodiscard]] bool released(E_Button id) const;
-			[[nodiscard]] ButtonState::Frames pressing(E_Button id) const;
+			[[nodiscard]] bool pressed(Button id) const;
+			[[nodiscard]] bool released(Button id) const;
+			[[nodiscard]] ButtonState::Frames pressing(Button id) const;
 
 			[[nodiscard]] const TriggerState& getTrigger(E_Trigger t) const;
 			[[nodiscard]] Vec2 getThumb(E_Thumb t) const;

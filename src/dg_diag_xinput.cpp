@@ -37,7 +37,7 @@ namespace dg::xinput {
 			ent.pbY->setValue(val.y * 50);
 		}
 		for(int i=0 ; i<std::size(ar) ; i++) {
-			ar[i]->setChecked(state.pressing(static_cast<dg::xinput::PadState::E_Button>(i)) > 0);
+			ar[i]->setChecked(state.pressing(static_cast<dg::xinput::PadState::Button>(i)) > 0);
 		}
 
 		struct Trig {

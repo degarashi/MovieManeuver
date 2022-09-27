@@ -17,27 +17,27 @@ namespace dg::xinput {
 		VKInputs ret;
 		{
 			struct BtnPair {
-				PS::E_Button 	id;
+				PS::Button 	id;
 				VirtualKey		vk;
 			};
 			const BtnPair Btn[] = {
-				{PS::E_Button::A, VirtualKey::B},
-				{PS::E_Button::B, VirtualKey::A},
-				{PS::E_Button::X, VirtualKey::Y},
-				{PS::E_Button::Y, VirtualKey::X},
+				{PS::Button::A, VirtualKey::B},
+				{PS::Button::B, VirtualKey::A},
+				{PS::Button::X, VirtualKey::Y},
+				{PS::Button::Y, VirtualKey::X},
 
-				{PS::E_Button::DPadLeft, VirtualKey::DLeft},
-				{PS::E_Button::DPadUp, VirtualKey::DUp},
-				{PS::E_Button::DPadRight, VirtualKey::DRight},
-				{PS::E_Button::DPadDown, VirtualKey::DDown},
+				{PS::Button::DPadLeft, VirtualKey::DLeft},
+				{PS::Button::DPadUp, VirtualKey::DUp},
+				{PS::Button::DPadRight, VirtualKey::DRight},
+				{PS::Button::DPadDown, VirtualKey::DDown},
 
-				{PS::E_Button::LeftShoulder, VirtualKey::L1},
-				{PS::E_Button::LeftThumb, VirtualKey::L3},
-				{PS::E_Button::RightShoulder, VirtualKey::R1},
-				{PS::E_Button::RightThumb, VirtualKey::R3},
+				{PS::Button::LeftShoulder, VirtualKey::L1},
+				{PS::Button::LeftThumb, VirtualKey::L3},
+				{PS::Button::RightShoulder, VirtualKey::R1},
+				{PS::Button::RightThumb, VirtualKey::R3},
 
-				{PS::E_Button::Start, VirtualKey::Start},
-				{PS::E_Button::Back, VirtualKey::Select},
+				{PS::Button::Start, VirtualKey::Start},
+				{PS::Button::Back, VirtualKey::Select},
 			};
 			for(auto& b : Btn) {
 				if(_state.pressed(b.id))

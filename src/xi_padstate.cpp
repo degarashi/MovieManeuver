@@ -83,22 +83,22 @@ namespace dg::xinput {
 				return false;
 
 		// いずれか片方が0でないとおかしい
-		auto axisCheck = [this](const auto id0, const auto id1) {
-			return (_button[id0].pressing() * _button[id1].pressing()) == 0;
+		auto axisCheck = [this](const Button id0, const Button id1) {
+			return (_button[BtnId(id0)].pressing() * _button[BtnId(id1)].pressing()) == 0;
 		};
-		if(!axisCheck(E_Button::DPadLeft, E_Button::DPadRight)) return false;
-		if(!axisCheck(E_Button::DPadUp, E_Button::DPadDown)) return false;
+		if(!axisCheck(Button::DPadLeft, Button::DPadRight)) return false;
+		if(!axisCheck(Button::DPadUp, Button::DPadDown)) return false;
 
 		return true;
 	}
-	bool PadState::pressed(const E_Button id) const {
-		return _button[id].pressed();
+	bool PadState::pressed(const Button id) const {
+		return _button[BtnId(id)].pressed();
 	}
-	bool PadState::released(const E_Button id) const {
-		return _button[id].released();
+	bool PadState::released(const Button id) const {
+		return _button[BtnId(id)].released();
 	}
-	ButtonState::Frames PadState::pressing(const E_Button id) const {
-		return _button[id].pressing();
+	ButtonState::Frames PadState::pressing(const Button id) const {
+		return _button[BtnId(id)].pressing();
 	}
 	const TriggerState& PadState::getTrigger(const E_Trigger t) const {
 		return _trigger[t];
@@ -108,10 +108,10 @@ namespace dg::xinput {
 	}
 	IVec2 PadState::getDPadVec() const {
 		return {
-			static_cast<int>(_button[E_Button::DPadRight].pressing() > 0)
-				- static_cast<int>(_button[E_Button::DPadLeft].pressing() > 0),
-			static_cast<int>(_button[E_Button::DPadUp].pressing() > 0)
-				- static_cast<int>(_button[E_Button::DPadDown].pressing() > 0),
+			static_cast<int>(_button[BtnId(Button::DPadRight)].pressing() > 0)
+				- static_cast<int>(_button[BtnId(Button::DPadLeft)].pressing() > 0),
+			static_cast<int>(_button[BtnId(Button::DPadUp)].pressing() > 0)
+				- static_cast<int>(_button[BtnId(Button::DPadDown)].pressing() > 0),
 		};
 	}
 	int PadState::getTriggerDeadZone(const E_Trigger id) const {
