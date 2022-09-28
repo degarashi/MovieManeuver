@@ -1,6 +1,7 @@
 #pragma once
 #include "virtual_key.hpp"
 #include "buttonstate.hpp"
+#include "wii_enums.hpp"
 #include <stdexcept>
 #include <unordered_map>
 
@@ -12,13 +13,6 @@ namespace dg::wii {
 	};
 	class Init_Fail : public Exception {
 		using Exception::Exception;
-	};
-	enum class Button {
-		A, B,
-		One, Two,
-		Minus, Home, Plus,
-		Left, Up, Right, Down,
-		_Num
 	};
 	using ButtonToVKMap_t = std::unordered_map<Button, VirtualKey>;
 	extern const ButtonToVKMap_t ButtonToVKMap;
