@@ -2,18 +2,11 @@
 #include "virtual_key.hpp"
 #include "buttonstate.hpp"
 #include "wii_enums.hpp"
-#include <stdexcept>
 #include <unordered_map>
 
 struct wrmt_wiiremote;
 using WRMT_WiiRemote = wrmt_wiiremote;
 namespace dg::wii {
-	class Exception : public std::runtime_error {
-		using runtime_error::runtime_error;
-	};
-	class Init_Fail : public Exception {
-		using Exception::Exception;
-	};
 	using ButtonToVKMap_t = std::unordered_map<Button, VirtualKey>;
 	extern const ButtonToVKMap_t ButtonToVKMap;
 	using ButtonAr = std::array<bool, static_cast<size_t>(Button::_Num)>;

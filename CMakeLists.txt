@@ -43,6 +43,7 @@ set(PROJECT_SOURCES
     src/wii_padstate.hpp
     src/inputmgr_wii.hpp
     src/wii_enums.hpp
+    src/wii_exception.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)

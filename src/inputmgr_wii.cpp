@@ -1,5 +1,6 @@
 #include "inputmgr_wii.hpp"
 #include "diag_wiimote.h"
+#include "wii_exception.hpp"
 #include <wiiremote.h>
 
 namespace dg::wii {

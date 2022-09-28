@@ -1,4 +1,5 @@
 #include "wii_padstate.hpp"
+#include "wii_exception.hpp"
 #include <QtGlobal>
 #include <wiiremote.h>
 
