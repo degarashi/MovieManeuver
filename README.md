@@ -57,6 +57,9 @@ XInput対応のゲームパッドからブラウザ(現状はChromeのみ)上で
 - ブラウザ側で日本語入力が有効になっていると上手く動作しない
 - 対応OSはWindows、ブラウザはChromeのみ
 - 対応ゲームパッドはXInputの0番パッドのみ(DirectInputの場合はx360ceを使ってください)
+- WiiリモコンはPCの再起動の度に接続し直さなくてはならない
+	- (a-urasim)さん作の[wiipermpair2](http://tyche.pu-toyama.ac.jp/~a-urasim/wiimote/)を使用するとその手間は必要なくなる
+
 
 ## 既知の問題点
 - キーコンフィグは無い
