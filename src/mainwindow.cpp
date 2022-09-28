@@ -81,27 +81,33 @@ MainWindow::MainWindow(QWidget *parent)
 	  _hwTarget(nullptr)
 {
 	_ui->setupUi(this);
-
-	// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
-	{
-		auto* wiiMgr = new dg::wii::Manager();
-		if(wiiMgr->numRemote() == 0) {
-			auto* xiMgr = new dg::xinput::Manager();
-			_imgr.reset(xiMgr);
-			_keyMap = MakeKeyMap();
-		} else {
-			_imgr.reset(wiiMgr);
-			_keyMap = MakeKeyMap_Wii();
-		}
-
-		connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
-		_ui->verticalLayout->addWidget(_imgr->makeDialog(), 1);
-	}
+	_initInputs();
 
 	// ウィンドウ検索のインターバルタイマー初期化
 	_timer = new QTimer(this);
 	_timer->start(CHECKTARGET_INTERVAL);
 	connect(_timer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
+}
+
+void MainWindow::_initInputs() {
+	// 終了処理等あるので一旦nullをセット
+	_imgr.reset();
+	_imgrWidget.reset();
+	// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
+	auto wiiMgr = std::make_unique<dg::wii::Manager>();
+	if(wiiMgr->numRemote() == 0) {
+		auto* xiMgr = new dg::xinput::Manager();
+		_imgr.reset(xiMgr);
+		_keyMap = MakeKeyMap();
+	} else {
+		_imgr.reset(wiiMgr.release());
+		_keyMap = MakeKeyMap_Wii();
+	}
+
+	connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
+	auto* dialog = _imgr->makeDialog();
+	_imgrWidget.reset(dialog);
+	_ui->verticalLayout->addWidget(dialog, 1);
 }
 void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 	if(_hwTarget) {

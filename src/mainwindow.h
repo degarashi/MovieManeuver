@@ -21,6 +21,7 @@ class MainWindow : public QMainWindow {
 
 		SP<Ui::MainWindow>		_ui;
 		SP<dg::InputMgrBase>	_imgr;
+		SP<QWidget>				_imgrWidget;
 		// ウィンドウ検索のインターバルタイマー
 		QTimer*							_timer;
 		// 対象(Youtube/Udemy)の検索や操作方法を定義
@@ -29,6 +30,9 @@ class MainWindow : public QMainWindow {
 		HWND							_hwTarget;
 
 		dg::VKMapping			_keyMap;
+	private slots:
+		// XInput / WiiRemoteの初期化
+		void _initInputs();
 
 	private slots:
 		void onPadUpdate(const dg::VKInputs& inputs);
