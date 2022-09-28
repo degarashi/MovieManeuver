@@ -4,9 +4,7 @@
 namespace dg {
 	class Manip_Udemy : public Manip {
 		private:
-			mutable u_int64		_prevTime = 0;
-			// 動画ウィンドウにフォーカスする処理
-			void _focus(HWND hw, const Proc_t& p) const;
+			static void UProc(HWND hw, const Proc_t& p);
 		public:
 			void startPause(HWND hw) const override;
 			void forward_5sec(HWND hw) const override;
