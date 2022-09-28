@@ -87,6 +87,9 @@ MainWindow::MainWindow(QWidget *parent)
 	_timer = new QTimer(this);
 	_timer->start(CHECKTARGET_INTERVAL);
 	connect(_timer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
+	// インプット手段のリセットアクション
+	connect(_ui->actionRefresh_Input_r, &QAction::triggered,
+			this, &MainWindow::_initInputs);
 }
 
 void MainWindow::_initInputs() {

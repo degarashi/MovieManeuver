@@ -39,8 +39,44 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAction_a">
+    <property name="title">
+     <string>Action(&amp;a)</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionRefresh_Input_r"/>
+    <addaction name="actionQuit_q"/>
+   </widget>
+   <addaction name="menuAction_a"/>
   </widget>
+  <action name="actionQuit_q">
+   <property name="text">
+    <string>Quit(&amp;q)</string>
+   </property>
+  </action>
+  <action name="actionRefresh_Input_r">
+   <property name="text">
+    <string>Refresh Input...(&amp;r)</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit_q</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>307</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
