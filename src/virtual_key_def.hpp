@@ -1,5 +1,6 @@
 #pragma once
 #include "virtual_key.hpp"
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <vector>
 #include <unordered_map>
