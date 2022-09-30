@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Diag_XInput</class>
- <widget class="QWidget" name="Diag_XInput">
+ <class>dg::xinput::DebugViewWidget</class>
+ <widget class="QWidget" name="dg::xinput::DebugViewWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

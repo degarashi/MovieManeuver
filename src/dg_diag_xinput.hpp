@@ -1,16 +1,16 @@
 #pragma once
 #include <QWidget>
 
-namespace Ui {
-	class Diag_XInput;
-}
 namespace dg::xinput {
 	struct PadState;
+	namespace Ui {
+		class DebugViewWidget;
+	}
 
 	class DebugViewWidget : public QWidget {
 		Q_OBJECT
 		private:
-			std::shared_ptr<Ui::Diag_XInput>	_ui;
+			std::shared_ptr<Ui::DebugViewWidget>	_ui;
 
 		public:
 			explicit DebugViewWidget(QWidget *parent = nullptr);

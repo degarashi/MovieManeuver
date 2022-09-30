@@ -5,7 +5,7 @@
 namespace dg::xinput {
 	DebugViewWidget::DebugViewWidget(QWidget *parent) :
 		QWidget(parent),
-		_ui(new Ui::Diag_XInput)
+		_ui(new Ui::DebugViewWidget)
 	{
 		_ui->setupUi(this);
 	}
