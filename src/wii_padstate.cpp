@@ -61,7 +61,7 @@ namespace dg {
 				{WRMT_MASK_BUTTON_DOWN, Button::Down},
 			};
 		}
-		BoolAr Remote::getPressedButton() const {
+		BoolAr Remote::getPressingButton() const {
 			BoolAr ret = {};
 			const int bs = WRMT_WiiRemote_GetState(_data, WRMT_DATA_BUTTONS);
 			for(auto& msk : Mask2B) {

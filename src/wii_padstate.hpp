@@ -23,6 +23,6 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
-			BoolAr getPressedButton() const;
+			[[nodiscard]] BoolAr getPressingButton() const;
 	};
 }

@@ -26,7 +26,7 @@ namespace dg::wii {
 			if(idx != 0)
 				continue;
 
-			const auto press = _remote[idx].getPressedButton();
+			const auto press = _remote[idx].getPressingButton();
 			VKInputs vk;
 			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
 				if(press[i]) {
