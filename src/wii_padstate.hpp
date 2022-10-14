@@ -17,8 +17,6 @@ namespace dg::wii {
 			WRMT_WiiRemote*	_data;
 			using ButtonState_a = std::array<ButtonState, static_cast<size_t>(Button::_Num)>;
 			ButtonState_a	_bstate;
-			using MaskToButtonPair = std::pair<uint16_t, Button>;
-			const static MaskToButtonPair Mask2B[static_cast<size_t>(Button::_Num)];
 
 		public:
 			Remote(Remote&& rmt);

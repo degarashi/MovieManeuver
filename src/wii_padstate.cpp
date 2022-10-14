@@ -44,6 +44,23 @@ namespace dg {
 		Remote::~Remote() {
 			WRMT_WiiRemote_Close(_data);
 		}
+
+		namespace {
+			using MaskToButtonPair = std::pair<uint16_t, Button>;
+			const MaskToButtonPair Mask2B[static_cast<size_t>(Button::_Num)] = {
+				{WRMT_MASK_BUTTON_A, Button::A},
+				{WRMT_MASK_BUTTON_B, Button::B},
+				{WRMT_MASK_BUTTON_ONE, Button::One},
+				{WRMT_MASK_BUTTON_TWO, Button::Two},
+				{WRMT_MASK_BUTTON_MINUS, Button::Minus},
+				{WRMT_MASK_BUTTON_PLUS, Button::Plus},
+				{WRMT_MASK_BUTTON_HOME, Button::Home},
+				{WRMT_MASK_BUTTON_UP, Button::Up},
+				{WRMT_MASK_BUTTON_LEFT, Button::Left},
+				{WRMT_MASK_BUTTON_RIGHT, Button::Right},
+				{WRMT_MASK_BUTTON_DOWN, Button::Down},
+			};
+		}
 		ButtonAr Remote::getPressedButton() const {
 			ButtonAr ret = {};
 			const int bs = WRMT_WiiRemote_GetState(_data, WRMT_DATA_BUTTONS);
@@ -52,18 +69,5 @@ namespace dg {
 			}
 			return ret;
 		}
-		const Remote::MaskToButtonPair Remote::Mask2B[static_cast<size_t>(Button::_Num)] = {
-			{WRMT_MASK_BUTTON_A, Button::A},
-			{WRMT_MASK_BUTTON_B, Button::B},
-			{WRMT_MASK_BUTTON_ONE, Button::One},
-			{WRMT_MASK_BUTTON_TWO, Button::Two},
-			{WRMT_MASK_BUTTON_MINUS, Button::Minus},
-			{WRMT_MASK_BUTTON_PLUS, Button::Plus},
-			{WRMT_MASK_BUTTON_HOME, Button::Home},
-			{WRMT_MASK_BUTTON_UP, Button::Up},
-			{WRMT_MASK_BUTTON_LEFT, Button::Left},
-			{WRMT_MASK_BUTTON_RIGHT, Button::Right},
-			{WRMT_MASK_BUTTON_DOWN, Button::Down},
-		};
 	}
 }
