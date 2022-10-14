@@ -9,7 +9,7 @@ using WRMT_WiiRemote = wrmt_wiiremote;
 namespace dg::wii {
 	using ButtonToVKMap_t = std::unordered_map<Button, VirtualKey>;
 	extern const ButtonToVKMap_t ButtonToVKMap;
-	using ButtonAr = std::array<bool, static_cast<size_t>(Button::_Num)>;
+	using BoolAr = std::array<bool, static_cast<size_t>(Button::_Num)>;
 
 	// WiiMote用のPadState
 	class Remote {
@@ -23,6 +23,6 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
-			ButtonAr getPressedButton() const;
+			BoolAr getPressedButton() const;
 	};
 }
