@@ -21,21 +21,27 @@ namespace dg::wii {
 	}
 	void Manager::onTimer() {
 		int idx;
+		bool has_changed = false;
 		while((idx = WRMT_Poll()) >= 0) {
 			// とりあえず0番以外は対応しない
 			if(idx != 0)
 				continue;
-
-			const auto press = _remote[idx].getPressingButton();
-			VKInputs vk;
-			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
-				if(press[i]) {
-					vk.emplace_back(ButtonToVKMap.at(Button(i)));
-				}
-			}
-			emit onInput(vk);
-			emit onInputWii(_remote[idx]);
+			has_changed = true;
 		}
+
+		auto& m = _remote[0];
+		if(has_changed) {
+			m.updateState();
+			const auto pressed = m.getPressedButton();
+			if(!pressed.empty()) {
+				for(auto& p : pressed)
+					qDebug() << static_cast<int>(p);
+				emit onInput(pressed);
+			}
+		} else {
+			m.updateKeepState();
+		}
+		emit onInputWii(m);
 	}
 	QWidget* Manager::makeDialog() {
 		auto* diag = new DebugViewWidget();

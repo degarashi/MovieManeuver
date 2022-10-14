@@ -2,6 +2,7 @@
 #include "virtual_key.hpp"
 #include "buttonstate.hpp"
 #include "wii_enums.hpp"
+#include "virtual_key_def.hpp"
 #include <unordered_map>
 
 struct wrmt_wiiremote;
@@ -24,5 +25,10 @@ namespace dg::wii {
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
 			[[nodiscard]] BoolAr getPressingButton() const;
+
+			void updateState();
+			// 前回から何も変化が無いときに呼ぶ
+			void updateKeepState();
+			[[nodiscard]] VKInputs getPressedButton() const;
 	};
 }
