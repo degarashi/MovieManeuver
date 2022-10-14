@@ -34,8 +34,6 @@ namespace dg::wii {
 			m.updateState();
 			const auto pressed = m.getPressedButton();
 			if(!pressed.empty()) {
-				for(auto& p : pressed)
-					qDebug() << static_cast<int>(p);
 				emit onInput(pressed);
 			}
 		} else {
