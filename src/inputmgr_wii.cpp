@@ -4,6 +4,10 @@
 #include <wiiremote.h>
 
 namespace dg::wii {
+	void Manager::_updateAll() {
+		WRMT_UpdateAll();
+	}
+
 	Manager::Manager() {
 		WRMT_WiiRemote* wiiremotes[WRMT_MAX_DEVICES];
 		if(WRMT_Init() != 0)
@@ -20,24 +24,13 @@ namespace dg::wii {
 		WRMT_Quit();
 	}
 	void Manager::onTimer() {
-		int idx;
-		bool has_changed = false;
-		while((idx = WRMT_Poll()) >= 0) {
-			// とりあえず0番以外は対応しない
-			if(idx != 0)
-				continue;
-			has_changed = true;
-		}
-
+		_updateAll();
+		// とりあえず0番以外は対応しない
 		auto& m = _remote[0];
-		if(has_changed) {
-			m.updateState();
-			const auto pressed = m.getPressedButton();
-			if(!pressed.empty()) {
-				emit onInput(pressed);
-			}
-		} else {
-			m.updateKeepState();
+		m.updateState();
+		const auto pressed = m.getPressedButton();
+		if(!pressed.empty()) {
+			emit onInput(pressed);
 		}
 		emit onInputWii(m);
 	}

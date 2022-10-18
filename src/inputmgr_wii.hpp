@@ -9,6 +9,8 @@ namespace dg::wii {
 			using Remote_v = std::vector<Remote>;
 			Remote_v	_remote;
 
+			void _updateAll();
+
 		public:
 			Manager();
 			~Manager();
