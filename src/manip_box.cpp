@@ -60,6 +60,11 @@ namespace dg {
 			TapKey(u8'M');
 		});
 	}
+	void Manip_Box::captionSwitch(const HWND hw) const {
+		_Focus(hw, [](){
+			TapKey(u8'C');
+		});
+	}
 
 	const std::wstring& Manip_Box::getWindowTopName() const {
 		static std::wstring ret(L"Powered by Box");
