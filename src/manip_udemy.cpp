@@ -81,6 +81,11 @@ namespace dg {
 			TapKey(u8'F');
 		});
 	}
+	void Manip_Udemy::captionSwitch(const HWND hw) const {
+		UProc(hw, [](){
+			TapKey(u8'C');
+		});
+	}
 	const QString& Manip_Udemy::getName() const {
 		static QString Name = QString::fromUtf8(u8"Udemy Manipulator");
 		return Name;
