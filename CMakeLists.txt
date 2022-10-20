@@ -45,6 +45,7 @@ set(PROJECT_SOURCES
     src/wii_enums.hpp
     src/wii_exception.hpp
     src/xi_enums.hpp
+    src/manip_box.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
