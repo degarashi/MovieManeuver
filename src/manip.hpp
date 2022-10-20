@@ -22,6 +22,7 @@ namespace dg {
 		virtual void volumeDown(HWND hw) const = 0;
 		virtual void volumeMute(HWND hw) const = 0;
 		virtual void fullScreen(HWND hw) const {}
+		virtual void captionSwitch(HWND hw) const {}
 
 		// 操作対象ウィンドウを検索する際の名前を取得
 		virtual const std::wstring& getWindowTopName() const = 0;
