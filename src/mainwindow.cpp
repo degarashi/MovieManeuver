@@ -37,6 +37,7 @@ namespace {
 
 		map.emplace(VirtualKey::B, &Manip::startPause);
 		map.emplace(VirtualKey::Y, &Manip::volumeMute);
+		map.emplace(VirtualKey::Select, &Manip::captionSwitch);
 
 		map.emplace(VirtualKey::L1, &Manip::speedDown);
 		map.emplace(VirtualKey::R1, &Manip::speedUp);
@@ -66,7 +67,7 @@ namespace {
 		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
 
 		map.emplace(VirtualKey::A, &Manip::startPause);
-		map.emplace(VirtualKey::B, &Manip::volumeMute);
+		map.emplace(VirtualKey::B, &Manip::captionSwitch);
 		map.emplace(VirtualKey::L1, &Manip::volumeMute);
 
 		map.emplace(VirtualKey::Select, &Manip::speedDown);
