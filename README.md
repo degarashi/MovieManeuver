@@ -5,6 +5,16 @@
 
 XInput対応のゲームパッドからブラウザ(現状はChromeのみ)上で再生中の動画を操作できます。
 
+## 対応プレイヤー
+まずChromeブラウザで対象のサイト(YouTube, Udemy, Box.com)を開いているか確認し、あればそれを、なければVLC Media Playerを確認するという動作をします。
+従ってVLCを操作したくともブラウザで上記のサイトを開いているとそちらに対象が移ります。
+### Chromeブラウザ
+- YouTube
+- Udemy
+- Box.com
+### その他アプリケーション
+- VLC Media Player
+
 ## 使用方法
 起動するとスクリーンショットのようなウィンドウが出て、裏で勝手にChromeでYoutubeもしくはUdemyの動画を再生しているかチェックします。
 検出されると図のようにYoutube Manipulator Running...と表示されるので準備完了です。
