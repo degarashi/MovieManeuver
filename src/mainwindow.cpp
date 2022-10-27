@@ -5,6 +5,7 @@
 #include "manip_udemy.hpp"
 #include "manip_youtube.hpp"
 #include "manip_box.hpp"
+#include "manip_vlc.hpp"
 
 #include <QThread>
 #include <QTimer>
@@ -15,9 +16,10 @@ namespace {
 	const dg::Manip_YouTube c_manipYT;
 	const dg::Manip_Udemy c_manipUD;
 	const dg::Manip_Box c_manipBox;
+	const dg::Manip_VLC c_manipVLC;
 
 	const dg::Manip* c_manipList[] = {
-		&c_manipYT, &c_manipUD, &c_manipBox
+		&c_manipYT, &c_manipUD, &c_manipBox, &c_manipVLC,
 	};
 	constexpr int CHECKTARGET_INTERVAL = 1000;
 }
