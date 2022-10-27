@@ -18,7 +18,7 @@ namespace {
 namespace dg {
 	bool CheckContainsSubstr(const std::wstring& str, const std::wstring& target) {
 		std::wstringstream ss;
-		ss << LR"(.*(\s+))" << target << LR"(.*)";
+		ss << LR"(.*(\s*))" << target << LR"(.*)";
 		const std::wregex re(ss.str());
 		return std::regex_match(str, re);
 	}
