@@ -12,7 +12,8 @@ namespace dg {
 	bool CheckContainsWindowName(HWND hw, const std::wstring& target);
 
 	BOOL CALLBACK EnumChild(HWND hw, LPARAM lParam);
-	void ClickLeftTop(HWND hw, bool rightButton = false, WORD offset = 2);
+	void ClickLeftTop(HWND hw, bool rightButton = false,
+					  WORD offsetX = 2, WORD offsetY = std::numeric_limits<WORD>::max());
 	void TapKey(int vkey, WORD auxCode = 0);
 
 	using Proc = std::function<void ()>;

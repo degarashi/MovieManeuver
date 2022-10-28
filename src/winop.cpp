@@ -46,15 +46,32 @@ namespace dg {
 		}
 		return TRUE;
 	}
-	void ClickLeftTop(const HWND hw, const bool rightButton, WORD offset) {
-		const LPARAM OFS = MAKELPARAM(offset, offset);
-		if(rightButton) {
-			SendMessage(hw, WM_RBUTTONDOWN, MK_RBUTTON, OFS);
-			SendMessage(hw, WM_RBUTTONUP, 0, OFS);
-		} else {
-			SendMessage(hw, WM_LBUTTONDOWN, MK_LBUTTON, OFS);
-			SendMessage(hw, WM_LBUTTONUP, 0, OFS);
+	namespace {
+		auto MI_H(const LONG x) {
+			return (x * 65535 / (::GetSystemMetrics(SM_CXSCREEN) - 1));
 		}
+		auto MI_V(const LONG y) {
+			return (y * 65535 / (::GetSystemMetrics(SM_CYSCREEN) - 1));
+		}
+	}
+	void ClickLeftTop(const HWND hw, const bool rightButton, const WORD offsetX, WORD offsetY) {
+		if(offsetY == std::numeric_limits<WORD>::max())
+			offsetY = offsetX;
+
+		const RECT rect = GetWindowRectDwm(hw);
+		// 元のカーソル位置
+		POINT pt;
+		GetCursorPos(&pt);
+
+		const DWORD flagDown = rightButton ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
+		const DWORD flagUp = rightButton ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
+		INPUT input[] = {
+			{ INPUT_MOUSE, MI_H(rect.left + offsetX), MI_V(rect.top + offsetY), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
+			{ INPUT_MOUSE, 0, 0, 0, flagDown, 0, 0, },
+			{ INPUT_MOUSE, 0, 0, 0, flagUp, 0, 0, },
+			{ INPUT_MOUSE, MI_H(pt.x), MI_V(pt.y), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
+		};
+		SendInput(_countof(input), input, sizeof(INPUT));
 	}
 	void TapKey(const int vkey, const WORD auxCode) {
 		INPUT input[4] = {};
