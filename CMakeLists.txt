@@ -82,6 +82,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Widgets
     ${WIIREMOTE_LIB}
     xinput
+    Dwmapi
 )
 
 set_target_properties(MovieManeuver PROPERTIES

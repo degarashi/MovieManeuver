@@ -1,4 +1,5 @@
 #include "winop.hpp"
+#include "dwmapi.h"
 #include <sstream>
 #include <regex>
 #include <QThread>
@@ -16,6 +17,15 @@ namespace {
 }
 
 namespace dg {
+	RECT GetWindowRectDwm(const HWND hw) {
+		RECT rect;
+		const auto ret = DwmGetWindowAttribute(hw, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(rect));
+		if(ret == E_HANDLE) {
+			// hw = 何かの子ウィンドウ
+			GetWindowRect(hw, &rect);
+		}
+		return rect;
+	}
 	bool CheckContainsSubstr(const std::wstring& str, const std::wstring& target) {
 		std::wstringstream ss;
 		ss << LR"(.*(\s*))" << target << LR"(.*)";
