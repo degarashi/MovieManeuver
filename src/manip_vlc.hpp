@@ -3,6 +3,8 @@
 
 namespace dg {
 	class Manip_VLC: public Manip {
+		private:
+			static void _Focus(HWND hw, const Proc_t& p);
 		public:
 			void startPause(HWND hw) const override;
 			void forward_5sec(HWND hw) const override;
