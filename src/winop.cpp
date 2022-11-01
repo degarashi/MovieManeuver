@@ -78,8 +78,9 @@ namespace dg {
 		POINT pt;
 		GetCursorPos(&pt);
 
-		const DWORD flagDown = rightButton ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
-		const DWORD flagUp = rightButton ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
+		const bool swp = IsMouseSwapped();
+		const DWORD flagDown = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
+		const DWORD flagUp = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
 		INPUT input[] = {
 			{ INPUT_MOUSE, MI_H(rect.left + offsetX), MI_V(rect.top + offsetY), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
 			{ INPUT_MOUSE, 0, 0, 0, flagDown, 0, 0, },
