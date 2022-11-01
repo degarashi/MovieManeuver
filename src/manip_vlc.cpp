@@ -75,6 +75,12 @@ namespace dg {
 			TapKey(u8'M');
 		});
 	}
+
+	void Manip_VLC::fullScreen(HWND hw) const {
+		_Focus(hw, [](){
+			TapKey(u8'F');
+		});
+	}
 	void Manip_VLC::captionSwitch(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(u8'V');

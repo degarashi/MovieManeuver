@@ -16,6 +16,7 @@ namespace dg {
 			void volumeDown(HWND hw) const override;
 			void volumeUp(HWND hw) const override;
 			void volumeMute(HWND hw) const override;
+			void fullScreen(HWND hw) const override;
 			void captionSwitch(HWND hw) const override;
 
 			const std::wstring& getWindowTopName() const override;
