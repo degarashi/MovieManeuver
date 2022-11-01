@@ -19,6 +19,9 @@ namespace {
 }
 
 namespace dg {
+	bool IsMouseSwapped() {
+		return ::GetSystemMetrics(SM_SWAPBUTTON);
+	}
 	bool IsFullScreen(const HWND hw) {
 		const auto r = GetWindowRectDwm(hw);
 		// ウィンドウの左上が仮想領域から出ているとnullptrが返る
