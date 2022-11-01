@@ -6,16 +6,22 @@
 namespace dg {
 	namespace {
 		constexpr unsigned long MANIP_WAIT = 25;
-		constexpr unsigned long VOLUME_MANIP_OFFSET = 160;
+		constexpr unsigned long MANIP_OFFSET = 160;
 	}
 	void Manip_YouTube::_focus(HWND hw, const Proc_t& p) const {
 		TempSwitch(hw, [hw, &p](){
-			// ページの先頭に戻る
-			ClickLeftTop(hw, true);
-			QThread::msleep(MANIP_WAIT);
-			TapKey(VK_ESCAPE);
-			QThread::msleep(MANIP_WAIT);
-			TapKey(VK_HOME);
+			if(!IsFullScreen(hw)) {
+				// ページの先頭に戻る
+				ClickLeftTop(hw, true);
+				QThread::msleep(MANIP_WAIT);
+				TapKey(VK_ESCAPE);
+				QThread::msleep(MANIP_WAIT);
+				TapKey(VK_HOME);
+			} else {
+				ClickLeftTop(hw, true, MANIP_OFFSET);
+				QThread::msleep(MANIP_WAIT);
+				ClickLeftTop(hw, false, MANIP_OFFSET);
+			}
 			p();
 		});
 	}
@@ -64,22 +70,22 @@ namespace dg {
 	}
 	void Manip_YouTube::volumeDown(const HWND hw) const {
 		_focus(hw, [hw](){
-			// (音量操作は動画ウィンドウがフォーカスされてないと機能しない為)
-			QThread::msleep(MANIP_WAIT);
-			ClickLeftTop(hw, true, VOLUME_MANIP_OFFSET);
+			if(!IsFullScreen(hw)) {
+				QThread::msleep(MANIP_WAIT);
+				ClickLeftTop(hw, true, MANIP_OFFSET);
+				TapKey(VK_ESCAPE);
+			}
 			TapKey(VK_DOWN);
-			QThread::msleep(MANIP_WAIT);
-			TapKey(VK_ESCAPE);
 		});
 	}
 	void Manip_YouTube::volumeUp(const HWND hw) const {
 		_focus(hw, [hw](){
-			// (音量操作は動画ウィンドウがフォーカスされてないと機能しない為)
-			QThread::msleep(MANIP_WAIT);
-			ClickLeftTop(hw, true, VOLUME_MANIP_OFFSET);
+			if(!IsFullScreen(hw)) {
+				QThread::msleep(MANIP_WAIT);
+				ClickLeftTop(hw, true, MANIP_OFFSET);
+				TapKey(VK_ESCAPE);
+			}
 			TapKey(VK_UP);
-			QThread::msleep(MANIP_WAIT);
-			TapKey(VK_ESCAPE);
 		});
 	}
 	void Manip_YouTube::volumeMute(const HWND hw) const {
