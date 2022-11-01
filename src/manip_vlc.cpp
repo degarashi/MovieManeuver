@@ -30,22 +30,22 @@ namespace dg {
 			TapKey(VK_SPACE);
 		});
 	}
-	void Manip_VLC::forward_5sec(const HWND hw) const {
+	void Manip_VLC::forward_few(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_RIGHT, VK_SHIFT);
 		});
 	}
-	void Manip_VLC::backward_5sec(const HWND hw) const {
+	void Manip_VLC::backward_few(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_LEFT, VK_SHIFT);
 		});
 	}
-	void Manip_VLC::forward_10sec(const HWND hw) const {
+	void Manip_VLC::forward_medium(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_RIGHT, VK_MENU);
 		});
 	}
-	void Manip_VLC::backward_10sec(const HWND hw) const {
+	void Manip_VLC::backward_medium(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_LEFT, VK_MENU);
 		});

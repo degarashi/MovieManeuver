@@ -27,24 +27,24 @@ namespace dg {
 			TapKey(VK_SPACE);
 		});
 	}
-	void Manip_Udemy::forward_5sec(const HWND hw) const {
+	void Manip_Udemy::forward_few(const HWND hw) const {
 		UProc(hw, [](){
 			TapKey(VK_RIGHT);
 		});
 	}
-	void Manip_Udemy::backward_5sec(const HWND hw) const {
+	void Manip_Udemy::backward_few(const HWND hw) const {
 		UProc(hw, [](){
 			TapKey(VK_LEFT);
 		});
 	}
-	void Manip_Udemy::forward_10sec(const HWND hw) const {
+	void Manip_Udemy::forward_medium(const HWND hw) const {
 		UProc(hw, [](){
 			TapKey(VK_RIGHT);
 			QThread::msleep(WAIT);
 			TapKey(VK_RIGHT);
 		});
 	}
-	void Manip_Udemy::backward_10sec(const HWND hw) const {
+	void Manip_Udemy::backward_medium(const HWND hw) const {
 		UProc(hw, [](){
 			TapKey(VK_LEFT);
 			QThread::msleep(WAIT);

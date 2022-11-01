@@ -32,22 +32,22 @@ namespace dg {
 			TapKey(u8'K');
 		});
 	}
-	void Manip_YouTube::forward_5sec(const HWND hw) const {
+	void Manip_YouTube::forward_few(const HWND hw) const {
 		_focus(hw, [](){
 			TapKey(VK_RIGHT);
 		});
 	}
-	void Manip_YouTube::backward_5sec(const HWND hw) const {
+	void Manip_YouTube::backward_few(const HWND hw) const {
 		_focus(hw, [](){
 			TapKey(VK_LEFT);
 		});
 	}
-	void Manip_YouTube::forward_10sec(const HWND hw) const {
+	void Manip_YouTube::forward_medium(const HWND hw) const {
 		_focus(hw, [](){
 			TapKey(u8'L');
 		});
 	}
-	void Manip_YouTube::backward_10sec(const HWND hw) const {
+	void Manip_YouTube::backward_medium(const HWND hw) const {
 		_focus(hw, [](){
 			TapKey(u8'J');
 		});

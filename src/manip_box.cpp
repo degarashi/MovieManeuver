@@ -15,22 +15,22 @@ namespace dg {
 			TapKey(VK_SPACE);
 		});
 	}
-	void Manip_Box::forward_5sec(const HWND hw) const {
+	void Manip_Box::forward_few(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_RIGHT);
 		});
 	}
-	void Manip_Box::backward_5sec(const HWND hw) const {
+	void Manip_Box::backward_few(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(VK_LEFT);
 		});
 	}
-	void Manip_Box::forward_10sec(const HWND hw) const {
+	void Manip_Box::forward_medium(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(u8'L');
 		});
 	}
-	void Manip_Box::backward_10sec(const HWND hw) const {
+	void Manip_Box::backward_medium(const HWND hw) const {
 		_Focus(hw, [](){
 			TapKey(u8'J');
 		});

@@ -32,8 +32,8 @@ namespace {
 		using dg::Manip;
 
 		VKMapping map;
-		map.emplace(VirtualKey::DLeft, &Manip::backward_5sec);
-		map.emplace(VirtualKey::DRight, &Manip::forward_5sec);
+		map.emplace(VirtualKey::DLeft, &Manip::backward_few);
+		map.emplace(VirtualKey::DRight, &Manip::forward_few);
 		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
 		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
 
@@ -43,16 +43,16 @@ namespace {
 
 		map.emplace(VirtualKey::L1, &Manip::speedDown);
 		map.emplace(VirtualKey::R1, &Manip::speedUp);
-		map.emplace(VirtualKey::L2, &Manip::backward_10sec);
-		map.emplace(VirtualKey::R2, &Manip::forward_10sec);
+		map.emplace(VirtualKey::L2, &Manip::backward_medium);
+		map.emplace(VirtualKey::R2, &Manip::forward_medium);
 
-		map.emplace(VirtualKey::TL_Left, &Manip::backward_5sec);
-		map.emplace(VirtualKey::TL_Right, &Manip::forward_5sec);
+		map.emplace(VirtualKey::TL_Left, &Manip::backward_few);
+		map.emplace(VirtualKey::TL_Right, &Manip::forward_few);
 		map.emplace(VirtualKey::TL_Up, &Manip::volumeUp);
 		map.emplace(VirtualKey::TL_Down, &Manip::volumeDown);
 
-		map.emplace(VirtualKey::TR_Left, &Manip::backward_10sec);
-		map.emplace(VirtualKey::TR_Right, &Manip::forward_10sec);
+		map.emplace(VirtualKey::TR_Left, &Manip::backward_medium);
+		map.emplace(VirtualKey::TR_Right, &Manip::forward_medium);
 		map.emplace(VirtualKey::TR_Up, &Manip::speedUp);
 		map.emplace(VirtualKey::TR_Down, &Manip::speedDown);
 		return map;
@@ -63,8 +63,8 @@ namespace {
 		using dg::Manip;
 
 		VKMapping map;
-		map.emplace(VirtualKey::DLeft, &Manip::backward_5sec);
-		map.emplace(VirtualKey::DRight, &Manip::forward_5sec);
+		map.emplace(VirtualKey::DLeft, &Manip::backward_few);
+		map.emplace(VirtualKey::DRight, &Manip::forward_few);
 		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
 		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
 
@@ -74,8 +74,8 @@ namespace {
 
 		map.emplace(VirtualKey::Select, &Manip::speedDown);
 		map.emplace(VirtualKey::Start, &Manip::speedUp);
-		map.emplace(VirtualKey::X, &Manip::backward_10sec);
-		map.emplace(VirtualKey::Y, &Manip::forward_10sec);
+		map.emplace(VirtualKey::X, &Manip::backward_medium);
+		map.emplace(VirtualKey::Y, &Manip::forward_medium);
 		return map;
 	}
 }

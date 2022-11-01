@@ -12,10 +12,10 @@ namespace dg {
 		HWND findTarget() const;
 
 		virtual void startPause(HWND hw) const = 0;
-		virtual void forward_5sec(HWND hw) const = 0;
-		virtual void backward_5sec(HWND hw) const = 0;
-		virtual void forward_10sec(HWND hw) const = 0;
-		virtual void backward_10sec(HWND hw) const = 0;
+		virtual void forward_few(HWND hw) const = 0;
+		virtual void backward_few(HWND hw) const = 0;
+		virtual void forward_medium(HWND hw) const = 0;
+		virtual void backward_medium(HWND hw) const = 0;
 		virtual void speedDown(HWND hw) const = 0;
 		virtual void speedUp(HWND hw) const = 0;
 		virtual void volumeUp(HWND hw) const = 0;
