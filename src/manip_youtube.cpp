@@ -87,6 +87,12 @@ namespace dg {
 			TapKey(u8'M');
 		});
 	}
+
+	void Manip_YouTube::fullScreen(HWND hw) const {
+		_focus(hw, [](){
+			TapKey(u8'F');
+		});
+	}
 	void Manip_YouTube::captionSwitch(const HWND hw) const {
 		_focus(hw, [](){
 			TapKey(u8'C');
