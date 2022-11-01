@@ -4,6 +4,8 @@
 #include <regex>
 #include <QThread>
 #include <QDebug>
+#include <QScreen>
+#include <QGuiApplication>
 
 namespace {
 	struct FindChildParam {
@@ -17,6 +19,16 @@ namespace {
 }
 
 namespace dg {
+	bool IsFullScreen(const HWND hw) {
+		const auto r = GetWindowRectDwm(hw);
+		// ウィンドウの左上が仮想領域から出ているとnullptrが返る
+		if(auto* scr = QGuiApplication::screenAt(QPoint(r.left, r.top))) {
+			const auto geom = scr->geometry();
+			return ((r.right - r.left) == geom.width()) &&
+					((r.bottom- r.top) == geom.height());
+		}
+		return false;
+	}
 	RECT GetWindowRectDwm(const HWND hw) {
 		RECT rect;
 		const auto ret = DwmGetWindowAttribute(hw, DWMWA_EXTENDED_FRAME_BOUNDS, &rect, sizeof(rect));

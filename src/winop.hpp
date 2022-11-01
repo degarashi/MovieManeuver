@@ -6,6 +6,7 @@
 #include <QString>
 
 namespace dg {
+	bool IsFullScreen(HWND hw);
 	RECT GetWindowRectDwm(HWND hw);
 	constexpr int MAX_WINDOW_NAME = 512;
 	bool CheckContainsSubstr(const std::wstring& str, const std::wstring& target);
