@@ -8,7 +8,7 @@ namespace dg {
 	}
 	void Manip_Udemy::UProc(HWND hw, const Proc_t& p) {
 		TempSwitch(hw, [hw, &p](){
-			ClickLeftTop(hw, true, 192);
+			ClickLeftTop(hw, true, true, 192);
 			QThread::msleep(20);
 			TapKey(VK_HOME);
 			p();

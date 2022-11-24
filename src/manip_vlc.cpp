@@ -12,7 +12,7 @@ namespace dg {
 		TempSwitch(hw, [hw, &p](){
 			// ウィンドウ下部中央をクリックする
 			const RECT r = GetWindowRectDwm(hw);
-			ClickLeftTop(hw, false, (r.right-r.left)/2, r.bottom-r.top-2);
+			ClickLeftTop(hw, false, false, (r.right-r.left)/2, r.bottom-r.top-2);
 			QThread::msleep(MANIP_WAIT);
 			p();
 		});

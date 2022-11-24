@@ -12,15 +12,15 @@ namespace dg {
 		TempSwitch(hw, [hw, &p](){
 			if(!IsFullScreen(hw)) {
 				// ページの先頭に戻る
-				ClickLeftTop(hw, true);
+				ClickLeftTop(hw, true, false);
 				QThread::msleep(MANIP_WAIT);
 				TapKey(VK_ESCAPE);
 				QThread::msleep(MANIP_WAIT);
 				TapKey(VK_HOME);
 			} else {
-				ClickLeftTop(hw, true, MANIP_OFFSET);
+				ClickLeftTop(hw, true, false, MANIP_OFFSET);
 				QThread::msleep(MANIP_WAIT);
-				ClickLeftTop(hw, false, MANIP_OFFSET);
+				ClickLeftTop(hw, false, false, MANIP_OFFSET);
 			}
 			p();
 		});
@@ -72,7 +72,7 @@ namespace dg {
 		_focus(hw, [hw](){
 			if(!IsFullScreen(hw)) {
 				QThread::msleep(MANIP_WAIT);
-				ClickLeftTop(hw, true, MANIP_OFFSET);
+				ClickLeftTop(hw, true, false, MANIP_OFFSET);
 				TapKey(VK_ESCAPE);
 			}
 			TapKey(VK_DOWN);
@@ -82,7 +82,7 @@ namespace dg {
 		_focus(hw, [hw](){
 			if(!IsFullScreen(hw)) {
 				QThread::msleep(MANIP_WAIT);
-				ClickLeftTop(hw, true, MANIP_OFFSET);
+				ClickLeftTop(hw, true, false, MANIP_OFFSET);
 				TapKey(VK_ESCAPE);
 			}
 			TapKey(VK_UP);

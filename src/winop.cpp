@@ -69,37 +69,37 @@ namespace dg {
 			return (y * 65535 / (::GetSystemMetrics(SM_CYSCREEN) - 1));
 		}
 	}
-	void ClickLeftTop(const HWND hw, const bool rightButton, const WORD offsetX, WORD offsetY) {
+	void ClickLeftTop(const HWND hw, const bool rightButton,
+					  const bool bUseSendMessage, const WORD offsetX, WORD offsetY)
+	{
 		if(offsetY == std::numeric_limits<WORD>::max())
 			offsetY = offsetX;
 
-		const RECT rect = GetWindowRectDwm(hw);
-		// 元のカーソル位置
-		POINT pt;
-		GetCursorPos(&pt);
-
-		const bool swp = IsMouseSwapped();
-		const DWORD flagDown = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
-		const DWORD flagUp = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
-		INPUT input[] = {
-			{ INPUT_MOUSE, MI_H(rect.left + offsetX), MI_V(rect.top + offsetY), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
-			{ INPUT_MOUSE, 0, 0, 0, flagDown, 0, 0, },
-			{ INPUT_MOUSE, 0, 0, 0, flagUp, 0, 0, },
-			{ INPUT_MOUSE, MI_H(pt.x), MI_V(pt.y), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
-		};
-		SendInput(_countof(input), input, sizeof(INPUT));
-	}
-	void ClickLeftTop_SendMessage(const HWND hw, const bool rightButton, const WORD offsetX, WORD offsetY) {
-		if(offsetY == std::numeric_limits<WORD>::max())
-			offsetY = offsetX;
-
-		const LPARAM OFS = MAKELPARAM(offsetX, offsetY);
-		if(rightButton) {
-			SendMessage(hw, WM_RBUTTONDOWN, MK_RBUTTON, OFS);
-			SendMessage(hw, WM_RBUTTONUP, 0, OFS);
+		if(bUseSendMessage) {
+			const LPARAM OFS = MAKELPARAM(offsetX, offsetY);
+			if(rightButton) {
+				SendMessage(hw, WM_RBUTTONDOWN, MK_RBUTTON, OFS);
+				SendMessage(hw, WM_RBUTTONUP, 0, OFS);
+			} else {
+				SendMessage(hw, WM_LBUTTONDOWN, MK_LBUTTON, OFS);
+				SendMessage(hw, WM_LBUTTONUP, 0, OFS);
+			}
 		} else {
-			SendMessage(hw, WM_LBUTTONDOWN, MK_LBUTTON, OFS);
-			SendMessage(hw, WM_LBUTTONUP, 0, OFS);
+			const RECT rect = GetWindowRectDwm(hw);
+			// 元のカーソル位置
+			POINT pt;
+			GetCursorPos(&pt);
+
+			const bool swp = IsMouseSwapped();
+			const DWORD flagDown = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
+			const DWORD flagUp = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
+			INPUT input[] = {
+				{ INPUT_MOUSE, MI_H(rect.left + offsetX), MI_V(rect.top + offsetY), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
+				{ INPUT_MOUSE, 0, 0, 0, flagDown, 0, 0, },
+				{ INPUT_MOUSE, 0, 0, 0, flagUp, 0, 0, },
+				{ INPUT_MOUSE, MI_H(pt.x), MI_V(pt.y), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
+			};
+			SendInput(_countof(input), input, sizeof(INPUT));
 		}
 	}
 	void TapKey(const int vkey, const WORD auxCode) {
