@@ -89,6 +89,19 @@ namespace dg {
 		};
 		SendInput(_countof(input), input, sizeof(INPUT));
 	}
+	void ClickLeftTop_SendMessage(const HWND hw, const bool rightButton, const WORD offsetX, WORD offsetY) {
+		if(offsetY == std::numeric_limits<WORD>::max())
+			offsetY = offsetX;
+
+		const LPARAM OFS = MAKELPARAM(offsetX, offsetY);
+		if(rightButton) {
+			SendMessage(hw, WM_RBUTTONDOWN, MK_RBUTTON, OFS);
+			SendMessage(hw, WM_RBUTTONUP, 0, OFS);
+		} else {
+			SendMessage(hw, WM_LBUTTONDOWN, MK_LBUTTON, OFS);
+			SendMessage(hw, WM_LBUTTONUP, 0, OFS);
+		}
+	}
 	void TapKey(const int vkey, const WORD auxCode) {
 		INPUT input[4] = {};
 		auto* inp = input;
