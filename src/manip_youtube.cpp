@@ -12,7 +12,7 @@ namespace dg {
 		TempSwitch(hw, [hw, &p](){
 			if(!IsFullScreen(hw)) {
 				// ページの先頭に戻る
-				ClickLeftTop(hw, true, false);
+				ClickLeftTop(hw, true, false, 2);
 				QThread::msleep(MANIP_WAIT);
 				TapKey(VK_ESCAPE);
 				QThread::msleep(MANIP_WAIT);
