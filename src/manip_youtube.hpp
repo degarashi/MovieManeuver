@@ -5,7 +5,7 @@ namespace dg {
 	class Manip_YouTube: public Manip {
 		private:
 			// 動画ウィンドウにフォーカスする処理
-			void _focus(HWND hw, const Proc_t& p) const;
+            void _focus(HWND hw) const;
 		public:
 			void startPause(HWND hw) const override;
 			void forward_few(HWND hw) const override;
