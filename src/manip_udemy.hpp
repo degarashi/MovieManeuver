@@ -4,7 +4,7 @@
 namespace dg {
 	class Manip_Udemy : public Manip {
 		private:
-			static void UProc(HWND hw, const Proc_t& p);
+            static void UProc(HWND hw);
 		public:
 			void startPause(HWND hw) const override;
 			void forward_few(HWND hw) const override;
