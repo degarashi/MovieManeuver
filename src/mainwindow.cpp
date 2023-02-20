@@ -91,9 +91,9 @@ MainWindow::MainWindow(QWidget *parent)
 	_initInputs();
 
 	// ウィンドウ検索のインターバルタイマー初期化
-    _findWindowTimer = new QTimer(this);
-    _findWindowTimer->start(CHECKTARGET_INTERVAL);
-    connect(_findWindowTimer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
+	_findWindowTimer = new QTimer(this);
+	_findWindowTimer->start(CHECKTARGET_INTERVAL);
+	connect(_findWindowTimer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
 	// インプット手段のリセットアクション
 	connect(_ui->actionRefresh_Input_r, &QAction::triggered,
 			this, &MainWindow::_initInputs);
@@ -125,11 +125,11 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 		for(auto& inp : inputs) {
 			const auto itr = m.find(inp);
 			if(itr != m.end()) {
-                const auto ptr = itr->second;
-                dg::TempSwitch(_hwTarget, [ptr, this]() {
-                    _manip->setFocus(_hwTarget);
-                    (_manip->*ptr)(_hwTarget);
-                });
+				const auto ptr = itr->second;
+				dg::TempSwitch(_hwTarget, [ptr, this]() {
+					_manip->setFocus(_hwTarget);
+					(_manip->*ptr)(_hwTarget);
+				});
 			}
 		}
 	}
