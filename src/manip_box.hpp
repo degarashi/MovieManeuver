@@ -3,11 +3,11 @@
 
 namespace dg {
 	class Manip_Box : public Manip {
-		private:
-			// 動画ウィンドウにフォーカスする処理
-            static void _Focus(HWND hw);
 		public:
-			void startPause(HWND hw) const override;
+            // 動画ウィンドウにフォーカスする処理
+            void setFocus(HWND hw) const override;
+
+            void startPause(HWND hw) const override;
 			void forward_few(HWND hw) const override;
 			void backward_few(HWND hw) const override;
 			void forward_medium(HWND hw) const override;

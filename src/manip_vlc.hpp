@@ -3,9 +3,9 @@
 
 namespace dg {
 	class Manip_VLC: public Manip {
-		private:
-            static void _Focus(HWND hw);
 		public:
+            void setFocus(HWND hw) const override;
+
 			void startPause(HWND hw) const override;
 			void forward_few(HWND hw) const override;
 			void backward_few(HWND hw) const override;
@@ -23,5 +23,5 @@ namespace dg {
 			const std::wstring& getWindowChildName() const override;
 
 			const QString& getName() const override;
-	};
+    };
 }

@@ -10,6 +10,7 @@ namespace dg {
 	struct Manip {
 		using Proc_t = std::function<void ()>;
 		HWND findTarget() const;
+        virtual void setFocus(HWND hw) const = 0;
 
 		virtual void startPause(HWND hw) const = 0;
 		virtual void forward_few(HWND hw) const = 0;

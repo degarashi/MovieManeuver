@@ -3,10 +3,10 @@
 
 namespace dg {
 	class Manip_Udemy : public Manip {
-		private:
-            static void UProc(HWND hw);
 		public:
-			void startPause(HWND hw) const override;
+            void setFocus(HWND hw) const override;
+
+            void startPause(HWND hw) const override;
 			void forward_few(HWND hw) const override;
 			void backward_few(HWND hw) const override;
 			void forward_medium(HWND hw) const override;

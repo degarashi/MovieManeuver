@@ -127,6 +127,7 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 			if(itr != m.end()) {
                 const auto ptr = itr->second;
                 dg::TempSwitch(_hwTarget, [ptr, this]() {
+                    _manip->setFocus(_hwTarget);
                     (_manip->*ptr)(_hwTarget);
                 });
 			}
