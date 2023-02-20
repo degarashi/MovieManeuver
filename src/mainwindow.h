@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow {
 		SP<dg::InputMgrBase>	_imgr;
 		SP<QWidget>				_imgrWidget;
 		// ウィンドウ検索のインターバルタイマー
-		QTimer*							_timer;
+        QTimer*							_findWindowTimer;
 		// 対象(Youtube/Udemy)の検索や操作方法を定義
 		const dg::Manip*				_manip;
 		// 操作対象(ブラウザ)のウィンドウハンドル

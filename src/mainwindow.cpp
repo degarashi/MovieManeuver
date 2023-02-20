@@ -90,9 +90,9 @@ MainWindow::MainWindow(QWidget *parent)
 	_initInputs();
 
 	// ウィンドウ検索のインターバルタイマー初期化
-	_timer = new QTimer(this);
-	_timer->start(CHECKTARGET_INTERVAL);
-	connect(_timer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
+    _findWindowTimer = new QTimer(this);
+    _findWindowTimer->start(CHECKTARGET_INTERVAL);
+    connect(_findWindowTimer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
 	// インプット手段のリセットアクション
 	connect(_ui->actionRefresh_Input_r, &QAction::triggered,
 			this, &MainWindow::_initInputs);
