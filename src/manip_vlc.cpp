@@ -9,13 +9,11 @@ namespace dg {
 		constexpr unsigned long VOLUME_MANIP_OFFSET = 160;
 	}
 	void Manip_VLC::_Focus(HWND hw, const Proc_t& p) {
-		TempSwitch(hw, [hw, &p](){
-			// ウィンドウ下部中央をクリックする
-			const RECT r = GetWindowRectDwm(hw);
-			ClickLeftTop(hw, false, false, (r.right-r.left)/2, r.bottom-r.top-2);
-			QThread::msleep(MANIP_WAIT);
-			p();
-		});
+        // ウィンドウ下部中央をクリックする
+        const RECT r = GetWindowRectDwm(hw);
+        ClickLeftTop(hw, false, false, (r.right-r.left)/2, r.bottom-r.top-2);
+        QThread::msleep(MANIP_WAIT);
+        p();
 	}
 	const std::wstring& Manip_VLC::getWindowTopName() const {
 		static std::wstring ret(L"VLC media player");

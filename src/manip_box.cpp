@@ -4,11 +4,9 @@
 
 namespace dg {
 	void Manip_Box::_Focus(HWND hw, const Proc_t& p) {
-		TempSwitch(hw, [hw, &p](){
-			ClickLeftTop(hw, false, false, 192);
-			QThread::msleep(20);
-			p();
-		});
+        ClickLeftTop(hw, false, false, 192);
+        QThread::msleep(20);
+        p();
 	}
 	void Manip_Box::startPause(const HWND hw) const {
 		_Focus(hw, [](){

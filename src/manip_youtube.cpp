@@ -9,21 +9,19 @@ namespace dg {
 		constexpr unsigned long MANIP_OFFSET = 160;
 	}
 	void Manip_YouTube::_focus(HWND hw, const Proc_t& p) const {
-		TempSwitch(hw, [hw, &p](){
-			if(!IsFullScreen(hw)) {
-				// ページの先頭に戻る
-				ClickLeftTop(hw, true, false, 2);
-				QThread::msleep(MANIP_WAIT);
-				TapKey(VK_ESCAPE);
-				QThread::msleep(MANIP_WAIT);
-				TapKey(VK_HOME);
-			} else {
-				ClickLeftTop(hw, true, false, MANIP_OFFSET);
-				QThread::msleep(MANIP_WAIT);
-				ClickLeftTop(hw, false, false, MANIP_OFFSET);
-			}
-			p();
-		});
+        if(!IsFullScreen(hw)) {
+            // ページの先頭に戻る
+            ClickLeftTop(hw, true, false, 2);
+            QThread::msleep(MANIP_WAIT);
+            TapKey(VK_ESCAPE);
+            QThread::msleep(MANIP_WAIT);
+            TapKey(VK_HOME);
+        } else {
+            ClickLeftTop(hw, true, false, MANIP_OFFSET);
+            QThread::msleep(MANIP_WAIT);
+            ClickLeftTop(hw, false, false, MANIP_OFFSET);
+        }
+        p();
 	}
 	const std::wstring& Manip_YouTube::getWindowTopName() const {
 		static std::wstring ret(L"YouTube");

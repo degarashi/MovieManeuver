@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "src/winop.hpp"
 #include "ui_mainwindow.h"
 #include "inputmgr_wii.hpp"
 #include "inputmgr_xinput.hpp"
@@ -124,8 +125,10 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 		for(auto& inp : inputs) {
 			const auto itr = m.find(inp);
 			if(itr != m.end()) {
-				auto ptr = itr->second;
-				(_manip->*ptr)(_hwTarget);
+                const auto ptr = itr->second;
+                dg::TempSwitch(_hwTarget, [ptr, this]() {
+                    (_manip->*ptr)(_hwTarget);
+                });
 			}
 		}
 	}

@@ -7,12 +7,10 @@ namespace dg {
 		constexpr unsigned long WAIT = 200;
 	}
 	void Manip_Udemy::UProc(HWND hw, const Proc_t& p) {
-		TempSwitch(hw, [hw, &p](){
-			ClickLeftTop(hw, true, true, 192);
-			QThread::msleep(20);
-			TapKey(VK_HOME);
-			p();
-		});
+        ClickLeftTop(hw, true, true, 192);
+        QThread::msleep(20);
+        TapKey(VK_HOME);
+        p();
 	}
 	const std::wstring& Manip_Udemy::getWindowTopName() const {
 		static std::wstring ret(L"Udemy");
