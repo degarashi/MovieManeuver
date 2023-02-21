@@ -12,6 +12,7 @@ namespace dg {
 	constexpr int MAX_WINDOW_NAME = 512;
 	bool CheckContainsSubstr(const std::wstring& str, const std::wstring& target);
 	bool CheckContainsWindowName(HWND hw, const std::wstring& target);
+    UINT GetDoubleClickTime();
 
 	BOOL CALLBACK EnumChild(HWND hw, LPARAM lParam);
 	void ClickLeftTop(HWND hw, bool rightButton, bool bUseSendMessage,

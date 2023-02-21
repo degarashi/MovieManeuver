@@ -189,6 +189,10 @@ namespace dg {
 			}
 			*buffp = TEXT('\0');
 		}
-		qDebug() << QString::fromWCharArray(indent_buff) + GetWindowName(hWnd);
-	}
+        qDebug() << QString::fromWCharArray(indent_buff) + GetWindowName(hWnd);
+    }
+
+    UINT GetDoubleClickTime() {
+        return ::GetDoubleClickTime();
+    }
 }
