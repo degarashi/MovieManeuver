@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "src/winop.hpp"
 #include "ui_mainwindow.h"
 #include "inputmgr_wii.hpp"
 #include "inputmgr_xinput.hpp"
@@ -94,6 +93,13 @@ MainWindow::MainWindow(QWidget *parent)
 	_findWindowTimer = new QTimer(this);
 	_findWindowTimer->start(CHECKTARGET_INTERVAL);
 	connect(_findWindowTimer, &QTimer::timeout, this, &MainWindow::checkTargetWindow);
+
+	// ウィンドウフォーカス復元用タイマー
+	_restoreFocusTimer = new QTimer(this);
+//	  _restoreFocusTimer->setInterval(1000);
+	_restoreFocusTimer->setSingleShot(true);
+	connect(_restoreFocusTimer, &QTimer::timeout, this, &MainWindow::onRestoreFocus);
+
 	// インプット手段のリセットアクション
 	connect(_ui->actionRefresh_Input_r, &QAction::triggered,
 			this, &MainWindow::_initInputs);
@@ -126,23 +132,38 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 			const auto itr = m.find(inp);
 			if(itr != m.end()) {
 				const auto ptr = itr->second;
-				dg::TempSwitch(_hwTarget, [ptr, this]() {
+                if(!_restoreFocusTimer->isActive()) {
+					_hwRestore = GetForegroundWindow();
+					SetForegroundWindow(_hwTarget);
+					QThread::msleep(50);
 					_manip->setFocus(_hwTarget);
-					(_manip->*ptr)(_hwTarget);
-				});
+				}
+				(_manip->*ptr)(_hwTarget);
+				_restoreFocusTimer->start();
 			}
 		}
 	}
 }
+void MainWindow::_switchManip(const dg::Manip *manip) {
+	if(_manip == manip)
+		return;
+
+	_manip = manip;
+    _restoreFocusTimer->stop();
+    _restoreFocusTimer->setInterval(300);
+	_ui->lbWindowName->setText(
+			_manip ? (_manip->getName() + u8" Running...") : QString("----"));
+}
 void MainWindow::checkTargetWindow() {
 	_hwTarget = nullptr;
-	_manip = nullptr;
 	for(auto* m: c_manipList) {
 		if((_hwTarget = m->findTarget())) {
-			_manip = m;
+			_switchManip(m);
 			break;
 		}
 	}
-	_ui->lbWindowName->setText(
-			_manip ? (_manip->getName() + u8" Running...") : QString("----"));
+}
+
+void MainWindow::onRestoreFocus() {
+	SetForegroundWindow(_hwRestore);
 }

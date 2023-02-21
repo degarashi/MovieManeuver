@@ -30,11 +30,17 @@ class MainWindow : public QMainWindow {
 		HWND							_hwTarget;
 
 		dg::VKMapping			_keyMap;
-	private slots:
+
+        QTimer*					_restoreFocusTimer;
+        HWND					_hwRestore;
+        void _switchManip(const dg::Manip* manip);
+
+    private slots:
 		// XInput / WiiRemoteの初期化
 		void _initInputs();
 
 	private slots:
 		void onPadUpdate(const dg::VKInputs& inputs);
 		void checkTargetWindow();
+        void onRestoreFocus();
 };
