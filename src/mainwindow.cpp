@@ -144,13 +144,17 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 		}
 	}
 }
+
+namespace dg {
+    UINT GetDoubleClickTime();
+}
 void MainWindow::_switchManip(const dg::Manip *manip) {
 	if(_manip == manip)
 		return;
 
 	_manip = manip;
     _restoreFocusTimer->stop();
-    _restoreFocusTimer->setInterval(300);
+    _restoreFocusTimer->setInterval(dg::GetDoubleClickTime());
 	_ui->lbWindowName->setText(
 			_manip ? (_manip->getName() + u8" Running...") : QString("----"));
 }
