@@ -4,7 +4,7 @@
 
 namespace dg {
 	namespace {
-		constexpr unsigned long WAIT = 200;
+        constexpr unsigned long WAIT = 50;
 	}
     void Manip_Udemy::setFocus(HWND hw) const {
         ClickLeftTop(hw, true, true, 192);
