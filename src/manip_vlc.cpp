@@ -38,10 +38,16 @@ namespace dg {
         TapKey(VK_LEFT, VK_MENU);
     }
 	void Manip_VLC::speedDown(const HWND hw) const {
-        TapKey(VK_OEM_4);	// [
+		// 音のピッチを下げてスピードダウン
+		// TapKey(VK_OEM_4);	// [
+		// 音のピッチを下げずにスピードダウン
+		TapKey(VK_SUBTRACT);
     }
 	void Manip_VLC::speedUp(const HWND hw) const {
-        TapKey(VK_OEM_6);	// ]
+		// 音のピッチを上げてスピードアップ
+		// TapKey(VK_OEM_6);	// ]
+		// 音のピッチを上げずにスピードアップ
+		TapKey(VK_ADD);
     }
 	void Manip_VLC::volumeDown(const HWND hw) const {
         TapKey(VK_DOWN, VK_CONTROL);
