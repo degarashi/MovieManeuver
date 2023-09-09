@@ -4,7 +4,8 @@
 
 namespace dg {
 	namespace {
-		constexpr unsigned long WAIT = 50;
+		// キーを連続で押す際のウェイト
+		constexpr unsigned long REPEAT_WAIT = 50;
 	}
 	void Manip_Udemy::setFocus(HWND hw) const {
 		ClickLeftTop(hw, true, true, 192);
@@ -29,12 +30,12 @@ namespace dg {
 	}
 	void Manip_Udemy::forward_medium(const HWND hw) const {
 		TapKey(VK_RIGHT);
-		QThread::msleep(WAIT);
+		QThread::msleep(REPEAT_WAIT);
 		TapKey(VK_RIGHT);
 	}
 	void Manip_Udemy::backward_medium(const HWND hw) const {
 		TapKey(VK_LEFT);
-		QThread::msleep(WAIT);
+		QThread::msleep(REPEAT_WAIT);
 		TapKey(VK_LEFT);
 	}
 	void Manip_Udemy::speedDown(const HWND hw) const {
