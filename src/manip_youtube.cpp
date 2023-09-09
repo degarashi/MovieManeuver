@@ -9,7 +9,8 @@ namespace dg {
 		constexpr unsigned long MANIP_OFFSET = 160;
 	}
     void Manip_YouTube::setFocus(HWND hw) const {
-        if(!IsFullScreen(hw)) {
+		TapKey(VK_IME_OFF);
+		if(!IsFullScreen(hw)) {
             // ページの先頭に戻る
             ClickLeftTop(hw, true, false, 2);
             QThread::msleep(MANIP_WAIT);
