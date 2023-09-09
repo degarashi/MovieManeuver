@@ -9,7 +9,6 @@ namespace dg {
     void Manip_Udemy::setFocus(HWND hw) const {
         ClickLeftTop(hw, true, true, 192);
         QThread::msleep(20);
-        TapKey(VK_HOME);
 	}
 	const std::wstring& Manip_Udemy::getWindowTopName() const {
 		static std::wstring ret(L"Udemy");
