@@ -17,9 +17,9 @@ namespace dg {
             QThread::msleep(MANIP_WAIT);
             TapKey(VK_HOME);
         } else {
-            ClickLeftTop(hw, true, false, MANIP_OFFSET);
+            ClickLeftTop(hw, true, true, MANIP_OFFSET);
             QThread::msleep(MANIP_WAIT);
-            ClickLeftTop(hw, false, false, MANIP_OFFSET);
+            ClickLeftTop(hw, false, true, MANIP_OFFSET-2);
         }
 	}
 	const std::wstring& Manip_YouTube::getWindowTopName() const {
