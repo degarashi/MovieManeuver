@@ -30,5 +30,9 @@ namespace dg {
 		virtual const std::wstring& getWindowChildName() const = 0;
 
 		virtual const QString& getName() const = 0;
+
+		// 共通の操作(一応override可)
+		virtual void mediaVolumeUp(HWND hw) const;
+		virtual void mediaVolumeDown(HWND hw) const;
 	};
 }
