@@ -9,6 +9,7 @@ namespace dg {
 		DLeft, DUp, DRight, DDown,
 		TL_Left, TL_Up, TL_Right, TL_Down,
 		TR_Left, TR_Up, TR_Right, TR_Down,
-		Start, Select
+		Start, Select,
+		Invalid		// 何のボタンも示さない値
 	};
 }
