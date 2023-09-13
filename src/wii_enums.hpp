@@ -8,4 +8,7 @@ namespace dg::wii {
 		Left, Up, Right, Down,
 		_Num
 	};
+	enum class Accel {
+		X, Y, Z
+	};
 }
