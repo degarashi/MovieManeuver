@@ -5,6 +5,7 @@
 namespace dg {
 	struct Manip;
 	class InputMgrBase;
+	using VKMap_V = std::vector<VKMapping>;
 }
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,8 +29,11 @@ class MainWindow : public QMainWindow {
 		const dg::Manip*				_manip;
 		// 操作対象(ブラウザ)のウィンドウハンドル
 		HWND							_hwTarget;
-
-		dg::VKMapping			_keyMap;
+		// VirtualKey -> (Manip::*) の対応表
+		dg::VKMap_V				_keyMap;
+		int						_keyMapIndex;
+		// KeyMap切り替えキーId
+		dg::VirtualKey			_modeSwKey;
 
         QTimer*					_restoreFocusTimer;
         HWND					_hwRestore;

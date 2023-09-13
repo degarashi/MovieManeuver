@@ -26,58 +26,70 @@ namespace {
 
 namespace {
 	// とりあえずのキーマップ
-	dg::VKMapping MakeKeyMap() {
-		using dg::VKMapping;
+	std::tuple<dg::VKMap_V, dg::VirtualKey> MakeKeyMap() {
 		using dg::VirtualKey;
 		using dg::Manip;
 
-		VKMapping map;
-		map.emplace(VirtualKey::DLeft, &Manip::backward_few);
-		map.emplace(VirtualKey::DRight, &Manip::forward_few);
-		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
-		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
+		dg::VKMap_V map {
+			// Mapping 0
+			{
+				{VirtualKey::DLeft, &Manip::backward_few},
+				{VirtualKey::DRight, &Manip::forward_few},
+				{VirtualKey::DUp, &Manip::volumeUp},
+				{VirtualKey::DDown, &Manip::volumeDown},
 
-		map.emplace(VirtualKey::B, &Manip::startPause);
-		map.emplace(VirtualKey::Y, &Manip::volumeMute);
-		map.emplace(VirtualKey::X, &Manip::fullScreen);
-		map.emplace(VirtualKey::Select, &Manip::captionSwitch);
+				{VirtualKey::B, &Manip::startPause},
+				{VirtualKey::Y, &Manip::volumeMute},
+				{VirtualKey::X, &Manip::fullScreen},
+				{VirtualKey::Select, &Manip::captionSwitch},
 
-		map.emplace(VirtualKey::L1, &Manip::speedDown);
-		map.emplace(VirtualKey::R1, &Manip::speedUp);
-		map.emplace(VirtualKey::L2, &Manip::backward_medium);
-		map.emplace(VirtualKey::R2, &Manip::forward_medium);
+				{VirtualKey::L1, &Manip::speedDown},
+				{VirtualKey::R1, &Manip::speedUp},
+				{VirtualKey::L2, &Manip::backward_medium},
+				{VirtualKey::R2, &Manip::forward_medium},
 
-		map.emplace(VirtualKey::TL_Left, &Manip::backward_few);
-		map.emplace(VirtualKey::TL_Right, &Manip::forward_few);
-		map.emplace(VirtualKey::TL_Up, &Manip::volumeUp);
-		map.emplace(VirtualKey::TL_Down, &Manip::volumeDown);
+				{VirtualKey::TL_Left, &Manip::backward_few},
+				{VirtualKey::TL_Right, &Manip::forward_few},
+				{VirtualKey::TL_Up, &Manip::volumeUp},
+				{VirtualKey::TL_Down, &Manip::volumeDown},
 
-		map.emplace(VirtualKey::TR_Left, &Manip::backward_medium);
-		map.emplace(VirtualKey::TR_Right, &Manip::forward_medium);
-		map.emplace(VirtualKey::TR_Up, &Manip::speedUp);
-		map.emplace(VirtualKey::TR_Down, &Manip::speedDown);
-		return map;
+				{VirtualKey::TR_Left, &Manip::backward_medium},
+				{VirtualKey::TR_Right, &Manip::forward_medium},
+				{VirtualKey::TR_Up, &Manip::speedUp},
+				{VirtualKey::TR_Down, &Manip::speedDown},
+			},
+		};
+		return {map, VirtualKey::Invalid};
 	}
-	dg::VKMapping MakeKeyMap_Wii() {
-		using dg::VKMapping;
+	std::tuple<dg::VKMap_V, dg::VirtualKey> MakeKeyMap_Wii() {
 		using dg::VirtualKey;
 		using dg::Manip;
 
-		VKMapping map;
-		map.emplace(VirtualKey::DLeft, &Manip::backward_few);
-		map.emplace(VirtualKey::DRight, &Manip::forward_few);
-		map.emplace(VirtualKey::DUp, &Manip::volumeUp);
-		map.emplace(VirtualKey::DDown, &Manip::volumeDown);
+		dg::VKMap_V map {
+			{
+				{VirtualKey::DLeft, &Manip::backward_few},
+				{VirtualKey::DRight, &Manip::forward_few},
+				{VirtualKey::DUp, &Manip::volumeUp},
+				{VirtualKey::DDown, &Manip::volumeDown},
 
-		map.emplace(VirtualKey::A, &Manip::startPause);
-		map.emplace(VirtualKey::B, &Manip::fullScreen);
-		map.emplace(VirtualKey::L1, &Manip::volumeMute);
+				{VirtualKey::A, &Manip::startPause},
+				{VirtualKey::B, &Manip::fullScreen},
+				{VirtualKey::L1, &Manip::volumeMute},
 
-		map.emplace(VirtualKey::Select, &Manip::speedDown);
-		map.emplace(VirtualKey::Start, &Manip::speedUp);
-		map.emplace(VirtualKey::X, &Manip::backward_medium);
-		map.emplace(VirtualKey::Y, &Manip::forward_medium);
-		return map;
+				{VirtualKey::Select, &Manip::speedDown},
+				{VirtualKey::Start, &Manip::speedUp},
+				{VirtualKey::X, &Manip::backward_medium},
+				{VirtualKey::Y, &Manip::forward_medium},
+			},
+			// Mapping 1 (PlaceHolder)
+			{}
+		};
+		// Map0をベースにMap1を定義
+		map[1] = map[0];
+		map[1][VirtualKey::DUp] = &Manip::mediaVolumeUp;
+		map[1][VirtualKey::DDown] = &Manip::mediaVolumeDown;
+		map[1][VirtualKey::A] = &Manip::fullScreen;
+		return {map, VirtualKey::B};
 	}
 }
 MainWindow::MainWindow(QWidget *parent)
@@ -109,15 +121,16 @@ void MainWindow::_initInputs() {
 	// 終了処理等あるので一旦nullをセット
 	_imgr.reset();
 	_imgrWidget.reset();
+	_keyMapIndex = 0;
 	// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
 	auto wiiMgr = std::make_unique<dg::wii::Manager>();
 	if(wiiMgr->numRemote() == 0) {
 		auto* xiMgr = new dg::xinput::Manager();
 		_imgr.reset(xiMgr);
-		_keyMap = MakeKeyMap();
+		std::tie(_keyMap, _modeSwKey) = MakeKeyMap();
 	} else {
 		_imgr.reset(wiiMgr.release());
-		_keyMap = MakeKeyMap_Wii();
+		std::tie(_keyMap, _modeSwKey) = MakeKeyMap_Wii();
 	}
 
 	connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
@@ -127,8 +140,13 @@ void MainWindow::_initInputs() {
 }
 void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 	if(_hwTarget) {
-		const auto& m = _keyMap;
 		for(auto& inp : inputs) {
+			const auto& m = _keyMap[_keyMapIndex];
+			if(inp == _modeSwKey) {
+				// キーマップモード切り替え
+				_keyMapIndex = (++_keyMapIndex) % _keyMap.size();
+				continue;
+			}
 			const auto itr = m.find(inp);
 			if(itr != m.end()) {
 				const auto ptr = itr->second;
