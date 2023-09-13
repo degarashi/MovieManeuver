@@ -34,9 +34,10 @@ namespace dg {
 			if(rc == WRMT_IO_ERROR)
 				throw Exception("WRMT_WiiRemote_Open() Failed");
 
-			// 余計な機能をOFF
+			// モーションセンサはON
+			WRMT_WiiRemote_SetEnabled(_data, WRMT_FUNCTION_MOTION, 1);
+			// その他余計な機能をOFF
 			WRMT_WiiRemote_SetEnabled(_data, WRMT_FUNCTION_CONTINUOUS, 0);
-			WRMT_WiiRemote_SetEnabled(_data, WRMT_FUNCTION_MOTION, 0);
 			WRMT_WiiRemote_SetEnabled(_data, WRMT_FUNCTION_IR, 0);
 			WRMT_WiiRemote_SetEnabled(_data, WRMT_FUNCTION_SPEAKER, 0);
 			WRMT_WiiRemote_Update(_data);
