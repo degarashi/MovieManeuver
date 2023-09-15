@@ -24,11 +24,11 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
+			[[nodiscard]] VKInputs getPressedButton() const;
 			[[nodiscard]] BoolAr getPressingButton() const;
 
 			void updateState();
 			// 前回から何も変化が無いときに呼ぶ
 			void updateKeepState();
-			[[nodiscard]] VKInputs getPressedButton() const;
 	};
 }
