@@ -121,17 +121,20 @@ void MainWindow::_initInputs() {
 	// 終了処理等あるので一旦nullをセット
 	_imgr.reset();
 	_imgrWidget.reset();
-	_keyMapIndex = 0;
 	// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
 	auto wiiMgr = std::make_unique<dg::wii::Manager>();
+	dg::VKMap_V keyMap;
+	dg::VirtualKey modeSwKey;
 	if(wiiMgr->numRemote() == 0) {
 		auto* xiMgr = new dg::xinput::Manager();
 		_imgr.reset(xiMgr);
-		std::tie(_keyMap, _modeSwKey) = MakeKeyMap();
+		std::tie(keyMap, modeSwKey) = MakeKeyMap();
 	} else {
 		_imgr.reset(wiiMgr.release());
-		std::tie(_keyMap, _modeSwKey) = MakeKeyMap_Wii();
+		std::tie(keyMap, modeSwKey) = MakeKeyMap_Wii();
 	}
+	_keymap.setKeymapSwitch(modeSwKey);
+	_keymap.setKeymap(keyMap);
 
 	connect(_imgr.get(), &dg::InputMgrBase::onInput, this, &MainWindow::onPadUpdate);
 	auto* dialog = _imgr->makeDialog();
@@ -141,24 +144,16 @@ void MainWindow::_initInputs() {
 void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 	if(_hwTarget) {
 		for(auto& inp : inputs) {
-			const auto& m = _keyMap[_keyMapIndex];
-			if(inp == _modeSwKey) {
-				// キーマップモード切り替え
-				_keyMapIndex = (++_keyMapIndex) % _keyMap.size();
+			if(_keymap.keySwitch(inp))
 				continue;
+			if(!_restoreFocusTimer->isActive()) {
+				_hwRestore = GetForegroundWindow();
+				SetForegroundWindow(_hwTarget);
+				QThread::msleep(50);
+				_manip->setFocus(_hwTarget);
 			}
-			const auto itr = m.find(inp);
-			if(itr != m.end()) {
-				const auto ptr = itr->second;
-                if(!_restoreFocusTimer->isActive()) {
-					_hwRestore = GetForegroundWindow();
-					SetForegroundWindow(_hwTarget);
-					QThread::msleep(50);
-					_manip->setFocus(_hwTarget);
-				}
-				(_manip->*ptr)(_hwTarget);
-				_restoreFocusTimer->start();
-			}
+			_keymap.manipulate(inp, _manip, _hwTarget);
+			_restoreFocusTimer->start();
 		}
 	}
 }

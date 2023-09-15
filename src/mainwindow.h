@@ -1,6 +1,7 @@
 #pragma once
 #include <QMainWindow>
 #include "virtual_key_def.hpp"
+#include "keymap.hpp"
 
 namespace dg {
 	struct Manip;
@@ -29,11 +30,7 @@ class MainWindow : public QMainWindow {
 		const dg::Manip*				_manip;
 		// 操作対象(ブラウザ)のウィンドウハンドル
 		HWND							_hwTarget;
-		// VirtualKey -> (Manip::*) の対応表
-		dg::VKMap_V				_keyMap;
-		int						_keyMapIndex;
-		// KeyMap切り替えキーId
-		dg::VirtualKey			_modeSwKey;
+		dg::Keymap				_keymap;
 
         QTimer*					_restoreFocusTimer;
         HWND					_hwRestore;
