@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <xinput.h>
 #include "vector.hpp"
-#include "axisstate2d.hpp"
+#include "axisstate_n.hpp"
 #include "aux_enums.hpp"
 #include "xi_enums.hpp"
 
@@ -15,6 +15,8 @@ namespace dg::xinput {
 							  DEFAULT_DZ_THUMB;
 
 		private:
+			using AxisState2D = AxisState_N<2>;
+
 			ButtonState _button[static_cast<int>(Button::NumButtons)];
 			TriggerState _trigger[static_cast<int>(Trigger::NumTrigger)];
 			AxisState2D _thumb[static_cast<int>(Thumb::NumThumb)];

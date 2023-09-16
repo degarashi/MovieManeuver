@@ -71,8 +71,8 @@ namespace dg::xinput {
 			Q_ASSERT(positive);
 		}
 
-		_thumb[ToInt(AxisState2D::Dir::Horizontal)].update(pad.sThumbLX, pad.sThumbLY);
-		_thumb[ToInt(AxisState2D::Dir::Vertical)].update(pad.sThumbRX, pad.sThumbRY);
+		_thumb[ToInt(Dir2D::Horizontal)].update(pad.sThumbLX, pad.sThumbLY);
+		_thumb[ToInt(Dir2D::Vertical)].update(pad.sThumbRX, pad.sThumbRY);
 	}
 	bool PadState::check() const {
 		for(const auto& btn : _button)
@@ -107,7 +107,7 @@ namespace dg::xinput {
 		return _trigger[TriggerId(t)];
 	}
 	Vec2 PadState::getThumb(const Thumb t) const {
-		return _thumb[ThumbId(t)].dir();
+		return _thumb[ThumbId(t)].vec();
 	}
 	IVec2 PadState::getDPadVec() const {
 		return {
@@ -123,17 +123,19 @@ namespace dg::xinput {
 	void PadState::setTriggerDeadZone(const Trigger id, const int dz) {
 		_trigger[TriggerId(id)].setDeadZone(dz);
 	}
-	const AxisState2D& PadState::thumb(const Thumb id) const {
+	const PadState::AxisState2D& PadState::thumb(const Thumb id) const {
 		return _thumb[ThumbId(id)];
 	}
-	AxisState2D& PadState::refThumb(const Thumb id) {
+	PadState::AxisState2D& PadState::refThumb(const Thumb id) {
 		return _thumb[ThumbId(id)];
 	}
 	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
 		const auto positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
 								 AxisState::Dir::Positive : AxisState::Dir::Negative;
-		const auto vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?
-								  AxisState2D::Dir::Horizontal : AxisState2D::Dir::Vertical;
+		const auto vertical = ToInt(
+									((dir==Direction4::Left) || (dir==Direction4::Right)) ?
+									Dir2D::Horizontal : Dir2D::Vertical
+								);
 		return thumb(id).axis(vertical).trigger(positive).buttonState().pressed();
 	}
 }
