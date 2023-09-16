@@ -7,7 +7,9 @@ namespace dg {
 		L1, L2, L3,
 		R1, R2, R3,
 		DLeft, DUp, DRight, DDown,
+		// ThumbStick-Left
 		TL_Left, TL_Up, TL_Right, TL_Down,
+		// ThumbStick-Right
 		TR_Left, TR_Up, TR_Right, TR_Down,
 		Start, Select,
 		Invalid		// 何のボタンも示さない値
