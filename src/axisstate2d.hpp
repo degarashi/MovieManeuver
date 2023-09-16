@@ -5,11 +5,13 @@
 namespace dg {
 	class AxisState2D {
 		public:
-			constexpr static int
-				Horizontal = 0,
-				Vertical = 1;
+			enum class Dir {
+				Horizontal,
+				Vertical,
+				_Num
+			};
 		private:
-			AxisState	_astate[2];
+			AxisState	_astate[static_cast<int>(Dir::_Num)];
 			Vec2		_dir;
 
 		public:
@@ -21,8 +23,8 @@ namespace dg {
 			void update();
 			void update(int hValue, int vValue);
 
-			[[nodiscard]] const AxisState& axis(int id) const;
-			[[nodiscard]] AxisState& refAxis(int id);
+			[[nodiscard]] const AxisState& axis(Dir dir) const;
+			[[nodiscard]] AxisState& refAxis(Dir dir);
 			[[nodiscard]] const Vec2& dir() const;
 
 			void setDeadZone(int dz);

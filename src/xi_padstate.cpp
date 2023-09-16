@@ -8,6 +8,9 @@ namespace dg::xinput {
 	const int PadState::THUMB_RANGE = 32768;
 	const int PadState::DEFAULT_DZ_THUMB = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 	const int PadState::DEFAULT_DZ_TRIGGER = XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
+	namespace {
+		constexpr auto ToInt = [](auto&& val) { return static_cast<int>(val); };
+	}
 
 	PadState::PadState():
 		_trigger {
@@ -68,8 +71,8 @@ namespace dg::xinput {
 			Q_ASSERT(positive);
 		}
 
-		_thumb[AxisState2D::Horizontal].update(pad.sThumbLX, pad.sThumbLY);
-		_thumb[AxisState2D::Vertical].update(pad.sThumbRX, pad.sThumbRY);
+		_thumb[ToInt(AxisState2D::Dir::Horizontal)].update(pad.sThumbLX, pad.sThumbLY);
+		_thumb[ToInt(AxisState2D::Dir::Vertical)].update(pad.sThumbRX, pad.sThumbRY);
 	}
 	bool PadState::check() const {
 		for(const auto& btn : _button)
@@ -129,8 +132,8 @@ namespace dg::xinput {
 	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
 		const auto positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
 								 AxisState::Dir::Positive : AxisState::Dir::Negative;
-		const int vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?
-								 AxisState2D::Horizontal : AxisState2D::Vertical;
+		const auto vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?
+								  AxisState2D::Dir::Horizontal : AxisState2D::Dir::Vertical;
 		return thumb(id).axis(vertical).trigger(positive).buttonState().pressed();
 	}
 }
