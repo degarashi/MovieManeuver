@@ -5,12 +5,14 @@ namespace dg {
 	//! 軸入力を管理(1D)
 	class AxisState {
 		public:
-			constexpr static int
-				Negative = 0,
-				Positive = 1;
+			enum class Dir {
+				Negative,
+				Positive,
+				_Num
+			};
 		private:
 			// TriggerStateをPositive/Negativeで2つ用意
-			TriggerState	_tstate[2];
+			TriggerState	_tstate[static_cast<int>(Dir::_Num)];
 			//! 軸入力を-1.0から1.0までの値に正規化した値
 			float			_axis;
 
@@ -28,8 +30,8 @@ namespace dg {
 			void update(int rawValue);
 			// ----------------------------
 
-			[[nodiscard]] const TriggerState& trigger(int id) const;
-			[[nodiscard]] TriggerState& refTrigger(int id);
+			[[nodiscard]] const TriggerState& trigger(Dir dir) const;
+			[[nodiscard]] TriggerState& refTrigger(Dir dir);
 			[[nodiscard]] float axis() const;
 
 			void setDeadZone(int dz);

@@ -127,8 +127,8 @@ namespace dg::xinput {
 		return _thumb[ThumbId(id)];
 	}
 	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
-		const int positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
-								 AxisState::Positive : AxisState::Negative;
+		const auto positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
+								 AxisState::Dir::Positive : AxisState::Dir::Negative;
 		const int vertical = ((dir==Direction4::Left) || (dir==Direction4::Right)) ?
 								 AxisState2D::Horizontal : AxisState2D::Vertical;
 		return thumb(id).axis(vertical).trigger(positive).buttonState().pressed();

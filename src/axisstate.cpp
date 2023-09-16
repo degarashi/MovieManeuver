@@ -3,6 +3,10 @@
 #include <QtGlobal>
 
 namespace dg {
+	namespace {
+		constexpr auto Negative = static_cast<int>(AxisState::Dir::Negative);
+		constexpr auto Positive = static_cast<int>(AxisState::Dir::Positive);
+	}
 	AxisState::AxisState(const int range, const int deadZone):
 		_tstate {
 			TriggerState(range, deadZone),
@@ -41,15 +45,17 @@ namespace dg {
 			_axis = _tstate[Positive].trigger();
 		}
 	}
-	const TriggerState& AxisState::trigger(const int id) const {
+	const TriggerState& AxisState::trigger(const Dir dir) const {
 		constexpr int N = sizeof(_tstate) / sizeof(_tstate[0]);
-		Q_ASSERT(id <= N);
-		return _tstate[id];
+		const auto dir_ = static_cast<int>(dir);
+		Q_ASSERT(dir_ <= N);
+		return _tstate[dir_];
 	}
-	TriggerState& AxisState::refTrigger(int id) {
+	TriggerState& AxisState::refTrigger(const Dir dir) {
 		constexpr int N = sizeof(_tstate) / sizeof(_tstate[0]);
-		Q_ASSERT(id <= N);
-		return _tstate[id];
+		const auto dir_ = static_cast<int>(dir);
+		Q_ASSERT(dir_ <= N);
+		return _tstate[dir_];
 	}
 	float AxisState::axis() const {
 		return _axis;
