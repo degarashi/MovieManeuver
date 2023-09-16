@@ -21,12 +21,19 @@ namespace dg {
 
 		Remote::Remote(Remote&& rmt):
 			_data(rmt._data),
-			_bstate(rmt._bstate)
+			_bstate(rmt._bstate),
+			_accel(rmt._accel)
 		{
 			rmt._data = nullptr;
 		}
+		namespace {
+			constexpr int DeadZone = 19,
+							Range = 128;
+		}
+		// Accelの範囲はUnsigned(0～255), 中央値=128
 		Remote::Remote(WRMT_WiiRemote* data):
-			_data(data)
+			_data(data),
+			_accel(Range, DeadZone)
 		{
 			Q_ASSERT(data);
 
@@ -70,10 +77,27 @@ namespace dg {
 			}
 			return ret;
 		}
+
+		const Remote::Axis3D& Remote::getAcceleration() const {
+			return _accel;
+		}
 		void Remote::updateState() {
+			// Buttons
 			const auto pressing = getPressingButton();
 			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
 				_bstate[i].update(pressing[i]);
+			}
+			// Acceleration
+			{
+				const int x = WRMT_WiiRemote_GetState(_data, WRMT_DATA_MOTION_X),
+						y = WRMT_WiiRemote_GetState(_data, WRMT_DATA_MOTION_Y),
+						z = WRMT_WiiRemote_GetState(_data, WRMT_DATA_MOTION_Z);
+				_accel.update(
+					x - Range,
+					y - Range,
+					z - Range
+				);
+				Q_ASSERT(_accel.check());
 			}
 		}
 		void Remote::updateKeepState() {
