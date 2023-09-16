@@ -42,9 +42,13 @@ namespace dg {
 		}
 	}
 	const TriggerState& AxisState::trigger(const int id) const {
+		constexpr int N = sizeof(_tstate) / sizeof(_tstate[0]);
+		Q_ASSERT(id <= N);
 		return _tstate[id];
 	}
 	TriggerState& AxisState::refTrigger(int id) {
+		constexpr int N = sizeof(_tstate) / sizeof(_tstate[0]);
+		Q_ASSERT(id <= N);
 		return _tstate[id];
 	}
 	float AxisState::axis() const {
