@@ -30,7 +30,6 @@ set(PROJECT_SOURCES
     src/aux_func.hpp
     src/triggerstate.hpp
     src/axisstate.hpp
-    src/axisstate2d.hpp
     src/aux_enums.hpp
     src/mainwindow.ui
     src/dg_diag_xinput.hpp
