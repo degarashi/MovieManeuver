@@ -113,5 +113,17 @@ namespace dg {
 			}
 			return vk;
 		}
+		KeyDiff_V Remote::getButtonDiff() const {
+			KeyDiff_V ret;
+			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
+				auto& bs = _bstate[i];
+				if(bs.pressed()) {
+					ret.emplace_back(ButtonToVKMap.at(Button(i)), true);
+				} else if(bs.released()) {
+					ret.emplace_back(ButtonToVKMap.at(Button(i)), false);
+				}
+			}
+			return ret;
+		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "virtual_key_def.hpp"
 #include <unordered_map>
 #include "axisstate_n.hpp"
+#include "keydiff.hpp"
 
 struct wrmt_wiiremote;
 using WRMT_WiiRemote = wrmt_wiiremote;
@@ -28,6 +29,7 @@ namespace dg::wii {
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
 			[[nodiscard]] VKInputs getPressedButton() const;
+			[[nodiscard]] KeyDiff_V getButtonDiff() const;
 			[[nodiscard]] BoolAr getPressingButton() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
 
