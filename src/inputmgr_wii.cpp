@@ -5,7 +5,7 @@
 
 namespace dg::wii {
 	void Manager::_updateAll() {
-		WRMT_UpdateAll();
+		WRMT_Poll();
 	}
 
 	Manager::Manager() {
