@@ -40,8 +40,6 @@ class MainWindow : public QMainWindow {
     private slots:
 		// XInput / WiiRemoteの初期化
 		void _initInputs();
-
-	private slots:
 		void onPadUpdate(const dg::KeyDiff_V& inputs);
 		void checkTargetWindow();
         void onRestoreFocus();
