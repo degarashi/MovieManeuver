@@ -12,7 +12,6 @@ namespace dg::wii {
 	using ButtonToVKMap_t = std::unordered_map<Button, VirtualKey>;
 	extern const ButtonToVKMap_t ButtonToVKMap;
 	using BoolAr = std::array<bool, static_cast<size_t>(Button::_Num)>;
-	using AxisAr = std::array<int, 3>;
 
 	// WiiMote用のPadState
 	class Remote {
