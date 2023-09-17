@@ -1,12 +1,13 @@
 #pragma once
 #include "virtual_key_def.hpp"
-#include <memory>
+#include <QObject>
 
 namespace dg {
 	struct Manip;
 	using VKMap_V = std::vector<VKMapping>;
 	//! キーマップ切り替え & Manip呼び出しクラス
-	class Keymap {
+	class Keymap : public QObject {
+		Q_OBJECT
 		private:
 			//! 切り替え仮想キー(サイクル)
 			VirtualKey		_modeSwKey;
