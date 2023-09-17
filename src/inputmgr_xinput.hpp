@@ -1,6 +1,7 @@
 #pragma once
 #include "inputmgr_base.hpp"
 #include "xi_padstate.hpp"
+#include "keydiff.hpp"
 
 namespace dg::xinput {
 	class Manager : public InputMgrBase {
@@ -10,7 +11,7 @@ namespace dg::xinput {
 			PadState	_state;
 			using PS = PadState;
 
-			VKInputs _composeInputs() const;
+			KeyDiff_V _composeInputs() const;
 
 		private slots:
 			void onTimer() override;

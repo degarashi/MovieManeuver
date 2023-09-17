@@ -2,6 +2,7 @@
 #include <QMainWindow>
 #include "virtual_key_def.hpp"
 #include "keymap.hpp"
+#include "keydiff.hpp"
 
 namespace dg {
 	struct Manip;
@@ -41,7 +42,7 @@ class MainWindow : public QMainWindow {
 		void _initInputs();
 
 	private slots:
-		void onPadUpdate(const dg::VKInputs& inputs);
+		void onPadUpdate(const dg::KeyDiff_V& inputs);
 		void checkTargetWindow();
         void onRestoreFocus();
 };

@@ -1,5 +1,7 @@
 #include "inputmgr_xinput.hpp"
 #include "dg_diag_xinput.hpp"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 namespace dg::xinput {
 	Manager::Manager() {
@@ -13,8 +15,8 @@ namespace dg::xinput {
 		connect(this, &Manager::onInputXI, diag, &DebugViewWidget::updateDebugView);
 		return diag;
 	}
-	VKInputs Manager::_composeInputs() const {
-		VKInputs ret;
+	KeyDiff_V Manager::_composeInputs() const {
+		KeyDiff_V ret;
 		{
 			struct BtnPair {
 				Button 	id;
@@ -41,7 +43,9 @@ namespace dg::xinput {
 			};
 			for(auto& b : Btn) {
 				if(_state.pressed(b.id))
-					ret.emplace_back(b.vk);
+					ret.emplace_back(b.vk, true);
+				else if(_state.pressed(b.id))
+					ret.emplace_back(b.vk, false);
 			}
 		}
 		{
@@ -63,13 +67,27 @@ namespace dg::xinput {
 			};
 			for(auto& t : TP) {
 				if(_state.thumbTilted(t.thumb, t.dir))
-					ret.emplace_back(t.vk);
+					ret.emplace_back(t.vk, true);
+				else if(_state.thumbRestored(t.thumb, t.dir)) {
+					ret.emplace_back(t.vk, false);
+				}
 			}
 		}
-		if(_state.getTrigger(Trigger::TriggerLeft).buttonState().pressed())
-			ret.emplace_back(VirtualKey::L2);
-		if(_state.getTrigger(Trigger::TriggerRight).buttonState().pressed())
-			ret.emplace_back(VirtualKey::R2);
+		{
+			const auto procTrigger = [this, &ret](const auto trigger, const auto vk){
+				auto& t = _state.getTrigger(Trigger::TriggerLeft).buttonState();
+				std::optional<bool> b;
+				if(t.pressed())
+					b = true;
+				else if(t.released())
+					b = false;
+				if(b)
+					ret.emplace_back(VirtualKey::L2, *b);
+
+			};
+			procTrigger(Trigger::TriggerLeft, VirtualKey::L2);
+			procTrigger(Trigger::TriggerRight, VirtualKey::R2);
+		}
 
 		return ret;
 	}

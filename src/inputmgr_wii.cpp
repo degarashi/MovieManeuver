@@ -28,7 +28,7 @@ namespace dg::wii {
 		// とりあえず0番以外は対応しない
 		auto& m = _remote[0];
 		m.updateState();
-		const auto pressed = m.getPressedButton();
+		const auto pressed = m.getButtonDiff();
 		if(!pressed.empty()) {
 			emit onInput(pressed);
 		}

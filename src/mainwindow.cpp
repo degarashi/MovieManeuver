@@ -141,10 +141,12 @@ void MainWindow::_initInputs() {
 	_imgrWidget.reset(dialog);
 	_ui->verticalLayout->addWidget(dialog, 1);
 }
-void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
+void MainWindow::onPadUpdate(const dg::KeyDiff_V& inputs) {
 	if(_hwTarget) {
 		for(auto& inp : inputs) {
-			if(_keymap.keySwitch(inp))
+			if(!inp.pressed)
+				continue;
+			if(_keymap.keySwitch(inp.key))
 				continue;
 			if(!_restoreFocusTimer->isActive()) {
 				_hwRestore = GetForegroundWindow();
@@ -152,7 +154,7 @@ void MainWindow::onPadUpdate(const dg::VKInputs& inputs) {
 				QThread::msleep(50);
 				_manip->setFocus(_hwTarget);
 			}
-			_keymap.manipulate(inp, _manip, _hwTarget);
+			_keymap.manipulate(inp.key, _manip, _hwTarget);
 			_restoreFocusTimer->start();
 		}
 	}
