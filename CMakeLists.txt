@@ -48,6 +48,7 @@ set(PROJECT_SOURCES
     src/manip_vlc.hpp
     src/keymap.hpp
     src/axisstate_n.hpp
+    src/keydiff.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
