@@ -28,7 +28,7 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
-			[[nodiscard]] VKInputs getPressedButton() const;
+			[[nodiscard]] VKey_V getPressedButton() const;
 			[[nodiscard]] KeyDiff_V getButtonDiff() const;
 			[[nodiscard]] BoolAr getPressingButton() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;

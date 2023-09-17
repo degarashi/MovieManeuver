@@ -104,8 +104,8 @@ namespace dg {
 			for(auto& bs : _bstate)
 				bs.update();
 		}
-		VKInputs Remote::getPressedButton() const {
-			VKInputs vk;
+		VKey_V Remote::getPressedButton() const {
+			VKey_V vk;
 			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
 				if(_bstate[i].pressed()) {
 					vk.emplace_back(ButtonToVKMap.at(Button(i)));
