@@ -52,6 +52,9 @@ namespace dg::xinput {
 			[[nodiscard]] const AxisState2D& thumb(Thumb id) const;
 			[[nodiscard]] AxisState2D& refThumb(Thumb id);
 
+			//! Thumbのpressed()
 			[[nodiscard]] bool thumbTilted(Thumb id, Direction4 dir) const;
+			//! Thumbのreleased()
+			[[nodiscard]] bool thumbRestored(Thumb id, Direction4 dir) const;
 	};
 }

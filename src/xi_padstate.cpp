@@ -141,4 +141,7 @@ namespace dg::xinput {
 	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
 		return _thumbAsButtonState(id, dir).pressed();
 	}
+	bool PadState::thumbRestored(Thumb id, Direction4 dir) const {
+		return _thumbAsButtonState(id, dir).released();
+	}
 }
