@@ -12,6 +12,15 @@ namespace dg::xinput {
 		constexpr auto ToInt = [](auto&& val) { return static_cast<int>(val); };
 	}
 
+	const ButtonState& PadState::_thumbAsButtonState(const Thumb id, const Direction4 dir) const {
+		const auto positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
+								 AxisState::Dir::Positive : AxisState::Dir::Negative;
+		const auto vertical = ToInt(
+									((dir==Direction4::Left) || (dir==Direction4::Right)) ?
+									Dir2D::Horizontal : Dir2D::Vertical
+								);
+		return thumb(id).axis(vertical).trigger(positive).buttonState();
+	}
 	PadState::PadState():
 		_trigger {
 			TriggerState(TRIGGER_RANGE, DEFAULT_DZ_TRIGGER),
@@ -130,12 +139,6 @@ namespace dg::xinput {
 		return _thumb[ThumbId(id)];
 	}
 	bool PadState::thumbTilted(const Thumb id, const Direction4 dir) const {
-		const auto positive = ((dir==Direction4::Right) || (dir==Direction4::Top)) ?
-								 AxisState::Dir::Positive : AxisState::Dir::Negative;
-		const auto vertical = ToInt(
-									((dir==Direction4::Left) || (dir==Direction4::Right)) ?
-									Dir2D::Horizontal : Dir2D::Vertical
-								);
-		return thumb(id).axis(vertical).trigger(positive).buttonState().pressed();
+		return _thumbAsButtonState(id, dir).pressed();
 	}
 }

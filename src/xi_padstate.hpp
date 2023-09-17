@@ -24,6 +24,7 @@ namespace dg::xinput {
 			static auto BtnId(const Button id) { return static_cast<int>(id); }
 			static auto ThumbId(const Thumb id) { return static_cast<int>(id); }
 			static auto TriggerId(const Trigger id) { return static_cast<int>(id); }
+			const ButtonState& _thumbAsButtonState(Thumb id, Direction4 dir) const;
 
 		public:
 			PadState();
