@@ -114,6 +114,10 @@ namespace dg {
 					ret.emplace_back(ButtonToVKMap.at(Button(i)), false);
 				}
 			}
+			return ret;
+		}
+		KeyDiff_V Remote::getAxisDiff() const {
+			KeyDiff_V ret;
 			const auto procAxis = [this, &ret](auto idx, auto np, auto vk_flag) {
 				auto& bs = _accel.axis(idx).trigger(np).buttonState();
 				if(bs.pressed()) {
