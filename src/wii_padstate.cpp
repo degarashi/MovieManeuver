@@ -95,7 +95,7 @@ namespace dg {
 			return _accel;
 		}
 
-		Remote::VKStateAr Remote::getState() const {
+		VKStateAr Remote::getState() const {
 			VKStateAr ret;
 			for(int i=0 ; i<Num_Button ; i++) {
 				ret[static_cast<int>(ButtonToVKMap.at(Button(i)))] = _bstate[i];

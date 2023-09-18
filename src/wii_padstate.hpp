@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "axisstate_n.hpp"
 #include "keydiff.hpp"
+#include "vk_def.hpp"
 
 struct wrmt_wiiremote;
 using WRMT_WiiRemote = wrmt_wiiremote;
@@ -35,7 +36,6 @@ namespace dg::wii {
 			[[nodiscard]] KeyDiff_V getAccelDiff() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
 
-			using VKStateAr = std::array<ButtonState, Num_VirtualKey>;
 			[[nodiscard]] VKStateAr getState() const;
 
 			void updateState();
