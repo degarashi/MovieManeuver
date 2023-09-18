@@ -2,7 +2,6 @@
 #include "virtual_key.hpp"
 #include "buttonstate.hpp"
 #include "wii_enums.hpp"
-#include "virtual_key_def.hpp"
 #include <unordered_map>
 #include "axisstate_n.hpp"
 #include "keydiff.hpp"
@@ -28,7 +27,6 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
-			[[nodiscard]] VKey_V getPressedButton() const;
 			[[nodiscard]] KeyDiff_V getButtonDiff() const;
 			[[nodiscard]] BoolAr getPressingButton() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
