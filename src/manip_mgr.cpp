@@ -57,34 +57,24 @@ namespace dg {
 			dst.addLayer(std::move(layer0));
 		}
 		void MakeKeyMap_Wii(InputMapSet& dst) {
+			using VK = VirtualKey;
 			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
-			layer0->addOnPress(VirtualKey::DRight, &Manip::forward_few);
-			layer0->addOnPress(VirtualKey::DUp, &Manip::volumeUp);
-			layer0->addOnPress(VirtualKey::DDown, &Manip::volumeDown);
+			layer0->addMap(std::make_unique<KI_Double>(VK::TL_Right, VK::DUp),
+						   std::make_shared<Act_Inst>(&Manip::mediaVolumeUp));
+			layer0->addMap(std::make_unique<KI_Double>(VK::TL_Right, VK::DDown),
+						   std::make_shared<Act_Inst>(&Manip::mediaVolumeDown));
+			layer0->addOnPress(VK::DLeft, &Manip::backward_few);
+			layer0->addOnPress(VK::DRight, &Manip::forward_few);
+			layer0->addOnPress(VK::DUp, &Manip::volumeUp);
+			layer0->addOnPress(VK::DDown, &Manip::volumeDown);
 
-			layer0->addOnPress(VirtualKey::A, &Manip::startPause);
-			const auto toLayer1 = [](InputMapSet& ims){
-				auto layer1 = std::make_unique<InputMapLayer>();
-				layer1->addOnPress(VirtualKey::DUp, &Manip::mediaVolumeUp);
-				layer1->addOnPress(VirtualKey::DDown, &Manip::mediaVolumeDown);
-				layer1->addOnPress(VirtualKey::A, &Manip::fullScreen);
-				{
-					const auto remLayer = [](InputMapSet& ims) {
-						ims.removeSet();
-					};
-					layer1->addMap(std::make_unique<KI_Press>(VirtualKey::B),
-								   std::make_shared<Act_Func>(remLayer));
-				}
-				ims.addLayer(std::move(layer1));
-			};
-			layer0->addMap(std::make_unique<KI_Press>(VirtualKey::B),
-						   std::make_shared<Act_Func>(toLayer1));
-			layer0->addOnPress(VirtualKey::L1, &Manip::volumeMute);
-			layer0->addOnPress(VirtualKey::Select, &Manip::speedDown);
-			layer0->addOnPress(VirtualKey::Start, &Manip::speedUp);
-			layer0->addOnPress(VirtualKey::X, &Manip::backward_medium);
-			layer0->addOnPress(VirtualKey::Y, &Manip::forward_medium);
+			layer0->addOnPress(VK::A, &Manip::startPause);
+			layer0->addOnPress(VK::B, &Manip::fullScreen);
+			layer0->addOnPress(VK::L1, &Manip::volumeMute);
+			layer0->addOnPress(VK::Select, &Manip::speedDown);
+			layer0->addOnPress(VK::Start, &Manip::speedUp);
+			layer0->addOnPress(VK::X, &Manip::backward_medium);
+			layer0->addOnPress(VK::Y, &Manip::forward_medium);
 			dst.addLayer(std::move(layer0));
 		}
 	}
