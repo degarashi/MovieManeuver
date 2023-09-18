@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
+    <width>528</width>
     <height>384</height>
    </rect>
   </property>
@@ -259,7 +259,7 @@
     <rect>
      <x>230</x>
      <y>20</y>
-     <width>151</width>
+     <width>231</width>
      <height>151</height>
     </rect>
    </property>
@@ -297,6 +297,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QProgressBar" name="pbAccX">
+          <property name="value">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -327,6 +334,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QProgressBar" name="pbAccY">
+          <property name="value">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -354,6 +368,13 @@
           </property>
           <property name="checkable">
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="pbAccZ">
+          <property name="value">
+           <number>50</number>
           </property>
          </widget>
         </item>
