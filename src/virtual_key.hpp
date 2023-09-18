@@ -12,6 +12,8 @@ namespace dg {
 		// ThumbStick-Right
 		TR_Left, TR_Up, TR_Right, TR_Down,
 		Start, Select,
-		Invalid		// 何のボタンも示さない値
+		Invalid,		// 何のボタンも示さない値
+		_Num
 	};
+	constexpr inline size_t Num_VirtualKey = static_cast<size_t>(VirtualKey::_Num);
 }
