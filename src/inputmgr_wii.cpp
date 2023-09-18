@@ -28,12 +28,7 @@ namespace dg::wii {
 		// とりあえず0番以外は対応しない
 		auto& m = _remote[0];
 		m.updateState();
-		auto pressed = m.getButtonDiff();
-		const auto axis = m.getAccelDiff();
-		std::move(axis.begin(), axis.end(), std::back_inserter(pressed));
-		if(!pressed.empty()) {
-			emit onInput(pressed);
-		}
+		emit onInput(m.getState());
 		emit onInputWii(m);
 	}
 	QWidget* Manager::makeDialog() {

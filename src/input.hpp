@@ -1,28 +1,28 @@
 #pragma once
-#include "virtual_key.hpp"
 #include <memory>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <functional>
-#include "keydiff.hpp"
+#include "vk_def.hpp"
 
 namespace dg {
-	struct KeyDiff;
 	struct Manip;
+	using ManipF = void (Manip::*)(HWND) const;
 	class InputMapSet;
-
 	using PreProc = std::function<void ()>;
-	//! 動作を定義。Manipのメソッドを呼び出してアクションを起こす
+	//! 動作を定義
 	struct Action {
 		virtual void proc(InputMapSet& ims, const Manip* manip, HWND hw, const PreProc& pre) const = 0;
 	};
 	using Action_S = std::shared_ptr<Action>;
-	struct Act_Inst : Action {
-		void (Manip::*_ptr)(HWND) const;
+	//! Manipのメソッドを呼び出す
+	struct Act_Manip : Action {
+		ManipF	_ptr;
 
-		Act_Inst(void (Manip::*ptr)(HWND) const);
+		Act_Manip(void (Manip::*ptr)(HWND) const);
 		void proc(InputMapSet& ims, const Manip* manip, HWND hw, const PreProc& pre) const override;
 	};
+	//! 事前にセットした任意の関数を呼ぶ
 	class Act_Func : public Action {
 		private:
 			using Proc = std::function<void (InputMapSet&)>;
@@ -34,37 +34,34 @@ namespace dg {
 
 	//! キー入力判定
 	struct KeyInput {
-		virtual bool check(const KeyDiff& k) = 0;
-		virtual void reset() {}
+		virtual bool check(const VKStateAr& state) = 0;
 	};
 	using KeyInput_U = std::unique_ptr<KeyInput>;
 	struct KI_Press : KeyInput {
 		VirtualKey key;
 
 		KI_Press(VirtualKey key);
-		bool check(const KeyDiff& k) override;
+		bool check(const VKStateAr& state) override;
 	};
 	struct KI_Release : KeyInput {
 		VirtualKey key;
 
 		KI_Release(VirtualKey key);
-		bool check(const KeyDiff& k) override;
+		bool check(const VKStateAr& state) override;
 	};
-	struct KI_Double : KeyInput {
+	// key[0]を押しながらkey[1]を押す判定
+	struct KI_Step : KeyInput {
 		VirtualKey	key[2];
-		bool		pressed[2];
 
-		KI_Double(VirtualKey first, VirtualKey second);
-		bool check(const KeyDiff& k) override;
+		KI_Step(VirtualKey first, VirtualKey second);
+		bool check(const VKStateAr& state) override;
 	};
 
 	struct InputMapAbst {
-		virtual bool proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) = 0;
-		virtual void reset() = 0;
+		virtual bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) = 0;
 	};
 	using InputMap_U = std::unique_ptr<InputMapAbst>;
 
-	using ManipF = void (Manip::*)(HWND) const;
 	//! キー割り当てレイヤ
 	class InputMapLayer : public InputMapAbst {
 		private:
@@ -80,8 +77,7 @@ namespace dg {
 				_actionMap.emplace_back(std::forward<KI>(ki), std::forward<ACT>(act));
 			}
 			void addOnPress(VirtualKey key, ManipF func);
-			bool proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) override;
-			void reset() override;
+			bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
 	};
 	class InputMapSet : public InputMapAbst {
 		private:
@@ -93,7 +89,6 @@ namespace dg {
 				_inputLayer.emplace_back(std::forward<Layer>(l));
 			}
 			void removeSet();
-			bool proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) override;
-			void reset() override;
+			bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
 	};
 }

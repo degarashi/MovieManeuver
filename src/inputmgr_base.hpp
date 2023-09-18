@@ -1,6 +1,6 @@
 #pragma once
 #include <QObject>
-#include "keydiff.hpp"
+#include "vk_def.hpp"
 
 class QTimer;
 namespace dg {
@@ -10,7 +10,7 @@ namespace dg {
 			// キー入力をポーリングで監視するタイマー
 			QTimer*		_timer;
 		signals:
-			void onInput(const KeyDiff_V& inputs);
+			void onInput(const VKStateAr& state);
 		private slots:
 			virtual void onTimer() = 0;
 		public:

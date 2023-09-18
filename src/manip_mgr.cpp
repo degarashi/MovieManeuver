@@ -59,10 +59,10 @@ namespace dg {
 		void MakeKeyMap_Wii(InputMapSet& dst) {
 			using VK = VirtualKey;
 			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addMap(std::make_unique<KI_Double>(VK::TL_Right, VK::DUp),
-						   std::make_shared<Act_Inst>(&Manip::mediaVolumeUp));
-			layer0->addMap(std::make_unique<KI_Double>(VK::TL_Right, VK::DDown),
-						   std::make_shared<Act_Inst>(&Manip::mediaVolumeDown));
+			layer0->addMap(std::make_unique<KI_Step>(VK::TL_Right, VK::DUp),
+						   std::make_shared<Act_Manip>(&Manip::mediaVolumeUp));
+			layer0->addMap(std::make_unique<KI_Step>(VK::TL_Right, VK::DDown),
+						   std::make_shared<Act_Manip>(&Manip::mediaVolumeDown));
 			layer0->addOnPress(VK::DLeft, &Manip::backward_few);
 			layer0->addOnPress(VK::DRight, &Manip::forward_few);
 			layer0->addOnPress(VK::DUp, &Manip::volumeUp);
@@ -142,20 +142,18 @@ namespace dg {
 		const QString manipName = (_manip) ? _manip->getName() : "Nothing";
 		emit onManipChanged(manipName);
 	}
-	void Manip_Mgr::onPadUpdate(const dg::KeyDiff_V& inputs) {
+	void Manip_Mgr::onPadUpdate(const VKStateAr& state) {
 		if(_hwTarget) {
-			for(auto& inp : inputs) {
-				const auto pre = [this](){
-					if(!_restoreFocusTimer->isActive()) {
-						_hwRestore = GetForegroundWindow();
-						SetForegroundWindow(_hwTarget);
-						QThread::msleep(50);
-						_manip->setFocus(_hwTarget);
-					}
-				};
-				_inputMapSet->proc(*_inputMapSet, inp, _manip, _hwTarget, pre);
+			const auto pre = [this](){
+				if(!_restoreFocusTimer->isActive()) {
+					_hwRestore = GetForegroundWindow();
+					SetForegroundWindow(_hwTarget);
+					QThread::msleep(50);
+					_manip->setFocus(_hwTarget);
+				}
+			};
+			if(_inputMapSet->proc(*_inputMapSet, state, _manip, _hwTarget, pre))
 				_restoreFocusTimer->start();
-			}
 		}
 	}
 }

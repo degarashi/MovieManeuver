@@ -46,7 +46,6 @@ set(PROJECT_SOURCES
     src/manip_box.hpp
     src/manip_vlc.hpp
     src/axisstate_n.hpp
-    src/keydiff.hpp
     src/manip_mgr.hpp
     src/input.hpp
     src/vk_def.hpp

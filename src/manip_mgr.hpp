@@ -1,9 +1,9 @@
 #pragma once
-#include "keydiff.hpp"
 #include "input.hpp"
 #include <QObject>
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "vk_def.hpp"
 
 class QTimer;
 namespace dg {
@@ -39,8 +39,6 @@ namespace dg {
 			Manip_Mgr(QObject* parent = nullptr);
 
 		signals:
-			// from InputMgr
-			void onInput(const KeyDiff_V& inputs);
 			void onWidgetCreated(QWidget* w);
 			void onManipChanged(const QString& name);
 
@@ -51,7 +49,7 @@ namespace dg {
 		private slots:
 			// call from RestoreFocusTimer
 			void onRestoreFocus();
-			void onPadUpdate(const dg::KeyDiff_V& inputs);
+			void onPadUpdate(const VKStateAr& state);
 			void checkTargetWindow();
 	};
 }

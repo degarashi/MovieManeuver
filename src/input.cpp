@@ -1,10 +1,10 @@
 #include "input.hpp"
 
 namespace dg {
-	// --- Act_Inst ---
-	Act_Inst::Act_Inst(void (Manip::*ptr)(HWND) const):
+	// --- Act_Manip ---
+	Act_Manip::Act_Manip(void (Manip::*ptr)(HWND) const):
 		_ptr(ptr) {}
-	void Act_Inst::proc(InputMapSet& /*ims*/, const Manip* manip, const HWND hw, const PreProc& pre) const {
+	void Act_Manip::proc(InputMapSet& /*ims*/, const Manip* manip, const HWND hw, const PreProc& pre) const {
 		pre();
 		(manip->*_ptr)(hw);
 	}
@@ -18,49 +18,37 @@ namespace dg {
 	// --- KI_Press ---
 	KI_Press::KI_Press(const VirtualKey key):
 		key(key) {}
-	bool KI_Press::check(const KeyDiff& k) {
-		if(k.pressed)
-			return key == k.key;
-		return false;
+	bool KI_Press::check(const VKStateAr& state) {
+		return state[static_cast<int>(key)].pressed();
 	}
 	// --- KI_Release ---
 	KI_Release::KI_Release(const VirtualKey key):
 		  key(key) {}
-	bool KI_Release::check(const KeyDiff& k) {
-		if(!k.pressed)
-			return key == k.key;
-		return false;
+	bool KI_Release::check(const VKStateAr& state) {
+		return state[static_cast<int>(key)].released();
 	}
-	// --- KI_Double ---
-	KI_Double::KI_Double(VirtualKey first, VirtualKey second):
+	// --- KI_Step ---
+	KI_Step::KI_Step(const VirtualKey first, const VirtualKey second):
 		  key{first, second}
 	{}
-	bool KI_Double::check(const KeyDiff& k) {
-		if(k.key == key[0])
-			pressed[0] = k.pressed;
-		else if(k.key == key[1])
-			pressed[1] = k.pressed;
-		return (pressed[0] && pressed[1]);
+	bool KI_Step::check(const VKStateAr& state) {
+		return state[static_cast<int>(key[0])].pressing()
+			   && state[static_cast<int>(key[1])].pressed();
 	}
 
 	// --- InputMapLayer ---
 	void InputMapLayer::addOnPress(VirtualKey key, ManipF func) {
 		addMap(std::make_unique<KI_Press>(key),
-			   std::make_shared<Act_Inst>(func));
+			   std::make_shared<Act_Manip>(func));
 	}
-	bool InputMapLayer::proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) {
+	bool InputMapLayer::proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto&& a : _actionMap) {
-			if(a.first->check(k)) {
+			if(a.first->check(state)) {
 				a.second->proc(ims, m, hw, pre);
 				return true;
 			}
 		}
 		return false;
-	}
-	void InputMapLayer::reset() {
-		for(auto&& a : _actionMap) {
-			a.first->reset();
-		}
 	}
 
 	// --- InputMapSet ---
@@ -71,18 +59,12 @@ namespace dg {
 			_inputLayer.erase(itr);
 		}
 	}
-	bool InputMapSet::proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) {
+	bool InputMapSet::proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto itr = _inputLayer.rbegin(); itr!=_inputLayer.rend() ; ++itr) {
-			if((*itr)->proc(ims, k, m, hw, pre)) {
-				reset();
+			if((*itr)->proc(ims, state, m, hw, pre)) {
 				return true;
 			}
 		}
 		return false;
-	}
-	void InputMapSet::reset() {
-		for(auto&& s : _inputLayer) {
-			s->reset();
-		}
 	}
 }

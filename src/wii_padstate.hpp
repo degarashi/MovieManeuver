@@ -4,7 +4,6 @@
 #include "wii_enums.hpp"
 #include <unordered_map>
 #include "axisstate_n.hpp"
-#include "keydiff.hpp"
 #include "vk_def.hpp"
 
 struct wrmt_wiiremote;
@@ -32,8 +31,6 @@ namespace dg::wii {
 			Remote(const Remote&) = delete;
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
-			[[nodiscard]] KeyDiff_V getButtonDiff() const;
-			[[nodiscard]] KeyDiff_V getAccelDiff() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
 
 			[[nodiscard]] VKStateAr getState() const;
