@@ -1,9 +1,13 @@
 #pragma once
 #include "keydiff.hpp"
-#include "keymap.hpp"
+#include "input.hpp"
+#include <QObject>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 class QTimer;
 namespace dg {
+	class InputMapSet;
 	class InputMgrBase;
 	struct Manip;
 	class Manip_Mgr :
@@ -17,15 +21,17 @@ namespace dg {
 			const dg::Manip*			_manip;
 			// 操作対象(ブラウザ)のウィンドウハンドル
 			HWND						_hwTarget;
-			Keymap						_keymap;
 			QTimer*						_restoreFocusTimer;
 			HWND						_hwRestore;
 
+			// ---- initInputs()で作成し直すクラス ----
 			template <class T>
 			using SP = std::shared_ptr<T>;
 
 			SP<dg::InputMgrBase>	_imgr;
 			SP<QWidget>				_imgrWidget;
+			SP<InputMapSet>			_inputMapSet;
+			// ----------------------------------------
 
 			void _switchManip(const dg::Manip* manip);
 

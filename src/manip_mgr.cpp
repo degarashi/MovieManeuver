@@ -5,6 +5,7 @@
 #include "manip_vlc.hpp"
 #include "inputmgr_wii.hpp"
 #include "inputmgr_xinput.hpp"
+#include "input.hpp"
 
 #include <QTimer>
 #include <QThread>
@@ -22,76 +23,71 @@ namespace {
 	constexpr int CHECKTARGET_INTERVAL = 1000;
 }
 
-namespace {
-	// とりあえずのキーマップ
-	std::tuple<dg::VKMap_V, dg::VirtualKey> MakeKeyMap() {
-		using dg::VirtualKey;
-		using dg::Manip;
-
-		dg::VKMap_V map {
-			// Mapping 0
-			{
-				{VirtualKey::DLeft, &Manip::backward_few},
-				{VirtualKey::DRight, &Manip::forward_few},
-				{VirtualKey::DUp, &Manip::volumeUp},
-				{VirtualKey::DDown, &Manip::volumeDown},
-
-				{VirtualKey::B, &Manip::startPause},
-				{VirtualKey::Y, &Manip::volumeMute},
-				{VirtualKey::X, &Manip::fullScreen},
-				{VirtualKey::Select, &Manip::captionSwitch},
-
-				{VirtualKey::L1, &Manip::speedDown},
-				{VirtualKey::R1, &Manip::speedUp},
-				{VirtualKey::L2, &Manip::backward_medium},
-				{VirtualKey::R2, &Manip::forward_medium},
-
-				{VirtualKey::TL_Left, &Manip::backward_few},
-				{VirtualKey::TL_Right, &Manip::forward_few},
-				{VirtualKey::TL_Up, &Manip::volumeUp},
-				{VirtualKey::TL_Down, &Manip::volumeDown},
-
-				{VirtualKey::TR_Left, &Manip::backward_medium},
-				{VirtualKey::TR_Right, &Manip::forward_medium},
-				{VirtualKey::TR_Up, &Manip::speedUp},
-				{VirtualKey::TR_Down, &Manip::speedDown},
-			},
-		};
-		return {map, VirtualKey::Invalid};
-	}
-	std::tuple<dg::VKMap_V, dg::VirtualKey> MakeKeyMap_Wii() {
-		using dg::VirtualKey;
-		using dg::Manip;
-
-		dg::VKMap_V map {
-			{
-				{VirtualKey::DLeft, &Manip::backward_few},
-				{VirtualKey::DRight, &Manip::forward_few},
-				{VirtualKey::DUp, &Manip::volumeUp},
-				{VirtualKey::DDown, &Manip::volumeDown},
-
-				{VirtualKey::A, &Manip::startPause},
-				{VirtualKey::B, &Manip::fullScreen},
-				{VirtualKey::L1, &Manip::volumeMute},
-
-				{VirtualKey::Select, &Manip::speedDown},
-				{VirtualKey::Start, &Manip::speedUp},
-				{VirtualKey::X, &Manip::backward_medium},
-				{VirtualKey::Y, &Manip::forward_medium},
-			},
-			// Mapping 1 (PlaceHolder)
-			{}
-		};
-		// Map0をベースにMap1を定義
-		map[1] = map[0];
-		map[1][VirtualKey::DUp] = &Manip::mediaVolumeUp;
-		map[1][VirtualKey::DDown] = &Manip::mediaVolumeDown;
-		map[1][VirtualKey::A] = &Manip::fullScreen;
-		return {map, VirtualKey::B};
-	}
-}
-
 namespace dg {
+	namespace {
+		// とりあえずのキーマップ
+		void MakeKeyMap(InputMapSet& dst) {
+			auto layer0 = std::make_unique<InputMapLayer>();
+			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
+			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
+			layer0->addOnPress(VirtualKey::DRight, &Manip::forward_few);
+			layer0->addOnPress(VirtualKey::DUp, &Manip::volumeUp);
+			layer0->addOnPress(VirtualKey::DDown, &Manip::volumeDown);
+
+			layer0->addOnPress(VirtualKey::B, &Manip::startPause);
+			layer0->addOnPress(VirtualKey::Y, &Manip::volumeMute);
+			layer0->addOnPress(VirtualKey::X, &Manip::fullScreen);
+			layer0->addOnPress(VirtualKey::Select, &Manip::captionSwitch);
+
+			layer0->addOnPress(VirtualKey::L1, &Manip::speedDown);
+			layer0->addOnPress(VirtualKey::R1, &Manip::speedUp);
+			layer0->addOnPress(VirtualKey::L2, &Manip::backward_medium);
+			layer0->addOnPress(VirtualKey::R2, &Manip::forward_medium);
+
+			layer0->addOnPress(VirtualKey::TL_Left, &Manip::backward_few);
+			layer0->addOnPress(VirtualKey::TL_Right, &Manip::forward_few);
+			layer0->addOnPress(VirtualKey::TL_Up, &Manip::volumeUp);
+			layer0->addOnPress(VirtualKey::TL_Down, &Manip::volumeDown);
+
+			layer0->addOnPress(VirtualKey::TR_Left, &Manip::backward_medium);
+			layer0->addOnPress(VirtualKey::TR_Right, &Manip::forward_medium);
+			layer0->addOnPress(VirtualKey::TR_Up, &Manip::speedUp);
+			layer0->addOnPress(VirtualKey::TR_Down, &Manip::speedDown);
+
+			dst.addLayer(std::move(layer0));
+		}
+		void MakeKeyMap_Wii(InputMapSet& dst) {
+			auto layer0 = std::make_unique<InputMapLayer>();
+			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
+			layer0->addOnPress(VirtualKey::DRight, &Manip::forward_few);
+			layer0->addOnPress(VirtualKey::DUp, &Manip::volumeUp);
+			layer0->addOnPress(VirtualKey::DDown, &Manip::volumeDown);
+
+			layer0->addOnPress(VirtualKey::A, &Manip::startPause);
+			const auto toLayer1 = [](InputMapSet& ims){
+				auto layer1 = std::make_unique<InputMapLayer>();
+				layer1->addOnPress(VirtualKey::DUp, &Manip::mediaVolumeUp);
+				layer1->addOnPress(VirtualKey::DDown, &Manip::mediaVolumeDown);
+				layer1->addOnPress(VirtualKey::A, &Manip::fullScreen);
+				{
+					const auto remLayer = [](InputMapSet& ims) {
+						ims.removeSet();
+					};
+					layer1->addMap(std::make_unique<KI_Press>(VirtualKey::B),
+								   std::make_shared<Act_Func>(remLayer));
+				}
+				ims.addLayer(std::move(layer1));
+			};
+			layer0->addMap(std::make_unique<KI_Press>(VirtualKey::B),
+						   std::make_shared<Act_Func>(toLayer1));
+			layer0->addOnPress(VirtualKey::L1, &Manip::volumeMute);
+			layer0->addOnPress(VirtualKey::Select, &Manip::speedDown);
+			layer0->addOnPress(VirtualKey::Start, &Manip::speedUp);
+			layer0->addOnPress(VirtualKey::X, &Manip::backward_medium);
+			layer0->addOnPress(VirtualKey::Y, &Manip::forward_medium);
+			dst.addLayer(std::move(layer0));
+		}
+	}
 	Manip_Mgr::Manip_Mgr(QObject* parent):
 		  QObject(parent),
 		  _manip(nullptr),
@@ -106,29 +102,25 @@ namespace dg {
 		_restoreFocusTimer = new QTimer(this);
 		_restoreFocusTimer->setSingleShot(true);
 		connect(_restoreFocusTimer, &QTimer::timeout, this, &Manip_Mgr::onRestoreFocus);
-
 	}
 	void Manip_Mgr::initInputs() {
 		// 終了処理等あるので一旦nullをセット
 		_imgr.reset();
 		_imgrWidget.reset();
+		_inputMapSet.reset();
+		_inputMapSet = std::make_shared<InputMapSet>();
 		// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
-		auto wiiMgr = std::make_unique<dg::wii::Manager>();
-		dg::VKMap_V keyMap;
-		dg::VirtualKey modeSwKey;
+		auto wiiMgr = std::make_unique<wii::Manager>();
 		if(wiiMgr->numRemote() == 0) {
-			auto* xiMgr = new dg::xinput::Manager();
+			auto* xiMgr = new xinput::Manager();
 			_imgr.reset(xiMgr);
-			std::tie(keyMap, modeSwKey) = MakeKeyMap();
+			MakeKeyMap(*_inputMapSet);
 		} else {
 			_imgr.reset(wiiMgr.release());
-			std::tie(keyMap, modeSwKey) = MakeKeyMap_Wii();
+			MakeKeyMap_Wii(*_inputMapSet);
 		}
-		connect(_imgr.get(), &dg::InputMgrBase::onInput,
+		connect(_imgr.get(), &InputMgrBase::onInput,
 				this, &Manip_Mgr::onPadUpdate);
-
-		_keymap.setKeymapSwitch(modeSwKey);
-		_keymap.setKeymap(keyMap);
 
 		auto* dialog = _imgr->makeDialog();
 		_imgrWidget.reset(dialog);
@@ -163,17 +155,15 @@ namespace dg {
 	void Manip_Mgr::onPadUpdate(const dg::KeyDiff_V& inputs) {
 		if(_hwTarget) {
 			for(auto& inp : inputs) {
-				if(!inp.pressed)
-					continue;
-				if(_keymap.keySwitch(inp.key))
-					continue;
-				if(!_restoreFocusTimer->isActive()) {
-					_hwRestore = GetForegroundWindow();
-					SetForegroundWindow(_hwTarget);
-					QThread::msleep(50);
-					_manip->setFocus(_hwTarget);
-				}
-				_keymap.manipulate(inp.key, _manip, _hwTarget);
+				const auto pre = [this](){
+					if(!_restoreFocusTimer->isActive()) {
+						_hwRestore = GetForegroundWindow();
+						SetForegroundWindow(_hwTarget);
+						QThread::msleep(50);
+						_manip->setFocus(_hwTarget);
+					}
+				};
+				_inputMapSet->proc(*_inputMapSet, inp, _manip, _hwTarget, pre);
 				_restoreFocusTimer->start();
 			}
 		}
