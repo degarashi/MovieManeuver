@@ -152,7 +152,7 @@ namespace dg {
 					_manip->setFocus(_hwTarget);
 				}
 			};
-			if(_inputMapSet->proc(*_inputMapSet, state, _manip, _hwTarget, pre))
+			if(_inputMapSet->proc(state, _manip, _hwTarget, pre))
 				_restoreFocusTimer->start();
 		}
 	}

@@ -12,7 +12,7 @@ namespace dg {
 	using PreProc = std::function<void ()>;
 	//! 動作を定義
 	struct Action {
-		virtual void proc(InputMapSet& ims, const Manip* manip, HWND hw, const PreProc& pre) const = 0;
+		virtual void proc(const Manip* manip, HWND hw, const PreProc& pre) const = 0;
 	};
 	using Action_S = std::shared_ptr<Action>;
 	//! Manipのメソッドを呼び出す
@@ -20,16 +20,16 @@ namespace dg {
 		ManipF	_ptr;
 
 		Act_Manip(void (Manip::*ptr)(HWND) const);
-		void proc(InputMapSet& ims, const Manip* manip, HWND hw, const PreProc& pre) const override;
+		void proc(const Manip* manip, HWND hw, const PreProc& pre) const override;
 	};
 	//! 事前にセットした任意の関数を呼ぶ
 	class Act_Func : public Action {
 		private:
-			using Proc = std::function<void (InputMapSet&)>;
+			using Proc = std::function<void ()>;
 			Proc _proc;
 		public:
 			Act_Func(const Proc& proc);
-			void proc(InputMapSet& ims, const Manip* manip, HWND hw, const PreProc& pre) const override;
+			void proc(const Manip* manip, HWND hw, const PreProc& pre) const override;
 	};
 
 	//! キー入力判定
@@ -58,7 +58,7 @@ namespace dg {
 	};
 
 	struct InputMapAbst {
-		virtual bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) = 0;
+		virtual bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) = 0;
 	};
 	using InputMap_U = std::unique_ptr<InputMapAbst>;
 
@@ -77,7 +77,7 @@ namespace dg {
 				_actionMap.emplace_back(std::forward<KI>(ki), std::forward<ACT>(act));
 			}
 			void addOnPress(VirtualKey key, ManipF func);
-			bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
 	};
 	class InputMapSet : public InputMapAbst {
 		private:
@@ -89,6 +89,6 @@ namespace dg {
 				_inputLayer.emplace_back(std::forward<Layer>(l));
 			}
 			void removeSet();
-			bool proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
 	};
 }

@@ -4,15 +4,15 @@ namespace dg {
 	// --- Act_Manip ---
 	Act_Manip::Act_Manip(void (Manip::*ptr)(HWND) const):
 		_ptr(ptr) {}
-	void Act_Manip::proc(InputMapSet& /*ims*/, const Manip* manip, const HWND hw, const PreProc& pre) const {
+	void Act_Manip::proc(const Manip* manip, const HWND hw, const PreProc& pre) const {
 		pre();
 		(manip->*_ptr)(hw);
 	}
 	// --- Act_Func ---
 	Act_Func::Act_Func(const Proc& proc):
 		  _proc(proc) {}
-	void Act_Func::proc(InputMapSet& ims, const Manip* /*manip*/, HWND /*hw*/, const PreProc& /*pre*/) const {
-		_proc(ims);
+	void Act_Func::proc(const Manip* /*manip*/, HWND /*hw*/, const PreProc& /*pre*/) const {
+		_proc();
 	}
 
 	// --- KI_Press ---
@@ -41,10 +41,10 @@ namespace dg {
 		addMap(std::make_unique<KI_Press>(key),
 			   std::make_shared<Act_Manip>(func));
 	}
-	bool InputMapLayer::proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
+	bool InputMapLayer::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto&& a : _actionMap) {
 			if(a.first->check(state)) {
-				a.second->proc(ims, m, hw, pre);
+				a.second->proc(m, hw, pre);
 				return true;
 			}
 		}
@@ -59,9 +59,9 @@ namespace dg {
 			_inputLayer.erase(itr);
 		}
 	}
-	bool InputMapSet::proc(InputMapSet& ims, const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
+	bool InputMapSet::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto itr = _inputLayer.rbegin(); itr!=_inputLayer.rend() ; ++itr) {
-			if((*itr)->proc(ims, state, m, hw, pre)) {
+			if((*itr)->proc(state, m, hw, pre)) {
 				return true;
 			}
 		}
