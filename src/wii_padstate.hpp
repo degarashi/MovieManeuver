@@ -35,6 +35,9 @@ namespace dg::wii {
 			[[nodiscard]] KeyDiff_V getAccelDiff() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
 
+			using VKStateAr = std::array<ButtonState, Num_VirtualKey>;
+			[[nodiscard]] VKStateAr getState() const;
+
 			void updateState();
 			// 前回から何も変化が無いときに呼ぶ
 			void updateKeepState();

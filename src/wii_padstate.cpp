@@ -94,6 +94,25 @@ namespace dg {
 		const Remote::Axis3D& Remote::getAcceleration() const {
 			return _accel;
 		}
+
+		Remote::VKStateAr Remote::getState() const {
+			VKStateAr ret;
+			for(int i=0 ; i<Num_Button ; i++) {
+				ret[static_cast<int>(ButtonToVKMap.at(Button(i)))] = _bstate[i];
+			}
+
+			const auto proc = [&accel=_accel, &ret](auto vk, auto idx, auto np) {
+				ret[static_cast<int>(vk)] =
+					accel.axis(idx).trigger(np).buttonState();
+			};
+			proc(VirtualKey::TL_Left, 0, AxisState::Dir::Negative);
+			proc(VirtualKey::TL_Right, 0, AxisState::Dir::Positive);
+			proc(VirtualKey::TL_Up, 1, AxisState::Dir::Negative);
+			proc(VirtualKey::TL_Down, 1, AxisState::Dir::Positive);
+			proc(VirtualKey::TR_Left, 2, AxisState::Dir::Negative);
+			proc(VirtualKey::TR_Right, 2, AxisState::Dir::Positive);
+			return ret;
+		}
 		void Remote::updateState() {
 			// Buttons
 			{
