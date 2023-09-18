@@ -32,7 +32,7 @@ namespace dg::wii {
 			Remote(WRMT_WiiRemote* data);
 			~Remote();
 			[[nodiscard]] KeyDiff_V getButtonDiff() const;
-			[[nodiscard]] KeyDiff_V getAxisDiff() const;
+			[[nodiscard]] KeyDiff_V getAccelDiff() const;
 			[[nodiscard]] const Axis3D& getAcceleration() const;
 
 			void updateState();

@@ -23,7 +23,7 @@ namespace dg::wii {
 			ar[idx]->setChecked(k.pressed);
 		}
 
-		const auto acc = remote.getAxisDiff();
+		const auto acc = remote.getAccelDiff();
 		std::array<std::pair<VirtualKey, QCheckBox *const>, 6> ar_acc {
 			std::make_pair(VirtualKey::TL_Left, _ui->cbAccX_Neg),
 			{VirtualKey::TL_Right, _ui->cbAccX_Pos},

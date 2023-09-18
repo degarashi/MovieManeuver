@@ -131,7 +131,7 @@ namespace dg {
 			}
 			return ret;
 		}
-		KeyDiff_V Remote::getAxisDiff() const {
+		KeyDiff_V Remote::getAccelDiff() const {
 			KeyDiff_V ret;
 			const auto procAxis = [this, &ret](auto idx, auto np, auto vk_flag) {
 				auto& bs = _accel.axis(idx).trigger(np).buttonState();
