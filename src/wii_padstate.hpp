@@ -18,12 +18,12 @@ namespace dg::wii {
 	class Remote {
 		private:
 			WRMT_WiiRemote*	_data;
-			using ButtonState_a = std::array<ButtonState, static_cast<size_t>(Button::_Num)>;
+			using ButtonState_a = std::array<ButtonState, Num_Button>;
 			using Axis3D = AxisState_N<3>;
 			ButtonState_a	_bstate;
 			Axis3D			_accel;
 
-			using BoolAr = std::array<bool, static_cast<size_t>(Button::_Num)>;
+			using BoolAr = std::array<bool, Num_Button>;
 			[[nodiscard]] BoolAr _getPressingButton() const;
 
 		public:
