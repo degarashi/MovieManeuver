@@ -46,7 +46,6 @@ set(PROJECT_SOURCES
     src/xi_enums.hpp
     src/manip_box.hpp
     src/manip_vlc.hpp
-    src/keymap.hpp
     src/axisstate_n.hpp
     src/keydiff.hpp
     src/manip_mgr.hpp
