@@ -144,4 +144,66 @@ namespace dg::xinput {
 	bool PadState::thumbRestored(Thumb id, Direction4 dir) const {
 		return _thumbAsButtonState(id, dir).released();
 	}
+	PadState::VKStateAr PadState::getState() const {
+		VKStateAr ret;
+		{
+			struct BtnPair {
+				Button 	id;
+				VirtualKey		vk;
+			};
+			const BtnPair Btn[] = {
+				{Button::A, VirtualKey::B},
+				{Button::B, VirtualKey::A},
+				{Button::X, VirtualKey::Y},
+				{Button::Y, VirtualKey::X},
+
+				{Button::DPadLeft, VirtualKey::DLeft},
+				{Button::DPadUp, VirtualKey::DUp},
+				{Button::DPadRight, VirtualKey::DRight},
+				{Button::DPadDown, VirtualKey::DDown},
+
+				{Button::LeftShoulder, VirtualKey::L1},
+				{Button::LeftThumb, VirtualKey::L3},
+				{Button::RightShoulder, VirtualKey::R1},
+				{Button::RightThumb, VirtualKey::R3},
+
+				{Button::Start, VirtualKey::Start},
+				{Button::Back, VirtualKey::Select},
+			};
+			for(auto& b : Btn) {
+				ret[static_cast<int>(b.vk)] = _button[static_cast<int>(b.id)];
+			}
+		}
+		{
+			struct TiltPair {
+				Thumb thumb;
+				Direction4	dir;
+				VirtualKey	vk;
+			};
+			const TiltPair TP[] = {
+				{Thumb::ThumbLeft, Direction4::Left, VirtualKey::TL_Left},
+				{Thumb::ThumbLeft, Direction4::Top, VirtualKey::TL_Up},
+				{Thumb::ThumbLeft, Direction4::Right, VirtualKey::TL_Right},
+				{Thumb::ThumbLeft, Direction4::Bottom, VirtualKey::TL_Down},
+
+				{Thumb::ThumbRight, Direction4::Left, VirtualKey::TR_Left},
+				{Thumb::ThumbRight, Direction4::Top, VirtualKey::TR_Up},
+				{Thumb::ThumbRight, Direction4::Right, VirtualKey::TR_Right},
+				{Thumb::ThumbRight, Direction4::Bottom, VirtualKey::TR_Down},
+			};
+			for(auto& t : TP) {
+				ret[static_cast<int>(t.vk)] =
+					_thumbAsButtonState(t.thumb, t.dir);
+			}
+		}
+		{
+			const auto procTrigger = [this, &ret](const auto trigger, const auto vk){
+				auto& t = getTrigger(Trigger::TriggerLeft).buttonState();
+				ret[static_cast<int>(vk)] = getTrigger(trigger).buttonState();
+			};
+			procTrigger(Trigger::TriggerLeft, VirtualKey::L2);
+			procTrigger(Trigger::TriggerRight, VirtualKey::R2);
+		}
+		return ret;
+	}
 }
