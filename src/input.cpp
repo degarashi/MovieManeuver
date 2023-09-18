@@ -31,6 +31,17 @@ namespace dg {
 			return key == k.key;
 		return false;
 	}
+	// --- KI_Double ---
+	KI_Double::KI_Double(VirtualKey first, VirtualKey second):
+		  key{first, second}
+	{}
+	bool KI_Double::check(const KeyDiff& k) {
+		if(k.key == key[0])
+			pressed[0] = k.pressed;
+		else if(k.key == key[1])
+			pressed[1] = k.pressed;
+		return (pressed[0] && pressed[1]);
+	}
 
 	// --- InputMapLayer ---
 	void InputMapLayer::addOnPress(VirtualKey key, ManipF func) {

@@ -50,6 +50,13 @@ namespace dg {
 		KI_Release(VirtualKey key);
 		bool check(const KeyDiff& k) override;
 	};
+	struct KI_Double : KeyInput {
+		VirtualKey	key[2];
+		bool		pressed[2];
+
+		KI_Double(VirtualKey first, VirtualKey second);
+		bool check(const KeyDiff& k) override;
+	};
 
 	struct InputMapAbst {
 		virtual bool proc(InputMapSet& ims, const KeyDiff& k, const Manip* m, HWND hw, const PreProc& pre) = 0;
