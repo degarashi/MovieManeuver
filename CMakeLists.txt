@@ -50,6 +50,7 @@ set(PROJECT_SOURCES
     src/axisstate_n.hpp
     src/keydiff.hpp
     src/manip_mgr.hpp
+    src/input.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
