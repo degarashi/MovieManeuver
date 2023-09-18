@@ -114,6 +114,20 @@ namespace dg {
 					ret.emplace_back(ButtonToVKMap.at(Button(i)), false);
 				}
 			}
+			const auto procAxis = [this, &ret](auto idx, auto np, auto vk_flag) {
+				auto& bs = _accel.axis(idx).trigger(np).buttonState();
+				if(bs.pressed()) {
+					ret.emplace_back(vk_flag, true);
+				} else if(bs.released()) {
+					ret.emplace_back(vk_flag, false);
+				}
+			};
+			procAxis(0, AxisState::Dir::Negative, VirtualKey::TL_Left);
+			procAxis(0, AxisState::Dir::Positive, VirtualKey::TL_Right);
+			procAxis(1, AxisState::Dir::Negative, VirtualKey::TL_Up);
+			procAxis(1, AxisState::Dir::Positive, VirtualKey::TL_Down);
+			procAxis(2, AxisState::Dir::Negative, VirtualKey::TR_Left);
+			procAxis(2, AxisState::Dir::Positive, VirtualKey::TR_Right);
 			return ret;
 		}
 	}
