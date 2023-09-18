@@ -10,7 +10,6 @@ namespace dg::wii {
 		_ui->setupUi(this);
 	}
 	void DebugViewWidget::updateDebugView(const wii::Remote& remote) {
-		const auto pressed = remote.getPressingButton();
 		// dg::wii::Button の定義順に依存
 		QCheckBox *const ar[] = {
 			_ui->cbA, _ui->cbB,
@@ -18,8 +17,10 @@ namespace dg::wii {
 			_ui->cbMinus, _ui->cbHome, _ui->cbPlus,
 			_ui->cbLeft, _ui->cbUp, _ui->cbRight, _ui->cbDown,
 		};
-		for(int i=0 ; i<std::size(ar) ; i++) {
-			ar[i]->setChecked(pressed[i]);
+		const auto btn = remote.getButtonDiff();
+		for(auto& k : btn) {
+			const int idx = static_cast<int>(VKToButtonMap.at(k.key));
+			ar[idx]->setChecked(k.pressed);
 		}
 	}
 }

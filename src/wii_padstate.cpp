@@ -18,6 +18,19 @@ namespace dg {
 			{Button::Right, VirtualKey::DRight},
 			{Button::Down, VirtualKey::DDown},
 		};
+		const VKToButtonMap_t VKToButtonMap = {
+			{VirtualKey::A, Button::A},
+			{VirtualKey::B, Button::B},
+			{VirtualKey::X, Button::One},
+			{VirtualKey::Y, Button::Two},
+			{VirtualKey::Select, Button::Minus},
+			{VirtualKey::L1, Button::Home},
+			{VirtualKey::Start, Button::Plus},
+			{VirtualKey::DLeft, Button::Left},
+			{VirtualKey::DUp, Button::Up},
+			{VirtualKey::DRight, Button::Right},
+			{VirtualKey::DDown, Button::Down},
+		};
 
 		Remote::Remote(Remote&& rmt):
 			_data(rmt._data),
@@ -69,7 +82,7 @@ namespace dg {
 				{WRMT_MASK_BUTTON_DOWN, Button::Down},
 			};
 		}
-		BoolAr Remote::getPressingButton() const {
+		Remote::BoolAr Remote::_getPressingButton() const {
 			BoolAr ret = {};
 			const int bs = WRMT_WiiRemote_GetState(_data, WRMT_DATA_BUTTONS);
 			for(auto& msk : Mask2B) {
@@ -83,9 +96,11 @@ namespace dg {
 		}
 		void Remote::updateState() {
 			// Buttons
-			const auto pressing = getPressingButton();
-			for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
-				_bstate[i].update(pressing[i]);
+			{
+				const auto pressing = _getPressingButton();
+				for(int i=0 ; i<static_cast<int>(Button::_Num) ; i++) {
+					_bstate[i].update(pressing[i]);
+				}
 			}
 			// Acceleration
 			{
