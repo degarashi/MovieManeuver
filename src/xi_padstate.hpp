@@ -4,7 +4,7 @@
 #include "axisstate_n.hpp"
 #include "aux_enums.hpp"
 #include "xi_enums.hpp"
-#include "virtual_key.hpp"
+#include "vk_def.hpp"
 
 namespace dg::xinput {
 	// XInput用のPadState
@@ -58,7 +58,6 @@ namespace dg::xinput {
 			//! Thumbのreleased()
 			[[nodiscard]] bool thumbRestored(Thumb id, Direction4 dir) const;
 
-			using VKStateAr = std::array<ButtonState, Num_VirtualKey>;
 			[[nodiscard]] VKStateAr getState() const;
 	};
 }

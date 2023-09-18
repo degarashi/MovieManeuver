@@ -144,7 +144,7 @@ namespace dg::xinput {
 	bool PadState::thumbRestored(Thumb id, Direction4 dir) const {
 		return _thumbAsButtonState(id, dir).released();
 	}
-	PadState::VKStateAr PadState::getState() const {
+	VKStateAr PadState::getState() const {
 		VKStateAr ret;
 		{
 			struct BtnPair {
