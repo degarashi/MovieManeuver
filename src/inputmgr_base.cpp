@@ -3,7 +3,7 @@
 
 namespace dg {
 	namespace {
-		constexpr int INTERVAL_MS = 16;
+		constexpr int INTERVAL_MS = 4;
 	}
 	InputMgrBase::InputMgrBase() {
 		_timer = new QTimer;
