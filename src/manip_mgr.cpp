@@ -28,53 +28,53 @@ namespace dg {
 		// とりあえずのキーマップ
 		void MakeKeyMap(InputMapSet& dst) {
 			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
-			layer0->addOnPress(VirtualKey::DLeft, &Manip::backward_few);
-			layer0->addOnPress(VirtualKey::DRight, &Manip::forward_few);
-			layer0->addOnPress(VirtualKey::DUp, &Manip::volumeUp);
-			layer0->addOnPress(VirtualKey::DDown, &Manip::volumeDown);
+			layer0->addOnPress(0x0000, VirtualKey::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VirtualKey::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VirtualKey::DRight, &Manip::forward_few);
+			layer0->addOnPress(0x0000, VirtualKey::DUp, &Manip::volumeUp);
+			layer0->addOnPress(0x0000, VirtualKey::DDown, &Manip::volumeDown);
 
-			layer0->addOnPress(VirtualKey::B, &Manip::startPause);
-			layer0->addOnPress(VirtualKey::Y, &Manip::volumeMute);
-			layer0->addOnPress(VirtualKey::X, &Manip::fullScreen);
-			layer0->addOnPress(VirtualKey::Select, &Manip::captionSwitch);
+			layer0->addOnPress(0x0000, VirtualKey::B, &Manip::startPause);
+			layer0->addOnPress(0x0000, VirtualKey::Y, &Manip::volumeMute);
+			layer0->addOnPress(0x0000, VirtualKey::X, &Manip::fullScreen);
+			layer0->addOnPress(0x0000, VirtualKey::Select, &Manip::captionSwitch);
 
-			layer0->addOnPress(VirtualKey::L1, &Manip::speedDown);
-			layer0->addOnPress(VirtualKey::R1, &Manip::speedUp);
-			layer0->addOnPress(VirtualKey::L2, &Manip::backward_medium);
-			layer0->addOnPress(VirtualKey::R2, &Manip::forward_medium);
+			layer0->addOnPress(0x0000, VirtualKey::L1, &Manip::speedDown);
+			layer0->addOnPress(0x0000, VirtualKey::R1, &Manip::speedUp);
+			layer0->addOnPress(0x0000, VirtualKey::L2, &Manip::backward_medium);
+			layer0->addOnPress(0x0000, VirtualKey::R2, &Manip::forward_medium);
 
-			layer0->addOnPress(VirtualKey::TL_Left, &Manip::backward_few);
-			layer0->addOnPress(VirtualKey::TL_Right, &Manip::forward_few);
-			layer0->addOnPress(VirtualKey::TL_Up, &Manip::volumeUp);
-			layer0->addOnPress(VirtualKey::TL_Down, &Manip::volumeDown);
+			layer0->addOnPress(0x0000, VirtualKey::TL_Left, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VirtualKey::TL_Right, &Manip::forward_few);
+			layer0->addOnPress(0x0000, VirtualKey::TL_Up, &Manip::volumeUp);
+			layer0->addOnPress(0x0000, VirtualKey::TL_Down, &Manip::volumeDown);
 
-			layer0->addOnPress(VirtualKey::TR_Left, &Manip::backward_medium);
-			layer0->addOnPress(VirtualKey::TR_Right, &Manip::forward_medium);
-			layer0->addOnPress(VirtualKey::TR_Up, &Manip::speedUp);
-			layer0->addOnPress(VirtualKey::TR_Down, &Manip::speedDown);
+			layer0->addOnPress(0x0000, VirtualKey::TR_Left, &Manip::backward_medium);
+			layer0->addOnPress(0x0000, VirtualKey::TR_Right, &Manip::forward_medium);
+			layer0->addOnPress(0x0000, VirtualKey::TR_Up, &Manip::speedUp);
+			layer0->addOnPress(0x0000, VirtualKey::TR_Down, &Manip::speedDown);
 
 			dst.addLayer(std::move(layer0));
 		}
 		void MakeKeyMap_Wii(InputMapSet& dst) {
 			using VK = VirtualKey;
 			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addMap(std::make_unique<KI_Step>(VK::TL_Right, VK::DUp),
+			layer0->addMap(std::make_unique<KI_Step>(0x0000, VK::TL_Right, VK::DUp),
 						   std::make_shared<Act_Manip>(&Manip::mediaVolumeUp));
-			layer0->addMap(std::make_unique<KI_Step>(VK::TL_Right, VK::DDown),
+			layer0->addMap(std::make_unique<KI_Step>(0x0000, VK::TL_Right, VK::DDown),
 						   std::make_shared<Act_Manip>(&Manip::mediaVolumeDown));
-			layer0->addOnPress(VK::DLeft, &Manip::backward_few);
-			layer0->addOnPress(VK::DRight, &Manip::forward_few);
-			layer0->addOnPress(VK::DUp, &Manip::volumeUp);
-			layer0->addOnPress(VK::DDown, &Manip::volumeDown);
+			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VK::DRight, &Manip::forward_few);
+			layer0->addOnPress(0x0000, VK::DUp, &Manip::volumeUp);
+			layer0->addOnPress(0x0000, VK::DDown, &Manip::volumeDown);
 
-			layer0->addOnPress(VK::A, &Manip::startPause);
-			layer0->addOnPress(VK::B, &Manip::fullScreen);
-			layer0->addOnPress(VK::L1, &Manip::volumeMute);
-			layer0->addOnPress(VK::Select, &Manip::speedDown);
-			layer0->addOnPress(VK::Start, &Manip::speedUp);
-			layer0->addOnPress(VK::X, &Manip::backward_medium);
-			layer0->addOnPress(VK::Y, &Manip::forward_medium);
+			layer0->addOnPress(0x0000, VK::A, &Manip::startPause);
+			layer0->addOnPress(0x0000, VK::B, &Manip::fullScreen);
+			layer0->addOnPress(0x0000, VK::L1, &Manip::volumeMute);
+			layer0->addOnPress(0x0000, VK::Select, &Manip::speedDown);
+			layer0->addOnPress(0x0000, VK::Start, &Manip::speedUp);
+			layer0->addOnPress(0x0000, VK::X, &Manip::backward_medium);
+			layer0->addOnPress(0x0000, VK::Y, &Manip::forward_medium);
 			dst.addLayer(std::move(layer0));
 		}
 	}
@@ -152,8 +152,13 @@ namespace dg {
 					_manip->setFocus(_hwTarget);
 				}
 			};
-			if(_inputMapSet->proc(state, _manip, _hwTarget, pre))
+			if(const auto res = _inputMapSet->proc(state, _manip, _hwTarget, pre);
+				res != InputMapAbst::Result::NotProceeded)
+			{
 				_restoreFocusTimer->start();
+				if(res == InputMapAbst::Result::ProceededWithReset)
+					_inputMapSet->reset();
+			}
 		}
 	}
 }

@@ -15,20 +15,31 @@ namespace dg {
 		_proc();
 	}
 
+	// --- KeyInput ---
+	KeyInput::KeyInput(const Priority prio):
+		priority(prio) {}
+	bool KeyInput::needReset() const {
+		return false;
+	}
+	void KeyInput::reset() {}
+
 	// --- KI_Press ---
-	KI_Press::KI_Press(const VirtualKey key):
+	KI_Press::KI_Press(const Priority prio, const VirtualKey key):
+		KeyInput(prio),
 		key(key) {}
 	bool KI_Press::check(const VKStateAr& state) {
-		return state[static_cast<int>(key)].pressed();
+		return  state[static_cast<int>(key)].pressed();
 	}
 	// --- KI_Release ---
-	KI_Release::KI_Release(const VirtualKey key):
+	KI_Release::KI_Release(const Priority prio, const VirtualKey key):
+		  KeyInput(prio),
 		  key(key) {}
 	bool KI_Release::check(const VKStateAr& state) {
 		return state[static_cast<int>(key)].released();
 	}
 	// --- KI_Step ---
-	KI_Step::KI_Step(const VirtualKey first, const VirtualKey second):
+	KI_Step::KI_Step(const Priority prio, const VirtualKey first, const VirtualKey second):
+		  KeyInput(prio),
 		  key{first, second}
 	{}
 	bool KI_Step::check(const VKStateAr& state) {
@@ -36,21 +47,34 @@ namespace dg {
 			   && state[static_cast<int>(key[1])].pressed();
 	}
 
-	// --- InputMapLayer ---
-	void InputMapLayer::addOnPress(VirtualKey key, ManipF func) {
-		addMap(std::make_unique<KI_Press>(key),
+   // --- InputMapLayer ---
+	void InputMapLayer::_resort() {
+		std::sort(_actionMap.begin(), _actionMap.end(),
+			[](const ActionEntry& ent0, const ActionEntry& ent1){
+				return ent0.first->priority < ent1.first->priority;
+			});
+	}
+	void InputMapLayer::addOnPress(const Priority prio, VirtualKey key, ManipF func) {
+		addMap(std::make_unique<KI_Press>(prio, key),
 			   std::make_shared<Act_Manip>(func));
 	}
-	bool InputMapLayer::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
+	InputMapAbst::Result InputMapLayer::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto&& a : _actionMap) {
 			if(a.first->check(state)) {
 				a.second->proc(m, hw, pre);
-				return true;
+				if(a.first->needReset()) {
+					return Result::ProceededWithReset;
+				}
+				return Result::Proceeded;
 			}
 		}
-		return false;
+		return Result::NotProceeded;
 	}
-
+	void InputMapLayer::reset() {
+		for(auto& ent: _actionMap) {
+			ent.first->reset();
+		}
+	}
 	// --- InputMapSet ---
 	void InputMapSet::removeSet() {
 		if(auto itr = std::prev(_inputLayer.end(), 1);
@@ -59,12 +83,19 @@ namespace dg {
 			_inputLayer.erase(itr);
 		}
 	}
-	bool InputMapSet::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
+	InputMapAbst::Result InputMapSet::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
 		for(auto itr = _inputLayer.rbegin(); itr!=_inputLayer.rend() ; ++itr) {
-			if((*itr)->proc(state, m, hw, pre)) {
-				return true;
+			if(const auto res = (*itr)->proc(state, m, hw, pre);
+				res != Result::NotProceeded)
+			{
+				return res;
 			}
 		}
-		return false;
+		return Result::NotProceeded;
+	}
+	void InputMapSet::reset() {
+		for(auto& layer : _inputLayer) {
+			layer->reset();
+		}
 	}
 }

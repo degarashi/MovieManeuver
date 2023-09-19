@@ -4,12 +4,14 @@
 #include <windows.h>
 #include <functional>
 #include "vk_def.hpp"
+#include <chrono>
 
 namespace dg {
 	struct Manip;
 	using ManipF = void (Manip::*)(HWND) const;
 	class InputMapSet;
 	using PreProc = std::function<void ()>;
+
 	//! 動作を定義
 	struct Action {
 		virtual void proc(const Manip* manip, HWND hw, const PreProc& pre) const = 0;
@@ -32,33 +34,45 @@ namespace dg {
 			void proc(const Manip* manip, HWND hw, const PreProc& pre) const override;
 	};
 
+	using Priority = uint32_t;
 	//! キー入力判定
 	struct KeyInput {
+		Priority	priority;
+
+		KeyInput(Priority prio);
 		virtual bool check(const VKStateAr& state) = 0;
+		virtual bool needReset() const;
+		virtual void reset();
 	};
 	using KeyInput_U = std::unique_ptr<KeyInput>;
 	struct KI_Press : KeyInput {
 		VirtualKey key;
 
-		KI_Press(VirtualKey key);
+		KI_Press(Priority prio, VirtualKey key);
 		bool check(const VKStateAr& state) override;
 	};
 	struct KI_Release : KeyInput {
 		VirtualKey key;
 
-		KI_Release(VirtualKey key);
+		KI_Release(Priority prio, VirtualKey key);
 		bool check(const VKStateAr& state) override;
 	};
 	// key[0]を押しながらkey[1]を押す判定
 	struct KI_Step : KeyInput {
 		VirtualKey	key[2];
 
-		KI_Step(VirtualKey first, VirtualKey second);
+		KI_Step(Priority prio, VirtualKey first, VirtualKey second);
 		bool check(const VKStateAr& state) override;
 	};
 
 	struct InputMapAbst {
-		virtual bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) = 0;
+		enum class Result {
+			NotProceeded,
+			Proceeded,
+			ProceededWithReset,
+		};
+		virtual Result proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) = 0;
+		virtual void reset() = 0;
 	};
 	using InputMap_U = std::unique_ptr<InputMapAbst>;
 
@@ -68,16 +82,20 @@ namespace dg {
 			// キー入力条件 -> キーアクション
 			// キー入力は固有の変数を持つのでUnique
 			// アクションは固有の変数を持たないのでShared
-			using ActionMap = std::vector<std::pair<KeyInput_U, Action_S>>;
+			using ActionEntry = std::pair<KeyInput_U, Action_S>;
+			using ActionMap = std::vector<ActionEntry>;
 			ActionMap		_actionMap;
+			void _resort();
 
 		public:
 			template <class KI, class ACT>
 			void addMap(KI&& ki, ACT&& act) {
 				_actionMap.emplace_back(std::forward<KI>(ki), std::forward<ACT>(act));
+				_resort();
 			}
-			void addOnPress(VirtualKey key, ManipF func);
-			bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			void addOnPress(Priority prio, VirtualKey key, ManipF func);
+			Result proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			void reset() override;
 	};
 	class InputMapSet : public InputMapAbst {
 		private:
@@ -89,6 +107,7 @@ namespace dg {
 				_inputLayer.emplace_back(std::forward<Layer>(l));
 			}
 			void removeSet();
-			bool proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			Result proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) override;
+			void reset() override;
 	};
 }
