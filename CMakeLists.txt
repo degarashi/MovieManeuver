@@ -49,6 +49,11 @@ set(PROJECT_SOURCES
     src/manip_mgr.hpp
     src/input.hpp
     src/vk_def.hpp
+    src/manip_if.hpp
+	src/keyinput.hpp
+	src/keyaction.hpp
+	src/keydetect.hpp
+	src/input_def.hpp
 )
 
 set(WIIREMOTE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)

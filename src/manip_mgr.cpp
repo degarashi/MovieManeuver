@@ -6,6 +6,9 @@
 #include "inputmgr_wii.hpp"
 #include "inputmgr_xinput.hpp"
 #include "input.hpp"
+#include "keyinput.hpp"
+#include "keyaction.hpp"
+#include "keydetect.hpp"
 
 #include <QTimer>
 #include <QThread>
@@ -25,44 +28,54 @@ namespace {
 
 namespace dg {
 	namespace {
+		using VK = VirtualKey;
 		// とりあえずのキーマップ
-		void MakeKeyMap(InputMapSet& dst) {
-			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addOnPress(0x0000, VirtualKey::DLeft, &Manip::backward_few);
-			layer0->addOnPress(0x0000, VirtualKey::DLeft, &Manip::backward_few);
-			layer0->addOnPress(0x0000, VirtualKey::DRight, &Manip::forward_few);
-			layer0->addOnPress(0x0000, VirtualKey::DUp, &Manip::volumeUp);
-			layer0->addOnPress(0x0000, VirtualKey::DDown, &Manip::volumeDown);
+		void MakeKeyMap(input::InputMapSet& dst) {
+			auto layer0 = std::make_unique<input::InputMapLayer>();
+			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VK::DRight, &Manip::forward_few);
+			layer0->addOnPress(0x0000, VK::DUp, &Manip::volumeUp);
+			layer0->addOnPress(0x0000, VK::DDown, &Manip::volumeDown);
 
-			layer0->addOnPress(0x0000, VirtualKey::B, &Manip::startPause);
-			layer0->addOnPress(0x0000, VirtualKey::Y, &Manip::volumeMute);
-			layer0->addOnPress(0x0000, VirtualKey::X, &Manip::fullScreen);
-			layer0->addOnPress(0x0000, VirtualKey::Select, &Manip::captionSwitch);
+			layer0->addOnPress(0x0000, VK::B, &Manip::startPause);
+			layer0->addOnPress(0x0000, VK::Y, &Manip::volumeMute);
+			layer0->addOnPress(0x0000, VK::X, &Manip::fullScreen);
+			layer0->addOnPress(0x0000, VK::Select, &Manip::captionSwitch);
 
-			layer0->addOnPress(0x0000, VirtualKey::L1, &Manip::speedDown);
-			layer0->addOnPress(0x0000, VirtualKey::R1, &Manip::speedUp);
-			layer0->addOnPress(0x0000, VirtualKey::L2, &Manip::backward_medium);
-			layer0->addOnPress(0x0000, VirtualKey::R2, &Manip::forward_medium);
+			layer0->addOnPress(0x0000, VK::L1, &Manip::speedDown);
+			layer0->addOnPress(0x0000, VK::R1, &Manip::speedUp);
+			layer0->addOnPress(0x0000, VK::L2, &Manip::backward_medium);
+			layer0->addOnPress(0x0000, VK::R2, &Manip::forward_medium);
 
-			layer0->addOnPress(0x0000, VirtualKey::TL_Left, &Manip::backward_few);
-			layer0->addOnPress(0x0000, VirtualKey::TL_Right, &Manip::forward_few);
-			layer0->addOnPress(0x0000, VirtualKey::TL_Up, &Manip::volumeUp);
-			layer0->addOnPress(0x0000, VirtualKey::TL_Down, &Manip::volumeDown);
+			layer0->addOnPress(0x0000, VK::TL_Left, &Manip::backward_few);
+			layer0->addOnPress(0x0000, VK::TL_Right, &Manip::forward_few);
+			layer0->addOnPress(0x0000, VK::TL_Up, &Manip::volumeUp);
+			layer0->addOnPress(0x0000, VK::TL_Down, &Manip::volumeDown);
 
-			layer0->addOnPress(0x0000, VirtualKey::TR_Left, &Manip::backward_medium);
-			layer0->addOnPress(0x0000, VirtualKey::TR_Right, &Manip::forward_medium);
-			layer0->addOnPress(0x0000, VirtualKey::TR_Up, &Manip::speedUp);
-			layer0->addOnPress(0x0000, VirtualKey::TR_Down, &Manip::speedDown);
+			layer0->addOnPress(0x0000, VK::TR_Left, &Manip::backward_medium);
+			layer0->addOnPress(0x0000, VK::TR_Right, &Manip::forward_medium);
+			layer0->addOnPress(0x0000, VK::TR_Up, &Manip::speedUp);
+			layer0->addOnPress(0x0000, VK::TR_Down, &Manip::speedDown);
 
 			dst.addLayer(std::move(layer0));
 		}
-		void MakeKeyMap_Wii(InputMapSet& dst) {
-			using VK = VirtualKey;
-			auto layer0 = std::make_unique<InputMapLayer>();
-			layer0->addMap(std::make_unique<KI_Step>(0x0000, VK::TL_Right, VK::DUp),
-						   std::make_shared<Act_Manip>(&Manip::mediaVolumeUp));
-			layer0->addMap(std::make_unique<KI_Step>(0x0000, VK::TL_Right, VK::DDown),
-						   std::make_shared<Act_Manip>(&Manip::mediaVolumeDown));
+		void MakeKeyMap_Wii(input::InputMapSet& dst) {
+			auto layer0 = std::make_unique<input::InputMapLayer>();
+			layer0->addMap(0x0000,
+						   std::make_shared<input::KD_Step>(VK::TL_Right, VK::DUp),
+						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeUp, false));
+			layer0->addMap(0x0000,
+						   std::make_shared<input::KD_Step>(VK::TL_Right, VK::DDown),
+						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeDown, false));
+			layer0->addMap(0x0000,
+						   std::make_shared<input::KD_Double>(VK::DDown, 2),
+						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeDown, false)
+						   );
+			layer0->addMap(0x0000,
+						   std::make_shared<input::KD_Double>(VK::DUp, 2),
+						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeUp, false)
+						   );
 			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
 			layer0->addOnPress(0x0000, VK::DRight, &Manip::forward_few);
 			layer0->addOnPress(0x0000, VK::DUp, &Manip::volumeUp);
@@ -98,7 +111,9 @@ namespace dg {
 		_imgr.reset();
 		_imgrWidget.reset();
 		_inputMapSet.reset();
-		_inputMapSet = std::make_shared<InputMapSet>();
+		_inputMapSet = std::make_shared<input::InputMapSet>();
+		_ki = std::make_shared<input::KeyInput>();
+		_prevTime = input::Clock::now();
 		// とりあえず起動時にWiiRemoteが検出されればそれを、なければXInputで初期化する
 		auto wiiMgr = std::make_unique<wii::Manager>();
 		if(wiiMgr->numRemote() == 0) {
@@ -125,6 +140,18 @@ namespace dg {
 			}
 		}
 	}
+
+	void Manip_Mgr::foreground() {
+		if(!_restoreFocusTimer->isActive()) {
+			_hwRestore = GetForegroundWindow();
+			SetForegroundWindow(_hwTarget);
+			QThread::msleep(50);
+			_manip->setFocus(_hwTarget);
+		}
+	}
+	void Manip_Mgr::callManip(ManipF func) const {
+		(_manip->*func)(_hwTarget);
+	}
 	void Manip_Mgr::onRestoreFocus() {
 		SetForegroundWindow(_hwRestore);
 	}
@@ -142,22 +169,22 @@ namespace dg {
 		const QString manipName = (_manip) ? _manip->getName() : "Nothing";
 		emit onManipChanged(manipName);
 	}
+
 	void Manip_Mgr::onPadUpdate(const VKStateAr& state) {
+		const auto curTime = input::Clock::now();
+		const auto delta = curTime - _prevTime;
+		_prevTime = curTime;
+		using namespace std::chrono;
+
+		NDetectAr det;
+		std::fill(det.begin(), det.end(), 1);
+		_inputMapSet->nDetect(det);
+		_ki->update(state, duration_cast<milliseconds>(delta), det);
+
 		if(_hwTarget) {
-			const auto pre = [this](){
-				if(!_restoreFocusTimer->isActive()) {
-					_hwRestore = GetForegroundWindow();
-					SetForegroundWindow(_hwTarget);
-					QThread::msleep(50);
-					_manip->setFocus(_hwTarget);
-				}
-			};
-			if(const auto res = _inputMapSet->proc(state, _manip, _hwTarget, pre);
-				res != InputMapAbst::Result::NotProceeded)
-			{
+			input::ProcessedKeys proced;
+			if(_inputMapSet->proc(*_ki, proced, *this)) {
 				_restoreFocusTimer->start();
-				if(res == InputMapAbst::Result::ProceededWithReset)
-					_inputMapSet->reset();
 			}
 		}
 	}

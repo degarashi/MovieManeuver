@@ -5,4 +5,5 @@
 
 namespace dg {
 	using VKStateAr = std::array<ButtonState, Num_VirtualKey>;
+	using NDetectAr = std::array<int, Num_VirtualKey>;
 }

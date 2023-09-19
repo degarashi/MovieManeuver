@@ -4,14 +4,21 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include "vk_def.hpp"
+#include "manip_if.hpp"
 
 class QTimer;
 namespace dg {
-	class InputMapSet;
+	namespace input {
+		class InputMapSet;
+		using Clock = std::chrono::high_resolution_clock;
+		using TimePoint = Clock::time_point;
+	}
 	class InputMgrBase;
 	struct Manip;
+
 	class Manip_Mgr :
-		public QObject
+		public QObject,
+		public ActionParam
 	{
 		Q_OBJECT
 		private:
@@ -28,10 +35,13 @@ namespace dg {
 			template <class T>
 			using SP = std::shared_ptr<T>;
 
-			SP<dg::InputMgrBase>	_imgr;
+			SP<InputMgrBase>		_imgr;
 			SP<QWidget>				_imgrWidget;
-			SP<InputMapSet>			_inputMapSet;
+			SP<input::InputMapSet>	_inputMapSet;
+			SP<input::KeyInput>		_ki;
 			// ----------------------------------------
+			input::TimePoint		_prevTime;
+			QTimer*					_inputUpdateTimer;
 
 			void _switchManip(const dg::Manip* manip);
 
@@ -51,5 +61,10 @@ namespace dg {
 			void onRestoreFocus();
 			void onPadUpdate(const VKStateAr& state);
 			void checkTargetWindow();
+
+		// ActionParam interface
+		public:
+			void foreground() override;
+			void callManip(ManipF func) const override;
 	};
 }

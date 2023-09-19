@@ -1,101 +1,59 @@
 #include "input.hpp"
+#include "keyinput.hpp"
+#include "keyaction.hpp"
+#include "keydetect.hpp"
+#include <cassert>
 
-namespace dg {
-	// --- Act_Manip ---
-	Act_Manip::Act_Manip(void (Manip::*ptr)(HWND) const):
-		_ptr(ptr) {}
-	void Act_Manip::proc(const Manip* manip, const HWND hw, const PreProc& pre) const {
-		pre();
-		(manip->*_ptr)(hw);
-	}
-	// --- Act_Func ---
-	Act_Func::Act_Func(const Proc& proc):
-		  _proc(proc) {}
-	void Act_Func::proc(const Manip* /*manip*/, HWND /*hw*/, const PreProc& /*pre*/) const {
-		_proc();
-	}
-
-	// --- KeyInput ---
-	KeyInput::KeyInput(const Priority prio):
-		priority(prio) {}
-	bool KeyInput::needReset() const {
-		return false;
-	}
-	void KeyInput::reset() {}
-
-	// --- KI_Press ---
-	KI_Press::KI_Press(const Priority prio, const VirtualKey key):
-		KeyInput(prio),
-		key(key) {}
-	bool KI_Press::check(const VKStateAr& state) {
-		return  state[static_cast<int>(key)].pressed();
-	}
-	// --- KI_Release ---
-	KI_Release::KI_Release(const Priority prio, const VirtualKey key):
-		  KeyInput(prio),
-		  key(key) {}
-	bool KI_Release::check(const VKStateAr& state) {
-		return state[static_cast<int>(key)].released();
-	}
-	// --- KI_Step ---
-	KI_Step::KI_Step(const Priority prio, const VirtualKey first, const VirtualKey second):
-		  KeyInput(prio),
-		  key{first, second}
-	{}
-	bool KI_Step::check(const VKStateAr& state) {
-		return state[static_cast<int>(key[0])].pressing()
-			   && state[static_cast<int>(key[1])].pressed();
-	}
-
+namespace dg::input {
    // --- InputMapLayer ---
-	void InputMapLayer::_resort() {
-		std::sort(_actionMap.begin(), _actionMap.end(),
-			[](const ActionEntry& ent0, const ActionEntry& ent1){
-				return ent0.first->priority < ent1.first->priority;
-			});
-	}
 	void InputMapLayer::addOnPress(const Priority prio, VirtualKey key, ManipF func) {
-		addMap(std::make_unique<KI_Press>(prio, key),
-			   std::make_shared<Act_Manip>(func));
+		addMap(
+			prio,
+			std::make_shared<KD_Press>(key),
+			std::make_shared<Act_Method>(
+				func,
+				true
+			)
+		);
 	}
-	InputMapAbst::Result InputMapLayer::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
-		for(auto&& a : _actionMap) {
-			if(a.first->check(state)) {
-				a.second->proc(m, hw, pre);
-				if(a.first->needReset()) {
-					return Result::ProceededWithReset;
-				}
-				return Result::Proceeded;
+	bool InputMapLayer::proc(const KeyInput& ki, ProcessedKeys& proced, ActionParam& ap) {
+		std::sort(_mapEnt.begin(), _mapEnt.end());
+
+		bool ret = false;
+		for(auto&& ent : _mapEnt) {
+			if(ent.detect->check(ki, proced)) {
+				ent.action->action(ap);
+				ret = true;
 			}
 		}
-		return Result::NotProceeded;
+		return ret;
 	}
-	void InputMapLayer::reset() {
-		for(auto& ent: _actionMap) {
-			ent.first->reset();
+	void InputMapLayer::nDetect(NDetectAr& dst) const {
+		for(auto&& ent : _mapEnt) {
+			ent.detect->nDetect(dst);
 		}
 	}
+
 	// --- InputMapSet ---
-	void InputMapSet::removeSet() {
+	void InputMapSet::removeLastLayer() {
 		if(auto itr = std::prev(_inputLayer.end(), 1);
 			itr != _inputLayer.end())
 		{
 			_inputLayer.erase(itr);
 		}
 	}
-	InputMapAbst::Result InputMapSet::proc(const VKStateAr& state, const Manip* m, HWND hw, const PreProc& pre) {
+	bool InputMapSet::proc(const KeyInput& ki, ProcessedKeys& proced, ActionParam& ap) {
+		bool ret = false;
+		// 優先度の高い順(末端)から処理
 		for(auto itr = _inputLayer.rbegin(); itr!=_inputLayer.rend() ; ++itr) {
-			if(const auto res = (*itr)->proc(state, m, hw, pre);
-				res != Result::NotProceeded)
-			{
-				return res;
-			}
+			ret |= (*itr)->proc(ki, proced, ap);
 		}
-		return Result::NotProceeded;
+		return ret;
 	}
-	void InputMapSet::reset() {
-		for(auto& layer : _inputLayer) {
-			layer->reset();
+	void InputMapSet::nDetect(NDetectAr& dst) const {
+		for(auto&& l: _inputLayer) {
+			l->nDetect(dst);
 		}
 	}
+
 }
