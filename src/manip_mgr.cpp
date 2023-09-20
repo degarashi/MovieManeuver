@@ -30,7 +30,7 @@ namespace {
 #define MShared(typ, ...) std::make_shared<typ>(__VA_ARGS__)
 namespace dg {
 	namespace {
-		using input::KD_Step;
+		using input::KD_Simul;
 		using input::KD_Press;
 		using input::KD_Double;
 		using input::Act_Method;
@@ -69,10 +69,10 @@ namespace dg {
 		void MakeKeyMap_Wii(input::InputMapSet& dst) {
 			auto layer0 = std::make_unique<input::InputMapLayer>();
 			layer0->addMap(0x0000,
-						   MShared(KD_Step, VK::TL_Right, MShared(KD_Press, VK::DUp)),
+						   MShared(KD_Simul, VK::TL_Right, MShared(KD_Press, VK::DUp)),
 						   MShared(Act_Method, &Manip::mediaVolumeUp, false));
 			layer0->addMap(0x0000,
-						   MShared(KD_Step, VK::TL_Right, MShared(KD_Press, VK::DDown)),
+						   MShared(KD_Simul, VK::TL_Right, MShared(KD_Press, VK::DDown)),
 						   MShared(Act_Method, &Manip::mediaVolumeDown, false));
 			layer0->addMap(0x0000,
 						   MShared(KD_Double, VK::DDown, 2),

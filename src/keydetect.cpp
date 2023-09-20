@@ -40,8 +40,11 @@ namespace dg::input {
 		return proced.count(key) != 0;
 	}
 
-	// --- KI_Step ---
-	bool KD_Step::check(const KeyInput& input, ProcessedKeys& proced) const {
+	// --- KI_Simul ---
+	void KD_Simul::nDetect(NDetectAr& dst) const {
+		return key1->nDetect(dst);
+	}
+	bool KD_Simul::check(const KeyInput& input, ProcessedKeys& proced) const {
 		if(!hasChecked(proced)) {
 			if(input.pressing(key0) &&
 				key1->check(input, proced))
@@ -52,7 +55,7 @@ namespace dg::input {
 		}
 		return false;
 	}
-	bool KD_Step::hasChecked(const ProcessedKeys& proced) const {
+	bool KD_Simul::hasChecked(const ProcessedKeys& proced) const {
 		return !(proced.count(key0) == 0 && !key1->hasChecked(proced));
 	}
 }

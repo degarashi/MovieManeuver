@@ -26,12 +26,13 @@ namespace dg::input {
 		bool hasChecked(const ProcessedKeys& proced) const override;
 	};
 	// key[0]を押しながらkey[1]を押す判定
-	struct KD_Step : KeyDetect {
+	struct KD_Simul : KeyDetect {
 		VirtualKey	key0;
 		KeyDetect_S	key1;
 		template <class S>
-		KD_Step(VirtualKey k0, S&& k1):
+		KD_Simul(VirtualKey k0, S&& k1):
 			key0(k0), key1(std::forward<S>(k1)) {}
+		void nDetect(NDetectAr& dst) const override;
 		bool check(const KeyInput& input, ProcessedKeys& proced) const override;
 		bool hasChecked(const ProcessedKeys& proced) const override;
 	};
