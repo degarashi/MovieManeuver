@@ -64,10 +64,10 @@ namespace dg {
 		void MakeKeyMap_Wii(input::InputMapSet& dst) {
 			auto layer0 = std::make_unique<input::InputMapLayer>();
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Step>(VK::TL_Right, VK::DUp),
+						   std::make_shared<input::KD_Step>(VK::TL_Right, std::make_shared<input::KD_Press>(VK::DUp)),
 						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeUp, false));
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Step>(VK::TL_Right, VK::DDown),
+						   std::make_shared<input::KD_Step>(VK::TL_Right, std::make_shared<input::KD_Press>(VK::DDown)),
 						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeDown, false));
 			layer0->addMap(0x0000,
 						   std::make_shared<input::KD_Double>(VK::DDown, 2),

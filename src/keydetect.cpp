@@ -7,13 +7,16 @@ namespace dg::input {
 	KD_Press::KD_Press(VirtualKey key):
 		  key(key){}
 	bool KD_Press::check(const KeyInput& input, ProcessedKeys& proced) const {
-		if(proced.count(key) == 0) {
+		if(!hasChecked(proced)) {
 			if(input.pressed(key, 1)) {
 				proced.emplace(key);
 				return true;
 			}
 		}
 		return false;
+	}
+	bool KD_Press::hasChecked(const ProcessedKeys& proced) const {
+		return proced.count(key) != 0;
 	}
 
 	// --- KI_Double ---
@@ -25,7 +28,7 @@ namespace dg::input {
 		ds = std::max(ds, count);
 	}
 	bool KD_Double::check(const KeyInput& input, ProcessedKeys& proced) const {
-		if(proced.count(key) == 0) {
+		if(!hasChecked(proced)) {
 			if(input.pressed(key, count)) {
 				proced.emplace(key);
 				return true;
@@ -33,20 +36,23 @@ namespace dg::input {
 		}
 		return false;
 	}
+	bool KD_Double::hasChecked(const ProcessedKeys& proced) const {
+		return proced.count(key) != 0;
+	}
 
 	// --- KI_Step ---
-	KD_Step::KD_Step(VirtualKey key0, VirtualKey key1): key{key0, key1} {}
 	bool KD_Step::check(const KeyInput& input, ProcessedKeys& proced) const {
-		if(proced.count(key[0]) == 0 &&
-			proced.count(key[1]) == 0) {
-			if(input.pressing(key[0]) &&
-				input.pressed(key[1], 1))
+		if(!hasChecked(proced)) {
+			if(input.pressing(key0) &&
+				key1->check(input, proced))
 			{
-				proced.emplace(key[0]);
-				proced.emplace(key[1]);
+				proced.emplace(key0);
 				return true;
 			}
 		}
 		return false;
+	}
+	bool KD_Step::hasChecked(const ProcessedKeys& proced) const {
+		return !(proced.count(key0) == 0 && !key1->hasChecked(proced));
 	}
 }
