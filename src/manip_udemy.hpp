@@ -18,6 +18,7 @@ namespace dg {
 			void volumeMute(const ManipParam& param) const override;
 			void fullScreen(const ManipParam& param) const override;
 			void captionSwitch(const ManipParam& param) const override;
+			void seekByNumber(const ManipParam& param) const override;
 
 			const std::wstring& getWindowTopName() const override;
 			const std::wstring& getWindowChildName() const override;
