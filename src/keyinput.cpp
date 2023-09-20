@@ -1,6 +1,9 @@
 #include "keyinput.hpp"
 
 namespace dg::input {
+	namespace {
+		constexpr MilliSec MaxDelay(300);
+	}
 	KeyInput::NPress::NPress() {
 		resetAccum();
 		result = 0;

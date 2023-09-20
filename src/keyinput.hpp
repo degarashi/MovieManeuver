@@ -7,7 +7,6 @@ namespace dg::input {
 	class KeyInput {
 		private:
 			bool		_pressing[Num_VirtualKey];
-			const inline static MilliSec MaxDelay = MilliSec(300);
 			struct NPress {
 				int			count;
 				MilliSec 	accumTime;
