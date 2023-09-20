@@ -79,6 +79,10 @@ namespace dg {
 	void Manip_YouTube::captionSwitch(const ManipParam& param) const {
         TapKey(u8'C');
     }
+	void Manip_YouTube::seekByNumber(const ManipParam& param) const {
+		const auto vk = u8'0' + param.aux0;
+		TapKey(vk);
+	}
 	const QString& Manip_YouTube::getName() const {
 		static QString Name = QString::fromUtf8(u8"Youtube Manipulator");
 		return Name;
