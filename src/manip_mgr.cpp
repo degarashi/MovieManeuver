@@ -34,6 +34,7 @@ namespace dg {
 		using input::KD_Press;
 		using input::KD_Double;
 		using input::Act_Method;
+		using input::Act_Func;
 		using VK = VirtualKey;
 		// とりあえずのキーマップ
 		void MakeKeyMap(input::InputMapSet& dst) {
@@ -68,31 +69,67 @@ namespace dg {
 		}
 		void MakeKeyMap_Wii(input::InputMapSet& dst) {
 			auto layer0 = std::make_unique<input::InputMapLayer>();
+			// 音量調整(右に傾ける)
 			layer0->addMap(0x0000,
 						   MShared(KD_Simul, VK::TL_Right, MShared(KD_Press, VK::DUp)),
 						   MShared(Act_Method, &Manip::mediaVolumeUp, false));
 			layer0->addMap(0x0000,
 						   MShared(KD_Simul, VK::TL_Right, MShared(KD_Press, VK::DDown)),
 						   MShared(Act_Method, &Manip::mediaVolumeDown, false));
-			layer0->addMap(0x0000,
+
+			// 上下を二度押しでシステム音量調整
+			layer0->addMap(0x1000,
 						   MShared(KD_Double, VK::DDown, 2),
 						   MShared(Act_Method, &Manip::mediaVolumeDown, false));
-			layer0->addMap(0x0000,
+			layer0->addMap(0x1000,
 						   MShared(KD_Double, VK::DUp, 2),
 						   MShared(Act_Method, &Manip::mediaVolumeUp, false));
 
-			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
-			layer0->addOnPress(0x0000, VK::DRight, &Manip::forward_few);
-			layer0->addOnPress(0x0000, VK::DUp, &Manip::volumeUp);
-			layer0->addOnPress(0x0000, VK::DDown, &Manip::volumeDown);
+			// シーク(左へ傾ける)
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Press, VK::DUp)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 0); }, true));
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Double, VK::DUp, 2)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 4); }, true));
 
-			layer0->addOnPress(0x0000, VK::A, &Manip::startPause);
-			layer0->addOnPress(0x0000, VK::B, &Manip::fullScreen);
-			layer0->addOnPress(0x0000, VK::L1, &Manip::volumeMute);
-			layer0->addOnPress(0x0000, VK::Select, &Manip::speedDown);
-			layer0->addOnPress(0x0000, VK::Start, &Manip::speedUp);
-			layer0->addOnPress(0x0000, VK::X, &Manip::backward_medium);
-			layer0->addOnPress(0x0000, VK::Y, &Manip::forward_medium);
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Press, VK::DRight)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 1); }, true));
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Double, VK::DRight, 2)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 5); }, true));
+
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Press, VK::DDown)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 2); }, true));
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Double, VK::DDown, 2)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 6); }, true));
+
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Press, VK::DLeft)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 3); }, true));
+			layer0->addMap(0x0000,
+							MShared(KD_Simul, VK::TL_Left, MShared(KD_Double, VK::DLeft, 2)),
+							MShared(Act_Func, [](ActionParam& p){ p.callManip(&Manip::seekByNumber, 7); }, true));
+
+			layer0->addOnPress(0x1000, VK::DLeft, &Manip::backward_few);
+			layer0->addOnPress(0x1000, VK::DRight, &Manip::forward_few);
+			layer0->addOnPress(0x1000, VK::DUp, &Manip::volumeUp);
+			layer0->addOnPress(0x1000, VK::DDown, &Manip::volumeDown);
+
+			layer0->addOnPress(0x1000, VK::A, &Manip::startPause);
+			layer0->addOnPress(0x1000, VK::B, &Manip::fullScreen);
+			layer0->addOnPress(0x1000, VK::L1, &Manip::volumeMute);
+			layer0->addMap(0x0000,
+						   MShared(KD_Double, VK::L1, 2),
+						   MShared(Act_Method, &Manip::captionSwitch, true));
+
+			layer0->addOnPress(0x1000, VK::Select, &Manip::speedDown);
+			layer0->addOnPress(0x1000, VK::Start, &Manip::speedUp);
+			layer0->addOnPress(0x1000, VK::X, &Manip::backward_medium);
+			layer0->addOnPress(0x1000, VK::Y, &Manip::forward_medium);
 			dst.addLayer(std::move(layer0));
 		}
 	}
