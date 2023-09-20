@@ -27,8 +27,13 @@ namespace {
 	constexpr int CHECKTARGET_INTERVAL = 1000;
 }
 
+#define MShared(typ, ...) std::make_shared<typ>(__VA_ARGS__)
 namespace dg {
 	namespace {
+		using input::KD_Step;
+		using input::KD_Press;
+		using input::KD_Double;
+		using input::Act_Method;
 		using VK = VirtualKey;
 		// とりあえずのキーマップ
 		void MakeKeyMap(input::InputMapSet& dst) {
@@ -64,19 +69,18 @@ namespace dg {
 		void MakeKeyMap_Wii(input::InputMapSet& dst) {
 			auto layer0 = std::make_unique<input::InputMapLayer>();
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Step>(VK::TL_Right, std::make_shared<input::KD_Press>(VK::DUp)),
-						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeUp, false));
+						   MShared(KD_Step, VK::TL_Right, MShared(KD_Press, VK::DUp)),
+						   MShared(Act_Method, &Manip::mediaVolumeUp, false));
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Step>(VK::TL_Right, std::make_shared<input::KD_Press>(VK::DDown)),
-						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeDown, false));
+						   MShared(KD_Step, VK::TL_Right, MShared(KD_Press, VK::DDown)),
+						   MShared(Act_Method, &Manip::mediaVolumeDown, false));
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Double>(VK::DDown, 2),
-						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeDown, false)
-						   );
+						   MShared(KD_Double, VK::DDown, 2),
+						   MShared(Act_Method, &Manip::mediaVolumeDown, false));
 			layer0->addMap(0x0000,
-						   std::make_shared<input::KD_Double>(VK::DUp, 2),
-						   std::make_shared<input::Act_Method>(&Manip::mediaVolumeUp, false)
-						   );
+						   MShared(KD_Double, VK::DUp, 2),
+						   MShared(Act_Method, &Manip::mediaVolumeUp, false));
+
 			layer0->addOnPress(0x0000, VK::DLeft, &Manip::backward_few);
 			layer0->addOnPress(0x0000, VK::DRight, &Manip::forward_few);
 			layer0->addOnPress(0x0000, VK::DUp, &Manip::volumeUp);
