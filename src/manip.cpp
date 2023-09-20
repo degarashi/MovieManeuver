@@ -11,12 +11,12 @@ namespace dg {
 		return param.result;
 	}
 
-	void Manip::mediaVolumeUp(HWND hw) const {
-		Q_UNUSED(hw)
+	void Manip::mediaVolumeUp(const ManipParam& param) const {
+		Q_UNUSED(param)
 		TapKey(VK_VOLUME_UP);
 	}
-	void Manip::mediaVolumeDown(HWND hw) const {
-		Q_UNUSED(hw)
+	void Manip::mediaVolumeDown(const ManipParam& param) const {
+		Q_UNUSED(param)
 		TapKey(VK_VOLUME_DOWN);
 	}
 }

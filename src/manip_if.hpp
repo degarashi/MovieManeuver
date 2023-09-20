@@ -1,13 +1,11 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 
 namespace dg {
+	struct ManipParam;
 	struct Manip;
-	using ManipF = void (Manip::*)(HWND) const;
-
+	using ManipF = void (Manip::*)(const ManipParam&) const;
 	struct ActionParam {
 		virtual void foreground() = 0;
-		virtual void callManip(ManipF func) const = 0;
+		virtual void callManip(ManipF method, int param=0) const = 0;
 	};
 }

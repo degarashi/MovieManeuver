@@ -9,6 +9,7 @@
 #include "keyinput.hpp"
 #include "keyaction.hpp"
 #include "keydetect.hpp"
+#include "manip_param.hpp"
 
 #include <QTimer>
 #include <QThread>
@@ -149,8 +150,12 @@ namespace dg {
 			_manip->setFocus(_hwTarget);
 		}
 	}
-	void Manip_Mgr::callManip(ManipF func) const {
-		(_manip->*func)(_hwTarget);
+
+	void Manip_Mgr::callManip(ManipF method, const int param) const {
+		ManipParam mp;
+		mp.hw = _hwTarget;
+		mp.aux0 = param;
+		(_manip->*method)(mp);
 	}
 	void Manip_Mgr::onRestoreFocus() {
 		SetForegroundWindow(_hwRestore);

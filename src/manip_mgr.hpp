@@ -14,7 +14,6 @@ namespace dg {
 		using TimePoint = Clock::time_point;
 	}
 	class InputMgrBase;
-	struct Manip;
 
 	class Manip_Mgr :
 		public QObject,
@@ -25,7 +24,7 @@ namespace dg {
 			// ウィンドウ検索のインターバルタイマー
 			QTimer*						_findWindowTimer;
 			// 対象(Youtube/Udemy)の検索や操作方法を定義
-			const dg::Manip*			_manip;
+			const Manip*				_manip;
 			// 操作対象(ブラウザ)のウィンドウハンドル
 			HWND						_hwTarget;
 			QTimer*						_restoreFocusTimer;
@@ -65,6 +64,6 @@ namespace dg {
 		// ActionParam interface
 		public:
 			void foreground() override;
-			void callManip(ManipF func) const override;
+			void callManip(ManipF method, int param) const override;
 	};
 }
