@@ -2,7 +2,7 @@
 
 namespace dg::input {
 	namespace {
-		constexpr MilliSec MaxDelay(300);
+		constexpr MilliSec MaxDelay(150);
 	}
 	KeyInput::NPress::NPress() {
 		resetAccum();
