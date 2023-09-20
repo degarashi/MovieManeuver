@@ -24,6 +24,7 @@ namespace dg {
 		virtual void volumeMute(const ManipParam& param) const = 0;
 		virtual void fullScreen(const ManipParam& param) const {}
 		virtual void captionSwitch(const ManipParam& param) const {}
+		virtual void seekByNumber(const ManipParam& param) const {}
 
 		// 操作対象ウィンドウを検索する際の名前を取得
 		virtual const std::wstring& getWindowTopName() const = 0;
