@@ -9,7 +9,6 @@ namespace dg {
 	struct ManipParam;
 	// ブラウザを操作するためのキーストロークやマウス操作を定義
 	struct Manip {
-		using Proc_t = std::function<void ()>;
 		HWND findTarget() const;
 		virtual void setFocus(HWND hw) const = 0;
 
