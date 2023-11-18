@@ -12,7 +12,7 @@ namespace dg {
 		ClickLeftTop(hw, true, true, 192);
 		QThread::msleep(20);
 		TapKey(VK_IME_OFF);
-		TapKey(VK_ESCAPE);
+		TapKey(VK_MENU);
 	}
 	const std::wstring& Manip_Udemy::getWindowTopName() const {
 		static std::wstring ret(L"Udemy");
