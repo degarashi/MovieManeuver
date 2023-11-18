@@ -9,10 +9,9 @@ namespace dg {
 		constexpr unsigned long REPEAT_WAIT = 50;
 	}
 	void Manip_Udemy::setFocus(const HWND hw) const {
-		ClickLeftTop(hw, MouseButton::Right, true, 192);
+		ClickLeftTop(hw, MouseButton::Middle, true, 192);
 		QThread::msleep(20);
 		TapKey(VK_IME_OFF);
-		TapKey(VK_MENU);
 	}
 	const std::wstring& Manip_Udemy::getWindowTopName() const {
 		static std::wstring ret(L"Udemy");
