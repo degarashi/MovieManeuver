@@ -13,15 +13,15 @@ namespace dg {
 		TapKey(VK_IME_OFF);
 		if(!IsFullScreen(hw)) {
             // ページの先頭に戻る
-			ClickLeftTop(hw, true, false, 2);
+			ClickLeftTop(hw, MouseButton::Right, false, 2);
             QThread::msleep(MANIP_WAIT);
             TapKey(VK_ESCAPE);
             QThread::msleep(MANIP_WAIT);
             TapKey(VK_HOME);
         } else {
-			ClickLeftTop(hw, true, true, MANIP_OFFSET);
+			ClickLeftTop(hw, MouseButton::Right, true, MANIP_OFFSET);
             QThread::msleep(MANIP_WAIT);
-			ClickLeftTop(hw, false, true, MANIP_OFFSET-2);
+			ClickLeftTop(hw, MouseButton::Left, true, MANIP_OFFSET-2);
         }
 	}
 	const std::wstring& Manip_YouTube::getWindowTopName() const {
@@ -56,7 +56,7 @@ namespace dg {
 	void Manip_YouTube::volumeDown(const ManipParam& param) const {
 		if(!IsFullScreen(param.hw)) {
             QThread::msleep(MANIP_WAIT);
-			ClickLeftTop(param.hw, true, false, MANIP_OFFSET);
+			ClickLeftTop(param.hw, MouseButton::Right, false, MANIP_OFFSET);
             TapKey(VK_ESCAPE);
         }
         TapKey(VK_DOWN);
@@ -64,7 +64,7 @@ namespace dg {
 	void Manip_YouTube::volumeUp(const ManipParam& param) const {
 		if(!IsFullScreen(param.hw)) {
             QThread::msleep(MANIP_WAIT);
-			ClickLeftTop(param.hw, true, false, MANIP_OFFSET);
+			ClickLeftTop(param.hw, MouseButton::Right, false, MANIP_OFFSET);
             TapKey(VK_ESCAPE);
         }
         TapKey(VK_UP);

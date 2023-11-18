@@ -15,7 +15,14 @@ namespace dg {
     UINT GetDoubleClickTime();
 
 	BOOL CALLBACK EnumChild(HWND hw, LPARAM lParam);
-	void ClickLeftTop(HWND hw, bool rightButton, bool bUseSendMessage,
+
+	enum MouseButton {
+		Left,
+		Right,
+		Middle,
+		_NUM
+	};
+	void ClickLeftTop(HWND hw, MouseButton button, bool bUseSendMessage,
 					  WORD offsetX, WORD offsetY = std::numeric_limits<WORD>::max());
 	void TapKey(int vkey, WORD auxCode = 0);
 

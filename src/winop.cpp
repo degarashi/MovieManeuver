@@ -69,21 +69,25 @@ namespace dg {
 			return (y * 65535 / (::GetSystemMetrics(SM_CYSCREEN) - 1));
 		}
 	}
-	void ClickLeftTop(const HWND hw, const bool rightButton,
+	void ClickLeftTop(const HWND hw, const MouseButton button,
 					  const bool bUseSendMessage, const WORD offsetX, WORD offsetY)
 	{
 		if(offsetY == std::numeric_limits<WORD>::max())
 			offsetY = offsetX;
 
+		struct ButtonPair {
+			int		down, up, keyId;
+		};
+		constexpr ButtonPair ButtonFlag[MouseButton::_NUM] = {
+			{WM_LBUTTONDOWN, WM_LBUTTONUP, MK_LBUTTON},
+			{WM_RBUTTONDOWN, WM_RBUTTONUP, MK_RBUTTON},
+			{WM_MBUTTONDOWN, WM_MBUTTONUP, MK_MBUTTON},
+		};
 		if(bUseSendMessage) {
+			const auto& bp = ButtonFlag[button];
 			const LPARAM OFS = MAKELPARAM(offsetX, offsetY);
-			if(rightButton) {
-				SendMessage(hw, WM_RBUTTONDOWN, MK_RBUTTON, OFS);
-				SendMessage(hw, WM_RBUTTONUP, 0, OFS);
-			} else {
-				SendMessage(hw, WM_LBUTTONDOWN, MK_LBUTTON, OFS);
-				SendMessage(hw, WM_LBUTTONUP, 0, OFS);
-			}
+			SendMessage(hw, bp.down, bp.keyId, OFS);
+			SendMessage(hw, bp.up, 0, OFS);
 		} else {
 			const RECT rect = GetWindowRectDwm(hw);
 			// 元のカーソル位置
@@ -91,8 +95,8 @@ namespace dg {
 			GetCursorPos(&pt);
 
 			const bool swp = IsMouseSwapped();
-			const DWORD flagDown = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
-			const DWORD flagUp = (rightButton ^ swp) ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
+			const DWORD flagDown = ((button==MouseButton::Right) ^ swp) ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_LEFTDOWN;
+			const DWORD flagUp = ((button==MouseButton::Right) ^ swp) ? MOUSEEVENTF_RIGHTUP: MOUSEEVENTF_LEFTUP;
 			INPUT input[] = {
 				{ INPUT_MOUSE, MI_H(rect.left + offsetX), MI_V(rect.top + offsetY), 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, 0, 0 },
 				{ INPUT_MOUSE, 0, 0, 0, flagDown, 0, 0, },

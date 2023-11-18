@@ -9,7 +9,7 @@ namespace dg {
 		constexpr unsigned long REPEAT_WAIT = 50;
 	}
 	void Manip_Udemy::setFocus(const HWND hw) const {
-		ClickLeftTop(hw, true, true, 192);
+		ClickLeftTop(hw, MouseButton::Right, true, 192);
 		QThread::msleep(20);
 		TapKey(VK_IME_OFF);
 		TapKey(VK_MENU);

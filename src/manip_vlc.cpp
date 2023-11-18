@@ -12,7 +12,7 @@ namespace dg {
 	void Manip_VLC::setFocus(const HWND hw) const {
         // ウィンドウ下部中央をクリックする
 		const RECT r = GetWindowRectDwm(hw);
-		ClickLeftTop(hw, false, false, (r.right-r.left)/2, r.bottom-r.top-12);
+		ClickLeftTop(hw, MouseButton::Left, false, (r.right-r.left)/2, r.bottom-r.top-12);
         QThread::msleep(MANIP_WAIT);
 	}
 	const std::wstring& Manip_VLC::getWindowTopName() const {

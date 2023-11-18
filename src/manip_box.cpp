@@ -5,7 +5,7 @@
 
 namespace dg {
 	void Manip_Box::setFocus(const HWND hw) const {
-		ClickLeftTop(hw, false, false, 192);
+		ClickLeftTop(hw, MouseButton::Left, false, 192);
         QThread::msleep(20);
 	}
 	void Manip_Box::startPause(const ManipParam& param) const {
